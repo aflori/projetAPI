@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CandidateController {
 
     @Autowired
-    private CandidateService service;
+    private CandidateService candidateService;
 
     /**
      * function made to answer a post request on serveur
@@ -42,7 +42,7 @@ public class CandidateController {
             responseCode = "201"
     )
     public ResponseEntity<Candidate> createCandidate(@RequestBody Candidate candidate) {
-        Candidate createdCandidate = service.createCandidate(candidate);
+        Candidate createdCandidate = candidateService.createCandidate(candidate);
 
         return new ResponseEntity<>(createdCandidate, HttpStatus.CREATED);
     }
