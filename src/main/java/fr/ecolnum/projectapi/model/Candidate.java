@@ -27,7 +27,6 @@ public class Candidate {
     @Column(nullable = false)
     private String lastName;
 
-    @Column(nullable = false)
     @ManyToMany
     private Set<Pool> evaluatedIn;
 
