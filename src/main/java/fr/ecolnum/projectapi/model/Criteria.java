@@ -2,6 +2,8 @@ package fr.ecolnum.projectapi.model;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 /**
  * This class will be the criteria model used to evaluate candidates
  */
@@ -17,6 +19,9 @@ public class Criteria {
 
     @Column(nullable = false)
     private String description;
+
+    @ManyToMany(mappedBy = "containedCriterias")
+    private Set<Criteria> existsIn;
 
     public int getId() {
         return id;
@@ -40,5 +45,13 @@ public class Criteria {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<Criteria> getExistsIn() {
+        return existsIn;
+    }
+
+    public void setExistsIn(Set<Criteria> existsIn) {
+        this.existsIn = existsIn;
     }
 }
