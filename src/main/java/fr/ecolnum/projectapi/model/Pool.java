@@ -11,6 +11,40 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "pool")
 public class Pool {
+    public set<Candidate> getTablepoolcandidate() {
+        return tablepoolcandidate;
+    }
+
+    public void setTablepoolcandidate(set<Candidate> tablepoolcandidate) {
+        this.tablepoolcandidate = tablepoolcandidate;
+    }
+
+    public set<Criteria> getTablepoolcriteria() {
+        return tablepoolcriteria;
+    }
+
+    public void setTablepoolcriteria(set<Criteria> tablepoolcriteria) {
+        this.tablepoolcriteria = tablepoolcriteria;
+    }
+
+    public set<Observer> getTablepoolobserver() {
+        return tablepoolobserver;
+    }
+
+    public void setTablepoolobserver(set<Observer> tablepoolobserver) {
+        this.tablepoolobserver = tablepoolobserver;
+    }
+
+    @ManyToMany
+    @JoinTable
+    private set<Candidate> tablepoolcandidate;
+    @ManyToMany
+    @JoinTable
+    private set <Criteria> tablepoolcriteria;
+    @ManyToMany
+    @JoinTable
+    private set <Observer> tablepoolobserver;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
