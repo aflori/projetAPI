@@ -15,7 +15,7 @@ public class Pool {
         return tablepoolcandidate;
     }
 
-    public void setTablepoolcandidate(set<Candidate> tablepoolcandidate) {
+    public void setTablepoolcandidate(set<Candidate> candidateofpool) {
         this.tablepoolcandidate = tablepoolcandidate;
     }
 
@@ -38,13 +38,13 @@ public class Pool {
     /**
      * join pooltable to other tables
      */
-    @ManyToMany
+    @ManyToMany(mappedBy = Candidate)
     @JoinTable
-    private set<Candidate> tablepoolcandidate;
-    @ManyToMany
+    private set<Candidate> candidateofpool;
+    @ManyToMany(mappedBy = Criteria)
     @JoinTable
     private set <Criteria> tablepoolcriteria;
-    @ManyToMany
+    @ManyToMany(mappedBy = Observer)
     @JoinTable
     private set <Observer> tablepoolobserver;
 

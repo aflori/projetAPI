@@ -15,7 +15,7 @@ public class PoolService {
     @Autowired
     private PoolRepository poolRepository;
 
-    public Iterable<Pool> findAll() {
+    public Iterable<Pool> getAllPools() {
         return poolRepository.findAll();
     }
 
@@ -23,18 +23,12 @@ public class PoolService {
         return poolRepository.findById(id);
     }
 
-    public Pool save(Pool pool){
-        return poolRepository.save(pool);
+    public Pool createPool(Pool pool){
+       return poolRepository.save(pool);
     }
 
-    public String delete( Pool pool){
-        poolRepository.delete(pool);
-        return "Succesfully Deleted";
-    }
-
-    public String update(Pool pool){
-        poolRepository.save(pool);
-        return "succesfully modify";
+    public Pool modifyPool(Pool pool){
+       return poolRepository.save(pool);
     }
 }
 
