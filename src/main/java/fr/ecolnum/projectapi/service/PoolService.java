@@ -1,5 +1,6 @@
 package fr.ecolnum.projectapi.service;
 
+import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.repository.PoolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 /**
- * use CRUD for pool
+ * use method CRUD for pool
  */
 @Service
 public class PoolService {
@@ -29,6 +30,9 @@ public class PoolService {
 
     public Pool modifyPool(Pool pool){
        return poolRepository.save(pool);
+    }
+    public String addObserverToPool(Observer){
+        return null;
     }
 }
 

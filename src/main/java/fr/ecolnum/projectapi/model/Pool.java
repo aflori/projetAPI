@@ -4,50 +4,17 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.Generated;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 /**
  * define structure pool and composants for the table
  */
 @Entity
-@Table(name = "pool")
 public class Pool {
-    public set<Candidate> getTablepoolcandidate() {
-        return tablepoolcandidate;
-    }
-
-    public void setTablepoolcandidate(set<Candidate> candidateofpool) {
-        this.tablepoolcandidate = tablepoolcandidate;
-    }
-
-    public set<Criteria> getTablepoolcriteria() {
-        return tablepoolcriteria;
-    }
-
-    public void setTablepoolcriteria(set<Criteria> tablepoolcriteria) {
-        this.tablepoolcriteria = tablepoolcriteria;
-    }
-
-    public set<Observer> getTablepoolobserver() {
-        return tablepoolobserver;
-    }
-
-    public void setTablepoolobserver(set<Observer> tablepoolobserver) {
-        this.tablepoolobserver = tablepoolobserver;
-    }
 
     /**
      * join pooltable to other tables
      */
-    @ManyToMany(mappedBy = Candidate)
-    @JoinTable
-    private set<Candidate> candidateofpool;
-    @ManyToMany(mappedBy = Criteria)
-    @JoinTable
-    private set <Criteria> tablepoolcriteria;
-    @ManyToMany(mappedBy = Observer)
-    @JoinTable
-    private set <Observer> tablepoolobserver;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -57,6 +24,29 @@ public class Pool {
     private Timestamp endDate;
     @Column(name = "location",nullable = false)
     private String location;
+
+    @ManyToMany
+    @JoinTable (
+            name = "pool_candidate",
+            joinColumns = @JoinColumn(name="pool_id"),
+            inverseJoinColumns = @JoinColumn(name ="candidate_id")
+    )
+    private Set <Candidate> evaluates;
+    @ManyToMany
+    @JoinTable (
+            name = "pool_criteria",
+            joinColumns = @JoinColumn(name="pool_id"),
+            inverseJoinColumns = @JoinColumn(name ="criteria_id")
+    )
+    private Set <Criteria> containedCriterias;
+    @ManyToMany
+    @JoinTable (
+            name = "pool_observer",
+            joinColumns = @JoinColumn(name="pool_id"),
+            inverseJoinColumns = @JoinColumn(name ="observer_id")
+    )
+    private Set <Observer> containedObservers;
+
     public Integer getId() {
         return id;
     }
