@@ -26,7 +26,7 @@ public class Observer {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "containedObservers")
     private Set<Pool> observeIn;
 
     public int getId() {
