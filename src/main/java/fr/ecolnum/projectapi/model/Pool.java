@@ -35,6 +35,9 @@ public class Pool {
         this.tablepoolobserver = tablepoolobserver;
     }
 
+    /**
+     * join pooltable to other tables
+     */
     @ManyToMany
     @JoinTable
     private set<Candidate> tablepoolcandidate;
