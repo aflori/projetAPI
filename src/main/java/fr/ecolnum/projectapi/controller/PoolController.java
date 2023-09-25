@@ -17,7 +17,7 @@ import java.util.Optional;
  * path for CRUD pool
  */
 @Controller
-@RequestMapping(path = "/pool")
+@RequestMapping(path = "/api/admin/pool")
 public class PoolController {
     @Autowired
     private PoolService poolService;

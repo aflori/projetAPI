@@ -21,7 +21,7 @@ public class Criteria {
     private String description;
 
     @ManyToMany(mappedBy = "containedCriterias")
-    private Set<Criteria> existsIn;
+    private Set<Pool> existsIn;
 
     public int getId() {
         return id;
@@ -47,11 +47,11 @@ public class Criteria {
         this.description = description;
     }
 
-    public Set<Criteria> getExistsIn() {
+    public Set<Pool> getExistsIn() {
         return existsIn;
     }
 
-    public void setExistsIn(Set<Criteria> existsIn) {
+    public void setExistsIn(Set<Pool> existsIn) {
         this.existsIn = existsIn;
     }
 }

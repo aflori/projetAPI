@@ -31,8 +31,8 @@ public class PoolService {
     public Pool modifyPool(Pool pool){
        return poolRepository.save(pool);
     }
-    public String addObserverToPool(Observer){
+    /*public String addObserverToPool(Observer){
         return null;
-    }
+    }*/
 }
 

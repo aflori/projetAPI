@@ -32,6 +32,7 @@ public class Pool {
             inverseJoinColumns = @JoinColumn(name ="candidate_id")
     )
     private Set <Candidate> evaluates;
+
     @ManyToMany
     @JoinTable (
             name = "pool_criteria",
@@ -39,6 +40,8 @@ public class Pool {
             inverseJoinColumns = @JoinColumn(name ="criteria_id")
     )
     private Set <Criteria> containedCriterias;
+
+
     @ManyToMany
     @JoinTable (
             name = "pool_observer",
