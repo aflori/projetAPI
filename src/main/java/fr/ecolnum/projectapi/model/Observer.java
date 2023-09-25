@@ -2,6 +2,8 @@ package fr.ecolnum.projectapi.model;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 /**
  * This class will be the user that connects to the api
  */
@@ -23,6 +25,9 @@ public class Observer {
 
     @Column(nullable = false)
     private String password;
+
+    @ManyToMany
+    private Set<Pool> observeIn;
 
     public int getId() {
         return id;
@@ -62,5 +67,13 @@ public class Observer {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Pool> getObserveIn() {
+        return observeIn;
+    }
+
+    public void setObserveIn(Set<Pool> observeIn) {
+        this.observeIn = observeIn;
     }
 }
