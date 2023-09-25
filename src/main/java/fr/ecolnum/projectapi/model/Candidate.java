@@ -27,7 +27,7 @@ public class Candidate {
     @Column(nullable = false)
     private String lastName;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "evaluates")
     private Set<Pool> evaluatedIn;
 
     public int getId() {
