@@ -8,23 +8,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * This class manages the http requests of the Observer objects.
+ */
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api/admin/observer")
 public class ObserverController {
     @Autowired
     private ObserverService observerService;
 
     @Operation(summary = "Create an observer", description = "Add a new Observer object to the database.")
-    @PostMapping("/observer")
+    @PostMapping
     public ResponseEntity<?> createObserver(@RequestBody Observer observer){
 
-        observerService.createObserver(observer);
+        Observer createdObserver =  observerService.createObserver(observer);
 
-        return new ResponseEntity<>(observer, HttpStatus.CREATED);
+        return new ResponseEntity<>(createdObserver, HttpStatus.CREATED);
     }
 
     @Operation(summary = "Return all observers", description = "Return the list of all the observers from the database.")
-    @GetMapping("/observers")
+    @GetMapping
     public ResponseEntity<?> getAllObservers() {
         return new ResponseEntity<>(observerService.getAllObservers(), HttpStatus.OK);
     }
