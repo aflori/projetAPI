@@ -9,6 +9,11 @@ import jakarta.persistence.ManyToMany;
 
 import java.util.Set;
 
+/**
+ * Class made to represent candidates
+ *
+ * @author aflori
+ */
 @Entity
 public class Candidate {
 
