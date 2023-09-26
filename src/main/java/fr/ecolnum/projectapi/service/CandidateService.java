@@ -34,23 +34,37 @@ public class CandidateService {
     public Candidate importPhotoToCandidate(int idCandidate, MultipartFile photoCandidate) {
         Optional<Candidate> optionalCandidate = repository.findById(idCandidate);
 
-        if(optionalCandidate.isEmpty()) {
+        if (optionalCandidate.isEmpty()) {
             return null;
         }
         Candidate candidate = optionalCandidate.get();
 
-        String  fileName = candidate.getFirstName() + '_' + candidate.getLastName() + '_' + candidate.getId();
+        String photoType = photoCandidate.getContentType();
 
-        if (createEmptyFileByName(fileName)) return null;
+        String extensionPhoto = extractExtension(photoType);
+
+        String fileName = "candidatePhoto/" + candidate.getFirstName() + '_' + candidate.getLastName() + '_' + candidate.getId() + extensionPhoto;
+
+        createEmptyFileByName(fileName);
 
         writePhotoIn(photoCandidate, fileName);
 
         return candidate;
     }
 
+    private static String extractExtension(String fileTypeDescription) {
+        String fileType = fileTypeDescription.substring(0, 5);
+        String fileExtension = fileTypeDescription.substring(6);
+
+        if (fileType.equals("image")) {
+            return '.' + fileExtension;
+        }
+        throw new RuntimeException();
+    }
+
     private static void writePhotoIn(MultipartFile photoCandidate, String fileName) {
         try {
-            FileOutputStream photoFile = new FileOutputStream(fileName,false);
+            FileOutputStream photoFile = new FileOutputStream(fileName, false);
             byte[] photoData = photoCandidate.getBytes();
             photoFile.write(photoData);
             photoFile.close();
@@ -60,18 +74,17 @@ public class CandidateService {
         }
     }
 
-    private static boolean createEmptyFileByName(String fileName) {
+    private static void createEmptyFileByName(String fileName) {
         try {
             File creationFile = new File(fileName);
-            if(creationFile.exists()) {
+            if (creationFile.exists()) {
                 creationFile.delete();
             }
             creationFile.createNewFile();
 
         } catch (Exception e) {
             //could not create file
-            return true;
+            throw new RuntimeException(e);
         }
-        return false;
     }
 }
