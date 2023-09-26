@@ -1,5 +1,6 @@
 package fr.ecolnum.projectapi.controller;
 
+import fr.ecolnum.projectapi.exception.CandidateAlreadyExistsException;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.service.CandidateService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,6 +49,7 @@ public class CandidateController {
     }
 
 
+
     @PostMapping("/checkDuplicate")
     @Operation(
             summary = "Check for duplicate candidate in the database then create it",
@@ -61,8 +63,11 @@ public class CandidateController {
             responseCode = "201"
     )
     public ResponseEntity<Candidate> checkDuplicate(@RequestBody Candidate candidate) {
-        Candidate createdCandidate = candidateService.checkDuplicate(candidate);
-
-        return new ResponseEntity<>(createdCandidate, HttpStatus.CREATED);
+        try {
+            Candidate createdCandidate = candidateService.checkDuplicate(candidate);
+            return new ResponseEntity<>(createdCandidate, HttpStatus.CREATED);
+        } catch (CandidateAlreadyExistsException e) {
+            return new ResponseEntity<>(HttpStatus.MULTIPLE_CHOICES);
+        }
     }
 }
