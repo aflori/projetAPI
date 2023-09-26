@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface CandidateRepository extends JpaRepository<Candidate, Integer> {
+    Iterable<Candidate> findByLastNameEquals(String name);
 }
