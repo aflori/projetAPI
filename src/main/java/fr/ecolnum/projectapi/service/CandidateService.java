@@ -32,17 +32,33 @@ public class CandidateService {
 
         String extensionPhoto = extractPhotoExtension(photoCandidate);
 
-        String fileName = "candidatePhoto/" + candidate.getFirstName() + '_' + candidate.getLastName() + '_' + candidate.getId() + extensionPhoto;
+        String fileName = "candidatePhoto/" + candidate.getFirstName() + '_' + candidate.getLastName() + '_'; //+ candidate.getId() + extensionPhoto;
 
-        createEmptyFileByName(fileName);
-        writePhotoIn(photoCandidate, fileName);
+        candidate = repository.save(candidate);
+
+        //id put in file name because save() create the candidate ID.
+        //we do not have it before calling it.
+        fileName = fileName + candidate.getId() + extensionPhoto;
+
+        try {
+
+            createEmptyFileByName(fileName);
+            writePhotoIn(photoCandidate, fileName);
+
+        } catch (FileNotUpdatableException exception) { // we can't create file
+
+            repository.delete(candidate);
+            throw exception;
+
+        }
 
         candidate.setPhotoUrl(fileName);
 
         return candidate;
     }
 
-    private static String extractExtension(MultipartFile photoCandidate) throws MultipartFileIsNotImageException {
+
+    private static String extractPhotoExtension(MultipartFile photoCandidate) throws MultipartFileIsNotImageException {
 
         String photoType = photoCandidate.getContentType();
         if (photoType == null) {
