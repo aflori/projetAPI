@@ -6,7 +6,9 @@ import fr.ecolnum.projectapi.repository.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Service for candidate action
@@ -45,8 +47,9 @@ public class CandidateService {
         Iterator<Candidate> iter;
         iter = candidateList.iterator();
 
-        while (iter.hasNext()) {
-            String firstNameDB = iter.next().getFirstName();
+        while (iter.hasNext() && !isDuplicate) {
+            Candidate candidateDB = iter.next();
+            String firstNameDB = candidateDB.getFirstName();
             if (firstName.equalsIgnoreCase(firstNameDB)) {
                 isDuplicate = true;
             }
@@ -54,11 +57,26 @@ public class CandidateService {
 
         if (isDuplicate) {
             throw new CandidateAlreadyExistsException("This name is already used");
-        }
-
-        else {
+        } else {
             return createCandidate(candidate);
 
         }
+    }
+
+    public Iterable<Candidate> returnDuplicate(Candidate candidate) {
+        String lastName = candidate.getLastName();
+        String firstName = candidate.getFirstName();
+        Iterable<Candidate> candidateList = repository.findByLastNameEquals(lastName);
+
+        Set<Candidate> duplicateCandidate = new HashSet<>();
+
+        for (Candidate dbCandidate : candidateList) {
+            String firstNameDB = dbCandidate.getFirstName();
+            if (firstName.equalsIgnoreCase(firstNameDB)) {
+                duplicateCandidate.add(dbCandidate);
+            }
+        }
+
+        return duplicateCandidate;
     }
 }
