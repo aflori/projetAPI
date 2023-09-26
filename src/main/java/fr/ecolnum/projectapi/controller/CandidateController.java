@@ -23,9 +23,12 @@ public class CandidateController {
     private CandidateService candidateService;
 
     /**
-     * function made to answer a post request on serveur
+     * function made to answer {{environement}}/api/admin/candidate Post request by creating a new candidate on database with its photo
      *
-     * @param candidate candidate that must be created on database
+     * @param firstName firstname of candidate
+     * @param lastName lastname of candidate
+     * @param photoCandidate imported photo created by spring when receiving request
+     *
      * @return the candidate created
      * @author aflori
      */
@@ -33,7 +36,7 @@ public class CandidateController {
     @Operation(
             summary = "Create a new candidate on database",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "first and last name of a candidate",
+                    description = "photo, first and last name of a candidate",
                     required = true
             )
     )
