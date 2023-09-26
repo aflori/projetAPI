@@ -81,4 +81,28 @@ public class Pool {
     public void setLocation(String location) {
         this.location = location;
     }
+
+    public Set<Candidate> getEvaluates() {
+        return evaluates;
+    }
+
+    public void setEvaluates(Set<Candidate> evaluates) {
+        this.evaluates = evaluates;
+    }
+
+    public Set<Criteria> getContainedCriterias() {
+        return containedCriterias;
+    }
+
+    public void setContainedCriterias(Set<Criteria> containedCriterias) {
+        this.containedCriterias = containedCriterias;
+    }
+
+    public Set<Observer> getContainedObservers() {
+        return containedObservers;
+    }
+
+    public void setContainedObservers(Set<Observer> containedObservers) {
+        this.containedObservers = containedObservers;
+    }
 }
