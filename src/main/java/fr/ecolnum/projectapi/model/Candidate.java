@@ -30,6 +30,14 @@ public class Candidate {
     @ManyToMany(mappedBy = "evaluates")
     private Set<Pool> evaluatedIn;
 
+    public Candidate() {}
+    public Candidate(String firstName, String lastName) {
+        this.id = 0;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.evaluatedIn = null;
+    }
+
     public int getId() {
         return id;
     }
