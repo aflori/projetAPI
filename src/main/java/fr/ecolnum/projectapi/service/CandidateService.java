@@ -1,5 +1,6 @@
 package fr.ecolnum.projectapi.service;
 
+import fr.ecolnum.projectapi.exception.FileNotUpdatableException;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +46,14 @@ public class CandidateService {
 
         String fileName = "candidatePhoto/" + candidate.getFirstName() + '_' + candidate.getLastName() + '_' + candidate.getId() + extensionPhoto;
 
-        createEmptyFileByName(fileName);
+        try {
+            createEmptyFileByName(fileName);
 
-        writePhotoIn(photoCandidate, fileName);
+            writePhotoIn(photoCandidate, fileName);
+        } catch (FileNotUpdatableException e) {
+            return null;
+        }
+
 
         return candidate;
     }
@@ -62,7 +68,7 @@ public class CandidateService {
         throw new RuntimeException();
     }
 
-    private static void writePhotoIn(MultipartFile photoCandidate, String fileName) {
+    private static void writePhotoIn(MultipartFile photoCandidate, String fileName) throws FileNotUpdatableException {
         try {
             FileOutputStream photoFile = new FileOutputStream(fileName, false);
             byte[] photoData = photoCandidate.getBytes();
@@ -70,11 +76,11 @@ public class CandidateService {
             photoFile.close();
         } catch (IOException e) {
             //can't happen, File class did create file
-            throw new RuntimeException(e);
+            throw new FileNotUpdatableException();
         }
     }
 
-    private static void createEmptyFileByName(String fileName) {
+    private static void createEmptyFileByName(String fileName) throws FileNotUpdatableException {
         try {
             File creationFile = new File(fileName);
             if (creationFile.exists()) {
@@ -84,7 +90,7 @@ public class CandidateService {
 
         } catch (Exception e) {
             //could not create file
-            throw new RuntimeException(e);
+            throw new FileNotUpdatableException();
         }
     }
 }
