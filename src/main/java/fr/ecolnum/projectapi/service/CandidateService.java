@@ -1,6 +1,7 @@
 package fr.ecolnum.projectapi.service;
 
 import fr.ecolnum.projectapi.exception.FileNotUpdatableException;
+import fr.ecolnum.projectapi.exception.MultipartFileIsNotImageException;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +41,12 @@ public class CandidateService {
         }
         Candidate candidate = optionalCandidate.get();
 
-        String photoType = photoCandidate.getContentType();
-
-        String extensionPhoto = extractExtension(photoType);
+        String extensionPhoto = null;
+        try {
+            extensionPhoto = extractExtension(photoCandidate);
+        } catch (MultipartFileIsNotImageException e) {
+            throw new RuntimeException(e);
+        }
 
         String fileName = "candidatePhoto/" + candidate.getFirstName() + '_' + candidate.getLastName() + '_' + candidate.getId() + extensionPhoto;
 
@@ -58,14 +62,19 @@ public class CandidateService {
         return candidate;
     }
 
-    private static String extractExtension(String fileTypeDescription) {
-        String fileType = fileTypeDescription.substring(0, 5);
-        String fileExtension = fileTypeDescription.substring(6);
+    private static String extractExtension(MultipartFile photoCandidate) throws MultipartFileIsNotImageException {
+
+        String photoType = photoCandidate.getContentType();
+        if (photoType == null) {
+            throw new MultipartFileIsNotImageException("no file found");
+        }
+        String fileType = photoType.substring(0, 5);
+        String fileExtension = photoType.substring(6);
 
         if (fileType.equals("image")) {
             return '.' + fileExtension;
         }
-        throw new RuntimeException();
+        throw new MultipartFileIsNotImageException("not an image file");
     }
 
     private static void writePhotoIn(MultipartFile photoCandidate, String fileName) throws FileNotUpdatableException {
