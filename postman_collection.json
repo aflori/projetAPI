@@ -1,0 +1,109 @@
+{
+	"info": {
+		"_postman_id": "10981739-e566-449a-9e0c-0280bef72dd7",
+		"name": "CampusPiscine",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29515438"
+	},
+	"item": [
+		{
+			"name": "List all pools",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{environment}}/api/pool",
+					"host": [
+						"{{environment}}"
+					],
+					"path": [
+						"api",
+						"pool"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new pool",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"firstName\": \"Andrews\",\n        \"lastName\": \"Wilson\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{environment}}/api/pool",
+					"host": [
+						"{{environment}}"
+					],
+					"path": [
+						"api",
+						"pool"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Associate observer to pool",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"poolId\": 1,\n        \"userId\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{environment}}/api/observer",
+					"host": [
+						"{{environment}}"
+					],
+					"path": [
+						"api",
+						"observer"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "environment",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
