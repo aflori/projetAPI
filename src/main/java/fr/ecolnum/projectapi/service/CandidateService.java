@@ -38,35 +38,6 @@ public class CandidateService {
         writePhotoIn(photoCandidate, fileName);
 
         candidate.setPhotoUrl(fileName);
-        return repository.save(candidate);
-    }
-
-
-    public Candidate importPhotoToCandidate(int idCandidate, MultipartFile photoCandidate) {
-        Optional<Candidate> optionalCandidate = repository.findById(idCandidate);
-
-        if (optionalCandidate.isEmpty()) {
-            return null;
-        }
-        Candidate candidate = optionalCandidate.get();
-
-        String extensionPhoto = null;
-        try {
-            extensionPhoto = extractExtension(photoCandidate);
-        } catch (MultipartFileIsNotImageException e) {
-            throw new RuntimeException(e);
-        }
-
-        String fileName = "candidatePhoto/" + candidate.getFirstName() + '_' + candidate.getLastName() + '_' + candidate.getId() + extensionPhoto;
-
-        try {
-            createEmptyFileByName(fileName);
-
-            writePhotoIn(photoCandidate, fileName);
-        } catch (FileNotUpdatableException e) {
-            return null;
-        }
-
 
         return candidate;
     }
