@@ -28,7 +28,16 @@ public class CandidateService {
      * @param candidate candidate to be created in database
      * @return the candidate (with its new ID) created
      */
-    public Candidate createCandidate(Candidate candidate) {
+    public Candidate createCandidate(Candidate candidate, MultipartFile photoCandidate) throws MultipartFileIsNotImageException, FileNotUpdatableException {
+
+        String extensionPhoto = extractPhotoExtension(photoCandidate);
+
+        String fileName = "candidatePhoto/" + candidate.getFirstName() + '_' + candidate.getLastName() + '_' + candidate.getId() + extensionPhoto;
+
+        createEmptyFileByName(fileName);
+        writePhotoIn(photoCandidate, fileName);
+
+        candidate.setPhotoUrl(fileName);
         return repository.save(candidate);
     }
 
