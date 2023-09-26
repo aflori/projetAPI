@@ -38,6 +38,7 @@ public class ObserverController {
             responseCode = "200"
     )
     public ResponseEntity<?> getAllObservers() {
-        return new ResponseEntity<>(observerService.getAllObservers(), HttpStatus.OK);
+        Iterable<Observer> observersList = observerService.getAllObservers();
+        return new ResponseEntity<>(observersList, HttpStatus.OK);
     }
 }

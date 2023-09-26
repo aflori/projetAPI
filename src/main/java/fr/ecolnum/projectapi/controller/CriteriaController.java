@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 /**
  * This class manages the http requests of the Criteria objects.
  */
@@ -38,7 +37,8 @@ public class CriteriaController {
             responseCode = "200"
     )
     public ResponseEntity<?> getAllCriterias() {
-        return new ResponseEntity<>(criteriaService.getAllCriterias(), HttpStatus.OK);
+        Iterable<Criteria> criteriaList = criteriaService.getAllCriterias();
+        return new ResponseEntity<>(criteriaList, HttpStatus.OK);
     }
 
 
