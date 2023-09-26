@@ -20,10 +20,12 @@ public class CandidateService {
     private CandidateRepository repository;
 
     /**
-     * this method create a candidate in the database
+     * this method create a candidate in the database and import a photo in local
      *
      * @param candidate candidate to be created in database
-     * @return the candidate (with its new ID) created
+     * @param photoCandidate photo object of the associated candidate
+     *
+     * @return the candidate (with its new ID and photo URL) created
      */
     public Candidate createCandidate(Candidate candidate, MultipartFile photoCandidate) throws MultipartFileIsNotImageException, FileNotUpdatableException {
 
