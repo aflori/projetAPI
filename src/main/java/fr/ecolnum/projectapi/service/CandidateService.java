@@ -32,19 +32,28 @@ public class CandidateService {
 
         String extensionPhoto = extractPhotoExtension(photoCandidate);
 
-        Candidate lastCandidateAdded = repository.findTopByOrderByIdDesc();
-
-
-        String fileName = "candidatePhoto/" + candidate.getFirstName() + '_' + candidate.getLastName() + '_' + (lastCandidateAdded.getId()+1) + extensionPhoto;
+        String fileName = "candidatePhoto/" + candidate.getFirstName() + '_' + candidate.getLastName() + '_';
 
         createEmptyFileByName(fileName);
         writePhotoIn(photoCandidate, fileName);
 
         candidate.setPhotoUrl(fileName);
 
-        return  repository.save(candidate);
+        Candidate newCandidateSaved = repository.save(candidate);
+
+        String newFileName = fileName + candidate.getId() + extensionPhoto;
+        changeFileName(fileName, newFileName);
+
+        newCandidateSaved.setPhotoUrl(newFileName);
+
+        return repository.save(newCandidateSaved);
     }
 
+    private static void changeFileName(String oldName, String newName) {
+        File oldF = new File(oldName);
+        File newF = new File(newName);
+        oldF.renameTo(newF);
+    }
 
     private static String extractPhotoExtension(MultipartFile photoCandidate) throws MultipartFileIsNotImageException {
 
