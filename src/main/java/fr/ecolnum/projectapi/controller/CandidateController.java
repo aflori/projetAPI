@@ -46,7 +46,7 @@ public class CandidateController {
     )
     public ResponseEntity<Candidate> createCandidate(@RequestPart String firstName,
                                                      @RequestPart String lastName,
-                                                     @RequestPart(name = "photo") MultipartFile photoCandidate) {
+                                                     @RequestPart(name = "photo", required = false) MultipartFile photoCandidate) {
         Candidate candidate = new Candidate(firstName, lastName);
 
         try {
