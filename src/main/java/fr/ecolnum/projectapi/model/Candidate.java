@@ -28,7 +28,7 @@ public class Candidate {
     @Column(nullable = false)
     private String lastName;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     @JsonIgnore
     private String photoUrl;
 
@@ -41,7 +41,7 @@ public class Candidate {
         this.firstName = firstName;
         this.lastName = lastName;
         this.evaluatedIn = null;
-        this.photoUrl = "candidatePhoto/";
+        this.photoUrl = null;
     }
 
     public int getId() {
