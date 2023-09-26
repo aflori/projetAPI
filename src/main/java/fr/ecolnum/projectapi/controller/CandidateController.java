@@ -1,5 +1,7 @@
 package fr.ecolnum.projectapi.controller;
 
+import fr.ecolnum.projectapi.exception.FileNotUpdatableException;
+import fr.ecolnum.projectapi.exception.MultipartFileIsNotImageException;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.service.CandidateService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,17 +41,26 @@ public class CandidateController {
             description = "Candidate created by server",
             responseCode = "201"
     )
-    public ResponseEntity<Candidate> createCandidate(@RequestBody Candidate candidate) {
-        Candidate createdCandidate = candidateService.createCandidate(candidate);
+    public ResponseEntity<Candidate> createCandidate(@RequestPart String firstName,
+                                                     @RequestPart String lastName,
+                                                     @RequestPart(name = "photo") MultipartFile photoCandidate) {
+        Candidate candidate = new Candidate(firstName, lastName);
 
-        return new ResponseEntity<>(createdCandidate, HttpStatus.CREATED);
+        try {
+
+            Candidate createdCandidate = candidateService.createCandidate(candidate, photoCandidate);
+            return new ResponseEntity<>(createdCandidate, HttpStatus.CREATED);
+
+        } catch (MultipartFileIsNotImageException e) {
+
+            return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+
+        } catch (FileNotUpdatableException e) {
+
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+
     }
 
-    @PostMapping("/img/{idCandidate}")
-    public ResponseEntity<?> importImage(@PathVariable("idCandidate") int id, @RequestParam("image") MultipartFile photoCandidate){
-
-        Candidate candidateHasNewPhoto =candidateService.importPhotoToCandidate(id, photoCandidate);
-
-        return new ResponseEntity<>(candidateHasNewPhoto, HttpStatus.CREATED);
-    }
 }
