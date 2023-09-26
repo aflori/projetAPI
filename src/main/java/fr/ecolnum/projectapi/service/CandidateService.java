@@ -29,6 +29,9 @@ public class CandidateService {
      */
     public Candidate createCandidate(Candidate candidate, MultipartFile photoCandidate) throws MultipartFileIsNotImageException, FileNotUpdatableException {
 
+        if(photoCandidate==null) {
+            return repository.save(candidate);
+        }
         String extensionPhoto = extractPhotoExtension(photoCandidate);
 
         String fileName = "candidatePhoto/" + candidate.getFirstName() + '_' + candidate.getLastName() + '_';
@@ -49,6 +52,7 @@ public class CandidateService {
 
         return repository.save(newCandidateSaved);
     }
+
 
 
 }
