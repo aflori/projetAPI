@@ -46,9 +46,10 @@ public class CandidateController {
     }
 
     @PostMapping("/img/{idCandidate}")
-    public ResponseEntity<?> importImage(@PathVariable("idCandidate") int id, @RequestParam("image") MultipartFile candidateImage){
+    public ResponseEntity<?> importImage(@PathVariable("idCandidate") int id, @RequestParam("image") MultipartFile photoCandidate){
 
+        Candidate candidateHasNewPhoto =candidateService.importPhotoToCandidate(id, photoCandidate);
 
-        return null;
+        return new ResponseEntity<>(candidateHasNewPhoto, HttpStatus.CREATED);
     }
 }
