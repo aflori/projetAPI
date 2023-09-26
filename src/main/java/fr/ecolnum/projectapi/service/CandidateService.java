@@ -41,6 +41,8 @@ public class CandidateService {
         Candidate newCandidateSaved = repository.save(candidate);
 
         String newFileName = fileName + candidate.getId() + extensionPhoto;
+
+        createEmptyFileByName(newFileName);
         changeFileName(fileName, newFileName);
 
         newCandidateSaved.setPhotoUrl(newFileName);
