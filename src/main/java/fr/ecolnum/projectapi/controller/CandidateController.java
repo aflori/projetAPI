@@ -46,4 +46,23 @@ public class CandidateController {
 
         return new ResponseEntity<>(createdCandidate, HttpStatus.CREATED);
     }
+
+
+    @PostMapping("/checkDuplicate")
+    @Operation(
+            summary = "Check for duplicate candidate in the database then create it",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "first and last name of a candidate",
+                    required = true
+            )
+    )
+    @ApiResponse(
+            description = "Candidate created by server",
+            responseCode = "201"
+    )
+    public ResponseEntity<Candidate> checkDuplicate(@RequestBody Candidate candidate) {
+        Candidate createdCandidate = candidateService.checkDuplicate(candidate);
+
+        return new ResponseEntity<>(createdCandidate, HttpStatus.CREATED);
+    }
 }
