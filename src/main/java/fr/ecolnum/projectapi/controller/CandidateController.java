@@ -8,10 +8,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Class made to represent Controller on candidate operation
@@ -24,11 +22,11 @@ public class CandidateController {
     private CandidateService candidateService;
 
     /**
-     * function made to answer a post request on serveur
      *
-     * @param candidate candidate that must be created on database
-     * @return the candidate created
-     * @author aflori
+     * @param firstName
+     * @param lastName
+     * @param photoCandidate
+     * @return
      */
     @PostMapping
     @Operation(
@@ -42,14 +40,22 @@ public class CandidateController {
             description = "Candidate created by server",
             responseCode = "201"
     )
-    public ResponseEntity<Candidate> createCandidate(@RequestBody Candidate candidate) {
-        Candidate createdCandidate = candidateService.createCandidate(candidate);
+    public ResponseEntity<Candidate> createCandidate(@RequestPart String firstName,
+                                                     @RequestPart String lastName,
+                                                     @RequestPart(name = "photo") MultipartFile photoCandidate) {
+        Candidate createdCandidate = candidateService.createCandidate(firstName, lastName, photoCandidate);
 
         return new ResponseEntity<>(createdCandidate, HttpStatus.CREATED);
     }
 
 
-
+    /**
+     *
+     * @param firstName firstName of checked candidate
+     * @param lastName lastName of checked candidate
+     * @param photoCandidate
+     * @return
+     */
     @PostMapping("/checkDuplicate")
     @Operation(
             summary = "Check for duplicate candidate in the database then create it",
@@ -62,9 +68,11 @@ public class CandidateController {
             description = "Candidate created by server",
             responseCode = "201"
     )
-    public ResponseEntity<Candidate> checkDuplicate(@RequestBody Candidate candidate) {
+    public ResponseEntity<Candidate> checkDuplicate(@RequestPart String firstName,
+                                                    @RequestPart String lastName,
+                                                    @RequestPart(name = "photo", required = false) MultipartFile photoCandidate) {
         try {
-            Candidate createdCandidate = candidateService.checkDuplicate(candidate);
+            Candidate createdCandidate = candidateService.checkDuplicate(firstName, lastName, photoCandidate);
             return new ResponseEntity<>(createdCandidate, HttpStatus.CREATED);
         } catch (CandidateAlreadyExistsException e) {
             return new ResponseEntity<>(HttpStatus.MULTIPLE_CHOICES);

@@ -5,6 +5,8 @@ import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -20,28 +22,33 @@ public class CandidateService {
     private CandidateRepository repository;
 
     /**
-     * this method create a candidate in the database
      *
-     * @param candidate candidate to be created in database
-     * @return the candidate (with its new ID) created
+     * @param firstName
+     * @param lastName
+     * @param photoCandidate
+     * @return
      */
-    public Candidate createCandidate(Candidate candidate) {
-        return repository.save(candidate);
+    public Candidate createCandidate(String firstName,
+                                     String lastName,
+                                     MultipartFile photoCandidate) {
+        return null;
     }
 
 
     /**
-     * check for duplicate candidate before creation.
      *
-     * @param candidate candidate checked to see if it already exists
-     * @return the candidate created
+     * @param firstName firstName of Candidate
+     * @param lastName lastName of Candidate
+     * @param photoCandidate photo of Candidate
+     * @return return the new candidate from the database
+     * @throws CandidateAlreadyExistsException if there is a duplicate
      */
-    public Candidate checkDuplicate(Candidate candidate) throws CandidateAlreadyExistsException {
+    public Candidate checkDuplicate(String firstName,
+                                    String lastName,
+                                    MultipartFile photoCandidate) throws CandidateAlreadyExistsException {
 
         boolean isDuplicate = false;
 
-        String lastName = candidate.getLastName();
-        String firstName = candidate.getFirstName();
         Iterable<Candidate> candidateList = repository.findByLastNameEquals(lastName);
 
         Iterator<Candidate> iter;
@@ -58,7 +65,7 @@ public class CandidateService {
         if (isDuplicate) {
             throw new CandidateAlreadyExistsException("This name is already used");
         } else {
-            return createCandidate(candidate);
+            return createCandidate(firstName, lastName, photoCandidate);
 
         }
     }
