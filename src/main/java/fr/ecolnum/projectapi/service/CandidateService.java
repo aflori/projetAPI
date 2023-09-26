@@ -32,29 +32,17 @@ public class CandidateService {
 
         String extensionPhoto = extractPhotoExtension(photoCandidate);
 
-        String fileName = "candidatePhoto/" + candidate.getFirstName() + '_' + candidate.getLastName() + '_'; //+ candidate.getId() + extensionPhoto;
+        Candidate lastCandidateAdded = repository.findTopByOrderByIdDesc();
 
-        candidate = repository.save(candidate);
 
-        //id put in file name because save() create the candidate ID.
-        //we do not have it before calling it.
-        fileName = fileName + candidate.getId() + extensionPhoto;
+        String fileName = "candidatePhoto/" + candidate.getFirstName() + '_' + candidate.getLastName() + '_' + (lastCandidateAdded.getId()+1) + extensionPhoto;
 
-        try {
-
-            createEmptyFileByName(fileName);
-            writePhotoIn(photoCandidate, fileName);
-
-        } catch (FileNotUpdatableException exception) { // we can't create file
-
-            repository.delete(candidate);
-            throw exception;
-
-        }
+        createEmptyFileByName(fileName);
+        writePhotoIn(photoCandidate, fileName);
 
         candidate.setPhotoUrl(fileName);
 
-        return candidate;
+        return  repository.save(candidate);
     }
 
 
