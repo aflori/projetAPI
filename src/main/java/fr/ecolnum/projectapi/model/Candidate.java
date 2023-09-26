@@ -27,6 +27,9 @@ public class Candidate {
     @Column(nullable = false)
     private String lastName;
 
+    @Column(nullable = false)
+    private String photoUrl;
+
     @ManyToMany(mappedBy = "evaluates")
     private Set<Pool> evaluatedIn;
 
@@ -36,6 +39,7 @@ public class Candidate {
         this.firstName = firstName;
         this.lastName = lastName;
         this.evaluatedIn = null;
+        this.photoUrl = "candidatePhoto/";
     }
 
     public int getId() {
@@ -78,5 +82,13 @@ public class Candidate {
                 ", lastName='" + lastName + '\'' +
                 ", evaluatedIn=" + evaluatedIn +
                 '}';
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }
