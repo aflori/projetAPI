@@ -6,6 +6,9 @@ import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.model.Criteria;
 import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Pool;
+import fr.ecolnum.projectapi.repository.CandidateRepository;
+import fr.ecolnum.projectapi.repository.CriteriaRepository;
+import fr.ecolnum.projectapi.repository.ObserverRepository;
 import fr.ecolnum.projectapi.repository.PoolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,13 @@ import java.util.Set;
 public class PoolService {
     @Autowired
     private PoolRepository poolRepository;
+
+    @Autowired
+    private CandidateRepository candidateRepository;
+    @Autowired
+    private CriteriaRepository criteriaRepository;
+    @Autowired
+    private ObserverRepository observerRepository;
 
     public Iterable<PoolDto> getAllPools() {
         Set<PoolDto> allPoolAvailable = new HashSet<>();
@@ -49,9 +59,13 @@ public class PoolService {
         return poolRepository.save(pool);
     }
 
-    public PoolDto createPool(PoolDto pool) {
+    public PoolDto createPool(PoolDto pool) throws IdNotFoundException {
 
-        return pool;
+        Pool poolDB = pool.convertToPoolObject(candidateRepository,criteriaRepository,observerRepository);
+        poolRepository.save(poolDB);
+
+        PoolDto poolCreated = new PoolDto(poolDB);
+        return poolCreated;
     }
     /**
      * @param poolId           recuperation id of pool
