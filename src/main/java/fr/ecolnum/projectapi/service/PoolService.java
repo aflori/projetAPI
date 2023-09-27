@@ -1,17 +1,15 @@
 package fr.ecolnum.projectapi.service;
 
+import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.model.Criteria;
 import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Pool;
-import fr.ecolnum.projectapi.repository.ObserverRepository;
 import fr.ecolnum.projectapi.repository.PoolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -23,8 +21,16 @@ public class PoolService {
     @Autowired
     private PoolRepository poolRepository;
 
-    public Iterable<Pool> getAllPools() {
-        return poolRepository.findAll();
+    public Iterable<PoolDto> getAllPools() {
+        Set<PoolDto> allPoolAvailable = new HashSet<>();
+        Iterable<Pool> poolList =  poolRepository.findAll();
+
+        for( Pool pool: poolList) {
+            PoolDto poolToAdd = new PoolDto(pool);
+            allPoolAvailable.add(poolToAdd);
+        }
+
+        return allPoolAvailable;
     }
 
     public Optional<Pool> finById(int id){
