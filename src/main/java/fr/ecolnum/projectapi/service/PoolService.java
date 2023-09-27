@@ -66,8 +66,9 @@ public class PoolService {
     /**
      * @param poolId           recuperation id of pool
      * @param poolModification add to pools an observer or a criteria or candidate with poolId
+     * @return
      */
-    public void modifyPool(int poolId, Pool poolModification) {
+    public Pool modifyPool(int poolId, Pool poolModification) {
         Pool modifiedPool = poolRepository.getReferenceById(poolId);
 
         Set<Candidate> candidateSet = poolModification.getEvaluates();
@@ -88,7 +89,15 @@ public class PoolService {
                 modifiedPool.getContainedCriterias().add(criteria);
             }
         }
-        poolRepository.save(modifiedPool);
+        return poolRepository.save(modifiedPool);
+    }
+
+    public PoolDto modifyPool(int poolId, PoolDto linksToRegister) throws IdNotFoundException {
+        Pool links = linksToRegister.convertToPoolObject(candidateRepository,criteriaRepository,observerRepository);
+
+        Pool objectCreated = modifyPool(poolId, links);
+
+        return  new PoolDto(objectCreated);
     }
 }
 
