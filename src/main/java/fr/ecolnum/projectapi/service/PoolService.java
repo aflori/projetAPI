@@ -55,11 +55,7 @@ public class PoolService {
         return new PoolDto(pool);
     }
 
-    public Pool createPool(Pool pool) {
-        return poolRepository.save(pool);
-    }
-
-    public PoolDto createPool(PoolDto pool) throws IdNotFoundException {
+      public PoolDto createPool(PoolDto pool) throws IdNotFoundException {
 
         Pool poolDB = pool.convertToPoolObject(candidateRepository,criteriaRepository,observerRepository);
         poolRepository.save(poolDB);
