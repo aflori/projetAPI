@@ -9,13 +9,19 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
+/**
+ * DTO is a pattern (data transfert object) which use for the recursivity
+ * DTO take only the id for the pools which associated no more
+ */
 public class PoolDto {
     private int id;
     private String name;
     private Timestamp startDate;
     private Timestamp endDate;
     private String location;
+    /**
+     * create objects for the list which are integers
+     */
     private List<Integer> containedCandidate;
     private List <Integer> containedCriterias;
     private List <Integer> containedObservers;
@@ -23,13 +29,19 @@ public class PoolDto {
     public PoolDto() {
     }
 
+    /**
+     *
+     * @param pool this construct take attributs of pool
+     */
     public PoolDto(Pool pool) {
         this.id = pool.getId();
         this.name = pool.getName();
         this.startDate = pool.getStartDate();
         this.endDate = pool.getEndDate();
         this.location = pool.getLocation();
-
+        /**
+         * transform the pool list in object which contain an ArrayList
+         */
         Set<Candidate> evaluate = pool.getEvaluates();
         containedCandidate = new ArrayList<>();
 

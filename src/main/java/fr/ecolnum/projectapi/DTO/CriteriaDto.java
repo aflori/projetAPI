@@ -8,22 +8,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * DTO is a pattern (data transfert object) which use for the recursivity
+ * DTO take only the id for the pools which associated no more
+ */
 public class CriteriaDto {
     private int id;
     private String name;
     private String description;
-
+    /**
+     * create an object for the list which are integers
+     */
     private List<Integer> existInPool;
     public CriteriaDto() {
     }
+
+    /**
+     *
+     * @param criteria this construct take attributs of criteria
+     */
     public CriteriaDto(Criteria criteria) {
         this.id = criteria.getId();
         this.name = criteria.getName();
         this.description = criteria.getDescription();
-
+        /**
+         * transform the pool list in object existsIn which contain an ArrayList
+         */
         Set<Pool> existsIn = criteria.getExistsIn();
         existInPool = new ArrayList<>();
-
+        /**
+         * just take all id contain in pool List
+         */
         for (Pool poolList : existsIn) {
             existInPool.add(poolList.getId());
         }

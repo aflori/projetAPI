@@ -9,25 +9,46 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * DTO is a pattern (data transfert object) which use for the recursivity
+ * DTO take only the id for the pools which associated no more
+ */
 public class ObserverDto {
     private int id;
     private String firstname;
     private String lastname;
     private String password;
     private String email;
+    /**
+     * create an object for the list which are integers
+     */
     private List<Integer> containInPool;
+
+    /**
+     * just an empty construct
+     */
     public ObserverDto() {
     }
+
+    /**
+     *
+     * @param observer this construct take attributs of observer
+     */
     public ObserverDto(Observer observer) {
         this.id = observer.getId();
         this.firstname = observer.getFirstName();
         this.lastname = observer.getLastName();
         this.email = observer.getEmail();
         this.password = observer.getPassword();
+        /**
+         * transform the pool list in object observeIn which contain an ArrayList
+         */
 
         Set<Pool> observeIn = observer.getObserveIn();
         containInPool = new ArrayList<>();
-
+        /**
+         * just take all id contain in pool List
+         */
         for (Pool poolList : observeIn) {
             containInPool.add(poolList.getId());
         }

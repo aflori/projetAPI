@@ -7,26 +7,39 @@ import fr.ecolnum.projectapi.model.Pool;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
+/**
+ * DTO is a pattern (data transfert object) which use for the recursivity
+ * DTO take only the id for the pools which associated no more
+ */
 public class CandidateDto {
     private int id;
     private String firstname;
     private String lastname;
     private String photoUrl;
+    /**
+     * create an object for the list which are integers
+     */
     private List<Integer> evaluatedIn;
-
     public CandidateDto() {
     }
+
+    /**
+     *
+     * @param candidate this construct take attributs of candidate
+     */
     public CandidateDto(Candidate candidate) {
         this.id = candidate.getId();
         this.firstname = candidate.getFirstName();
         this.lastname = candidate.getLastName();
         this.photoUrl = candidate.getPhotoUrl();
-
-
+        /**
+         * transform the pool list in object observeIn which contain an ArrayList
+         */
         Set<Pool> observeIn = candidate.getEvaluatedIn();
         evaluatedIn = new ArrayList<>();
-
+        /**
+         * just take all id contain in pool List
+         */
         for (Pool poolList : observeIn) {
             evaluatedIn.add(poolList.getId());
         }
