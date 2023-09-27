@@ -73,7 +73,6 @@ public class PoolController {
     }
 
     /**
-     *
      * @param poolId
      * @param poolModification it's pool's modification with her id / we add a new object like (candidate, Criteria, observer)
      * @return return just a status
@@ -84,9 +83,14 @@ public class PoolController {
             description = "Return pool modified and the OK HTTP response",
             responseCode = "201"
     )
-    public ResponseEntity<?> modifyPool(@PathVariable int poolId, @RequestBody Pool poolModification) {
-        poolService.modifyPool(poolId, poolModification);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> modifyPool(@PathVariable int poolId, @RequestBody PoolDto poolModification) {
+        PoolDto poolModified = null;
+        try {
+            poolModified = poolService.modifyPool(poolId, poolModification);
+            return new ResponseEntity<>(poolModified, HttpStatus.OK);
+        } catch (IdNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
 }
