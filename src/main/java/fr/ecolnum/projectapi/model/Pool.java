@@ -52,6 +52,7 @@ public class Pool {
     )
     private Set <Observer> containedObservers;
 
+
     public Integer getId() {
         return id;
     }
