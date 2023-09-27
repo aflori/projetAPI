@@ -43,7 +43,6 @@ public class Candidate {
         this.evaluatedIn = null;
         this.photoUrl = null;
     }
-
     public int getId() {
         return id;
     }
