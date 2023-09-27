@@ -43,15 +43,20 @@ public class PoolDto {
         Set<Criteria> evaluateCriteria = pool.getContainedCriterias();
         containedCriteria = new ArrayList<>();
 
-        for (Criteria criteriaList : evaluateCriteria) {
-            containedCriteria.add(criteriaList.getId());
+        if(evaluateCriteria != null) {
+            for (Criteria criteriaList : evaluateCriteria) {
+                containedCriteria.add(criteriaList.getId());
+            }
         }
-
-        for (Observer observerList : evaluateObserver) {
-            containedObservers.add(observerList.getId());
+        if(evaluateObserver != null) {
+            for (Observer observerList : evaluateObserver) {
+                containedObservers.add(observerList.getId());
+            }
         }
-        for (Candidate candidateList : evaluate) {
-            containedCandidate.add(candidateList.getId());
+        if(evaluate != null) {
+            for (Candidate candidateList : evaluate) {
+                containedCandidate.add(candidateList.getId());
+            }
         }
     }
 
