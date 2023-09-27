@@ -1,6 +1,7 @@
 package fr.ecolnum.projectapi.service;
 
 import fr.ecolnum.projectapi.DTO.PoolDto;
+import fr.ecolnum.projectapi.exception.PoolNotFoundException;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.model.Criteria;
 import fr.ecolnum.projectapi.model.Observer;
@@ -23,9 +24,9 @@ public class PoolService {
 
     public Iterable<PoolDto> getAllPools() {
         Set<PoolDto> allPoolAvailable = new HashSet<>();
-        Iterable<Pool> poolList =  poolRepository.findAll();
+        Iterable<Pool> poolList = poolRepository.findAll();
 
-        for( Pool pool: poolList) {
+        for (Pool pool : poolList) {
             PoolDto poolToAdd = new PoolDto(pool);
             allPoolAvailable.add(poolToAdd);
         }
@@ -33,17 +34,23 @@ public class PoolService {
         return allPoolAvailable;
     }
 
-    public Optional<Pool> finById(int id){
-        return poolRepository.findById(id);
+    public PoolDto finById(int id) throws PoolNotFoundException {
+        Optional<Pool> optionnalPool = poolRepository.findById(id);
+
+        if (optionnalPool.isEmpty()) {
+            throw new PoolNotFoundException("Id do not exist");
+        }
+
+        final Pool pool = optionnalPool.get();
+        return new PoolDto(pool);
     }
 
-    public Pool createPool(Pool pool){
-       return poolRepository.save(pool);
+    public Pool createPool(Pool pool) {
+        return poolRepository.save(pool);
     }
 
     /**
-     *
-     * @param poolId recuperation id of pool
+     * @param poolId           recuperation id of pool
      * @param poolModification add to pools an observer or a criteria or candidate with poolId
      */
     public void modifyPool(int poolId, Pool poolModification) {
@@ -57,8 +64,8 @@ public class PoolService {
         }
         Set<Observer> observerSet = poolModification.getContainedObservers();
         if (observerSet != null) {
-        for (Observer observer : poolModification.getContainedObservers()) {
-            modifiedPool.getContainedObservers().add(observer);
+            for (Observer observer : poolModification.getContainedObservers()) {
+                modifiedPool.getContainedObservers().add(observer);
             }
         }
         Set<Criteria> criteriaSet = poolModification.getContainedCriterias();
