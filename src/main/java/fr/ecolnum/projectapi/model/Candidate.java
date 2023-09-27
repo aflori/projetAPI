@@ -43,6 +43,10 @@ public class Candidate {
         this.evaluatedIn = null;
         this.photoUrl = null;
     }
+    public Candidate(int i, String firstName, String lastName) {
+        this(firstName, lastName);
+        this.id = i;
+    }
 
     public int getId() {
         return id;
