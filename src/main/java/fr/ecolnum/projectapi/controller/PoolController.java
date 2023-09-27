@@ -63,8 +63,13 @@ public class PoolController {
             responseCode = "201"
     )
     public ResponseEntity<?> createPool(@RequestBody PoolDto pool) {
-        PoolDto createdPool = poolService.createPool(pool);
-        return new ResponseEntity<>(createdPool, HttpStatus.CREATED);
+        PoolDto createdPool = null;
+        try {
+            createdPool = poolService.createPool(pool);
+            return new ResponseEntity<>(createdPool, HttpStatus.CREATED);
+        } catch (IdNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
     /**
