@@ -26,10 +26,9 @@ public class CandidateController {
     /**
      * function made to answer {{environement}}/api/admin/candidate Post request by creating a new candidate on database with its photo
      *
-     * @param firstName firstname of candidate
-     * @param lastName lastname of candidate
+     * @param firstName      firstname of candidate
+     * @param lastName       lastname of candidate
      * @param photoCandidate imported photo created by spring when receiving request
-     *
      * @return the candidate created
      * @author aflori
      */
@@ -67,9 +66,8 @@ public class CandidateController {
     }
 
     /**
-     *
-     * @param firstName firstName of checked candidate
-     * @param lastName lastName of checked candidate
+     * @param firstName      firstName of checked candidate
+     * @param lastName       lastName of checked candidate
      * @param photoCandidate
      * @return
      */
@@ -93,6 +91,10 @@ public class CandidateController {
             return new ResponseEntity<>(createdCandidate, HttpStatus.CREATED);
         } catch (CandidateAlreadyExistsException e) {
             return new ResponseEntity<>(HttpStatus.MULTIPLE_CHOICES);
+        } catch (MultipartFileIsNotImageException e) {
+            return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+        } catch (FileNotUpdatableException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
