@@ -28,4 +28,36 @@ public class CriteriaDto {
             existInPool.add(poolList.getId());
         }
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<Integer> getExistInPool() {
+        return existInPool;
+    }
+
+    public void setExistInPool(List<Integer> existInPool) {
+        this.existInPool = existInPool;
+    }
 }
