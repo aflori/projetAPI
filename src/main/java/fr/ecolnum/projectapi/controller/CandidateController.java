@@ -1,5 +1,6 @@
 package fr.ecolnum.projectapi.controller;
 
+import fr.ecolnum.projectapi.exception.CandidateAlreadyExistsException;
 import fr.ecolnum.projectapi.exception.FileNotUpdatableException;
 import fr.ecolnum.projectapi.exception.MultipartFileIsNotImageException;
 import fr.ecolnum.projectapi.model.Candidate;
@@ -63,7 +64,35 @@ public class CandidateController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
-
     }
 
+    /**
+     *
+     * @param firstName firstName of checked candidate
+     * @param lastName lastName of checked candidate
+     * @param photoCandidate
+     * @return
+     */
+    @PostMapping("/checkDuplicate")
+    @Operation(
+            summary = "Check for duplicate candidate in the database then create it",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "first and last name of a candidate",
+                    required = true
+            )
+    )
+    @ApiResponse(
+            description = "Candidate created by server",
+            responseCode = "201"
+    )
+    public ResponseEntity<Candidate> checkDuplicate(@RequestPart String firstName,
+                                                    @RequestPart String lastName,
+                                                    @RequestPart(name = "photo", required = false) MultipartFile photoCandidate) {
+        try {
+            Candidate createdCandidate = candidateService.checkDuplicate(firstName, lastName, photoCandidate);
+            return new ResponseEntity<>(createdCandidate, HttpStatus.CREATED);
+        } catch (CandidateAlreadyExistsException e) {
+            return new ResponseEntity<>(HttpStatus.MULTIPLE_CHOICES);
+        }
+    }
 }

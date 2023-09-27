@@ -1,5 +1,6 @@
 package fr.ecolnum.projectapi.controller;
 
+import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.service.PoolService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -65,17 +69,20 @@ public class PoolController {
     }
 
     /**
-     * @param pool
-     * @return pool modified
+     *
+     * @param poolId
+     * @param poolModification it's pool's modification with her id / we add a new object like (candidate, Criteria, observer)
+     * @return return just a status
      */
     @Operation(summary = "Return modified pool", description = "Return the pool modified from the database.")
-    @PutMapping
+    @PutMapping("/{poolId}")
     @ApiResponse(
             description = "Return pool modified and the OK HTTP response",
             responseCode = "201"
     )
-    public ResponseEntity<?> modifyPool(@RequestBody Pool pool) {
-        Pool modifiedPool = poolService.modifyPool(pool);
-        return new ResponseEntity<>(modifiedPool, HttpStatus.CREATED);
+    public ResponseEntity<?> modifyPool(@PathVariable int poolId, @RequestBody Pool poolModification) {
+        poolService.modifyPool(poolId, poolModification);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }
