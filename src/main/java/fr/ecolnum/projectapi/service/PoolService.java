@@ -49,6 +49,10 @@ public class PoolService {
         return poolRepository.save(pool);
     }
 
+    public PoolDto createPool(PoolDto pool) {
+
+        return pool;
+    }
     /**
      * @param poolId           recuperation id of pool
      * @param poolModification add to pools an observer or a criteria or candidate with poolId
