@@ -18,6 +18,8 @@ public class Pool {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "name",nullable = false)
+    private String name;
     @Column(name = "startDate",nullable = false)
     private Timestamp startDate;
     @Column(name = "endDate",nullable = false)
@@ -80,6 +82,14 @@ public class Pool {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Set<Candidate> getEvaluates() {
