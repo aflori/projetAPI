@@ -1,5 +1,6 @@
 package fr.ecolnum.projectapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
@@ -27,8 +28,21 @@ public class Candidate {
     @Column(nullable = false)
     private String lastName;
 
+//    @Column(nullable = false)
+    @JsonIgnore
+    private String photoUrl;
+
     @ManyToMany(mappedBy = "evaluates")
     private Set<Pool> evaluatedIn;
+
+    public Candidate() {}
+    public Candidate(String firstName, String lastName) {
+        this.id = 0;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.evaluatedIn = null;
+        this.photoUrl = null;
+    }
 
     public int getId() {
         return id;
@@ -70,5 +84,13 @@ public class Candidate {
                 ", lastName='" + lastName + '\'' +
                 ", evaluatedIn=" + evaluatedIn +
                 '}';
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }
