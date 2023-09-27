@@ -68,7 +68,7 @@ public class PoolService {
      * @param poolModification add to pools an observer or a criteria or candidate with poolId
      * @return
      */
-    public Pool modifyPool(int poolId, Pool poolModification) {
+    private Pool modifyPool(int poolId, Pool poolModification) {
         Pool modifiedPool = poolRepository.getReferenceById(poolId);
 
         Set<Candidate> candidateSet = poolModification.getEvaluates();
