@@ -41,19 +41,21 @@ public class CandidateService {
         }
         String extensionPhoto = extractPhotoExtension(photoCandidate);
 
-        String fileName = "candidatePhoto/" + candidate.getFirstName() + '_' + candidate.getLastName() + '_';
+        String fileName = candidate.getFirstName() + '_' + candidate.getLastName() + '_';
+        String directoryFileName = "assets/candidatePhoto/" + fileName;
 
-        createEmptyFileByName(fileName);
-        writePhotoIn(photoCandidate, fileName);
+                createEmptyFileByName(directoryFileName);
+        writePhotoIn(photoCandidate, directoryFileName);
 
         candidate.setPhotoUrl(fileName);
 
         Candidate newCandidateSaved = repository.save(candidate);
 
         String newFileName = fileName + candidate.getId() + extensionPhoto;
+        String newDirectoryFileName = "assets/candidatePhoto/" + newFileName;
 
-        createEmptyFileByName(newFileName);
-        changeFileName(fileName, newFileName);
+        createEmptyFileByName(newDirectoryFileName);
+        changeFileName(directoryFileName, newDirectoryFileName);
 
         newCandidateSaved.setPhotoUrl(newFileName);
 
