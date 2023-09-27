@@ -70,7 +70,7 @@ public class CandidateService {
      */
     public Candidate checkDuplicate(String firstName,
                                     String lastName,
-                                    MultipartFile photoCandidate) throws CandidateAlreadyExistsException {
+                                    MultipartFile photoCandidate) throws CandidateAlreadyExistsException, MultipartFileIsNotImageException, FileNotUpdatableException {
 
         boolean isDuplicate = false;
 
@@ -91,11 +91,7 @@ public class CandidateService {
             throw new CandidateAlreadyExistsException("This name is already used");
         } else {
             Candidate candidateToCreate = new Candidate(firstName, lastName);
-            try {
-                return createCandidate(candidateToCreate, photoCandidate);
-            } catch (Exception ignored) {
-                return  null;
-            }
+            return createCandidate(candidateToCreate, photoCandidate);
         }
     }
 
