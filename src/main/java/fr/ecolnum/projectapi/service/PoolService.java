@@ -1,7 +1,7 @@
 package fr.ecolnum.projectapi.service;
 
 import fr.ecolnum.projectapi.DTO.PoolDto;
-import fr.ecolnum.projectapi.exception.PoolNotFoundException;
+import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.model.Criteria;
 import fr.ecolnum.projectapi.model.Observer;
@@ -34,11 +34,11 @@ public class PoolService {
         return allPoolAvailable;
     }
 
-    public PoolDto finById(int id) throws PoolNotFoundException {
+    public PoolDto finById(int id) throws IdNotFoundException {
         Optional<Pool> optionnalPool = poolRepository.findById(id);
 
         if (optionnalPool.isEmpty()) {
-            throw new PoolNotFoundException("Id do not exist");
+            throw new IdNotFoundException("pool id not found");
         }
 
         final Pool pool = optionnalPool.get();
