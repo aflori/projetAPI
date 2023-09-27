@@ -1,23 +1,16 @@
 package fr.ecolnum.projectapi.controller;
 
 import fr.ecolnum.projectapi.DTO.PoolDto;
-import fr.ecolnum.projectapi.exception.PoolNotFoundException;
-import fr.ecolnum.projectapi.model.Observer;
+import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.service.PoolService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.Id;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Optional;
 
 /**
  * path for CRUD pool
@@ -54,7 +47,7 @@ public class PoolController {
     public ResponseEntity<?> getPoolById(@PathVariable(value = "id") int id) {
         try {
             return new ResponseEntity<>(poolService.finById(id), HttpStatus.OK);
-        } catch (PoolNotFoundException e) {
+        } catch (IdNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
