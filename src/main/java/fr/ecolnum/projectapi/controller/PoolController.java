@@ -1,5 +1,6 @@
 package fr.ecolnum.projectapi.controller;
 
+import fr.ecolnum.projectapi.exception.PoolNotFoundException;
 import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.service.PoolService;
@@ -50,7 +51,11 @@ public class PoolController {
             responseCode = "200"
     )
     public ResponseEntity<?> getPoolById(@PathVariable(value = "id") int id) {
-        return new ResponseEntity<>(poolService.finById(id), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(poolService.finById(id), HttpStatus.OK);
+        } catch (PoolNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     /**
