@@ -1,5 +1,6 @@
 package fr.ecolnum.projectapi.controller;
 
+import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.exception.PoolNotFoundException;
 import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Pool;
@@ -68,8 +69,8 @@ public class PoolController {
             description = "Return pools list and the OK HTTP response",
             responseCode = "201"
     )
-    public ResponseEntity<?> createPool(@RequestBody Pool pool) {
-        Pool createdPool = poolService.createPool(pool);
+    public ResponseEntity<?> createPool(@RequestBody PoolDto pool) {
+        PoolDto createdPool = poolService.createPool(pool);
         return new ResponseEntity<>(createdPool, HttpStatus.CREATED);
     }
 
