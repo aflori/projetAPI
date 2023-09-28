@@ -2,6 +2,7 @@ package fr.ecolnum.projectapi.service;
 
 import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
+import fr.ecolnum.projectapi.exception.PoolNotMatchingException;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.model.Criteria;
 import fr.ecolnum.projectapi.model.Observer;
@@ -55,50 +56,24 @@ public class PoolService {
         return new PoolDto(pool);
     }
 
-    public PoolDto createPool(PoolDto pool) throws IdNotFoundException {
+    public PoolDto createPool(PoolDto poolDTO) throws IdNotFoundException {
 
-        Pool poolDB = pool.convertToPoolObject(candidateRepository, criteriaRepository, observerRepository);
-        poolRepository.save(poolDB);
-
-        PoolDto poolCreated = new PoolDto(poolDB);
-        return poolCreated;
+        Pool pool = poolDTO.convertToPoolObject(candidateRepository, criteriaRepository, observerRepository);
+        pool = poolRepository.save(pool);
+        return new PoolDto(pool);
     }
 
-    /**
-     * @param poolId           recuperation id of pool
-     * @param poolModification add to pools an observer or a criteria or candidate with poolId
-     * @return
-     */
-    private Pool modifyPool(int poolId, Pool poolModification) {
-        Pool modifiedPool = poolRepository.getReferenceById(poolId);
 
-        Set<Candidate> candidateSet = poolModification.getEvaluates();
-        if (candidateSet != null) {
-            for (Candidate candidate : poolModification.getEvaluates()) {
-                modifiedPool.getEvaluates().add(candidate);
-            }
+    public PoolDto modifyPool(int poolId, PoolDto modifiedPoolDTO) throws IdNotFoundException, PoolNotMatchingException {
+        if (poolId != modifiedPoolDTO.getId()) {
+            throw new PoolNotMatchingException("Pool Id from request does not match Id from poolDTO.");
         }
-        Set<Observer> observerSet = poolModification.getContainedObservers();
-        if (observerSet != null) {
-            for (Observer observer : poolModification.getContainedObservers()) {
-                modifiedPool.getContainedObservers().add(observer);
-            }
+        if (poolRepository.findById(poolId).isEmpty()) {
+            throw new IdNotFoundException("This Pool does not exist.");
         }
-        Set<Criteria> criteriaSet = poolModification.getContainedCriterias();
-        if (criteriaSet != null) {
-            for (Criteria criteria : criteriaSet) {
-                modifiedPool.getContainedCriterias().add(criteria);
-            }
-        }
-        return poolRepository.save(modifiedPool);
-    }
-
-    public PoolDto modifyPool(int poolId, PoolDto linksToRegister) throws IdNotFoundException {
-        Pool links = linksToRegister.convertToPoolObject(candidateRepository, criteriaRepository, observerRepository);
-
-        Pool objectCreated = modifyPool(poolId, links);
-
-        return new PoolDto(objectCreated);
+        Pool modifiedPool = modifiedPoolDTO.convertToPoolObject(candidateRepository, criteriaRepository, observerRepository);
+        modifiedPool = poolRepository.save(modifiedPool);
+        return new PoolDto(modifiedPool);
     }
 }
 
