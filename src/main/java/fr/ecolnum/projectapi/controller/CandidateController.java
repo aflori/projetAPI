@@ -3,7 +3,7 @@ package fr.ecolnum.projectapi.controller;
 import fr.ecolnum.projectapi.exception.CandidateAlreadyExistsException;
 import fr.ecolnum.projectapi.exception.FileNotUpdatableException;
 import fr.ecolnum.projectapi.exception.MultipartFileIsNotImageException;
-import fr.ecolnum.projectapi.model.Candidate;
+import fr.ecolnum.projectapi.DTO.CandidateDto;
 import fr.ecolnum.projectapi.service.CandidateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import static fr.ecolnum.projectapi.util.GenericUtility.convertStringToJsonData;
 
 /**
  * Class made to represent Controller on candidate operation
@@ -44,19 +46,17 @@ public class CandidateController {
             description = "Candidate created by server",
             responseCode = "201"
     )
-    public ResponseEntity<Candidate> createCandidate(@RequestPart String firstName,
-                                                     @RequestPart String lastName,
-                                                     @RequestPart(name = "photo", required = false) MultipartFile photoCandidate) {
-        Candidate candidate = new Candidate(firstName, lastName);
-
+    public ResponseEntity<?> createCandidate(@RequestPart String firstName,
+                                             @RequestPart String lastName,
+                                             @RequestPart(name = "photo", required = false) MultipartFile photoCandidate) {
         try {
 
-            Candidate createdCandidate = candidateService.createCandidate(candidate, photoCandidate);
+            CandidateDto createdCandidate = candidateService.createCandidate(firstName, lastName, photoCandidate);
             return new ResponseEntity<>(createdCandidate, HttpStatus.CREATED);
 
         } catch (MultipartFileIsNotImageException e) {
 
-            return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+            return new ResponseEntity<>(convertStringToJsonData(e.getMessage()), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
 
         } catch (FileNotUpdatableException e) {
 
@@ -83,16 +83,16 @@ public class CandidateController {
             description = "Candidate created by server",
             responseCode = "201"
     )
-    public ResponseEntity<Candidate> checkDuplicate(@RequestPart String firstName,
-                                                    @RequestPart String lastName,
-                                                    @RequestPart(name = "photo", required = false) MultipartFile photoCandidate) {
+    public ResponseEntity<?> checkDuplicate(@RequestPart String firstName,
+                                            @RequestPart String lastName,
+                                            @RequestPart(name = "photo", required = false) MultipartFile photoCandidate) {
         try {
-            Candidate createdCandidate = candidateService.checkDuplicate(firstName, lastName, photoCandidate);
+            CandidateDto createdCandidate = candidateService.checkDuplicate(firstName, lastName, photoCandidate);
             return new ResponseEntity<>(createdCandidate, HttpStatus.CREATED);
         } catch (CandidateAlreadyExistsException e) {
-            return new ResponseEntity<>(HttpStatus.MULTIPLE_CHOICES);
+            return new ResponseEntity<>(convertStringToJsonData(e.getMessage()),HttpStatus.MULTIPLE_CHOICES);
         } catch (MultipartFileIsNotImageException e) {
-            return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+            return new ResponseEntity<>(convertStringToJsonData(e.getMessage()),HttpStatus.UNSUPPORTED_MEDIA_TYPE);
         } catch (FileNotUpdatableException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

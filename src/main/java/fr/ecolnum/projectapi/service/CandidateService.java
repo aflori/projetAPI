@@ -3,6 +3,7 @@ package fr.ecolnum.projectapi.service;
 import fr.ecolnum.projectapi.exception.FileNotUpdatableException;
 import fr.ecolnum.projectapi.exception.MultipartFileIsNotImageException;
 import fr.ecolnum.projectapi.exception.CandidateAlreadyExistsException;
+import fr.ecolnum.projectapi.DTO.CandidateDto;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +41,17 @@ public class CandidateService {
      * @param photoCandidate photo object of the associated candidate
      * @return the candidate (with its new ID and photo URL) created
      */
-    public Candidate createCandidate(Candidate candidate, MultipartFile photoCandidate) throws MultipartFileIsNotImageException, FileNotUpdatableException {
+    public CandidateDto createCandidate(String firstName, String lastName, MultipartFile photoCandidate) throws MultipartFileIsNotImageException, FileNotUpdatableException {
 
         // create a file for the project directory
+        Candidate candidate = new Candidate(firstName,lastName);
+
         File homeFolder = new File(homePath);
 
         if (DEBUG == true) {
             if (photoCandidate == null) {
-                return repository.save(candidate);
+                Candidate createdCandidate = repository.save(candidate);
+                return new CandidateDto(createdCandidate);
             }
         }
 
@@ -70,7 +74,8 @@ public class CandidateService {
 
         newCandidateSaved.setPhotoName(newFileName);
 
-        return repository.save(newCandidateSaved);
+        Candidate createdCandidate = repository.save(newCandidateSaved);
+        return new CandidateDto(createdCandidate);
     }
 
     /**
@@ -80,9 +85,9 @@ public class CandidateService {
      * @return return the new candidate from the database
      * @throws CandidateAlreadyExistsException if there is a duplicate
      */
-    public Candidate checkDuplicate(String firstName,
-                                    String lastName,
-                                    MultipartFile photoCandidate) throws CandidateAlreadyExistsException, MultipartFileIsNotImageException, FileNotUpdatableException {
+    public CandidateDto checkDuplicate(String firstName,
+                                       String lastName,
+                                       MultipartFile photoCandidate) throws CandidateAlreadyExistsException, MultipartFileIsNotImageException, FileNotUpdatableException {
 
         boolean isDuplicate = false;
 
@@ -102,22 +107,22 @@ public class CandidateService {
         if (isDuplicate) {
             throw new CandidateAlreadyExistsException("This name is already used");
         } else {
-            Candidate candidateToCreate = new Candidate(firstName, lastName);
-            return createCandidate(candidateToCreate, photoCandidate);
+            CandidateDto candidateToCreate = new CandidateDto(firstName, lastName);
+            return createCandidate(candidateToCreate.getFirstName(), candidateToCreate.getLastName(), photoCandidate);
         }
     }
 
-    public Iterable<Candidate> returnDuplicate(Candidate candidate) {
+    public Iterable<CandidateDto> returnDuplicate(CandidateDto candidate) {
         String lastName = candidate.getLastName();
         String firstName = candidate.getFirstName();
         Iterable<Candidate> candidateList = repository.findByLastNameEquals(lastName);
 
-        Set<Candidate> duplicateCandidate = new HashSet<>();
+        Set<CandidateDto> duplicateCandidate = new HashSet<>();
 
         for (Candidate dbCandidate : candidateList) {
             String firstNameDB = dbCandidate.getFirstName();
             if (firstName.equalsIgnoreCase(firstNameDB)) {
-                duplicateCandidate.add(dbCandidate);
+                duplicateCandidate.add(new CandidateDto(dbCandidate));
             }
         }
 

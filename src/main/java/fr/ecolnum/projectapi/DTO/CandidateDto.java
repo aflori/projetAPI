@@ -51,6 +51,12 @@ public class CandidateDto {
         }
     }
 
+    public CandidateDto(String firstName, String lastName) {
+        this.id = 0;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public Candidate convertToCandidateObject(final PoolRepository poolRepository) throws IdNotFoundException {
 
         Set<Pool> evaluatedIn = extractSetFromRepository(poolRepository, this.evaluatedIn);
