@@ -1,13 +1,17 @@
 package fr.ecolnum.projectapi.DTO;
 
-import fr.ecolnum.projectapi.model.Candidate;
+import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Pool;
+import fr.ecolnum.projectapi.repository.PoolRepository;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import static fr.ecolnum.projectapi.util.GenericUtility.extractSetFromRepository;
+
 
 /**
  * DTO is a pattern (data transfert object) which use for the recursivity
@@ -53,6 +57,12 @@ public class ObserverDto {
         }
     }
 
+    public Observer convertToObserverObject(final PoolRepository poolRepository) throws IdNotFoundException {
+        Set<Pool> observeIn = extractSetFromRepository(poolRepository, this.containInPool);
+
+        return new Observer(this.id, this.lastname, this.firstname, this.email, this.password, observeIn);
+    }
+
     public int getId() {
         return id;
     }
@@ -91,5 +101,13 @@ public class ObserverDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Integer> getContainInPool() {
+        return containInPool;
+    }
+
+    public void setContainInPool(List<Integer> containInPool) {
+        this.containInPool = containInPool;
     }
 }

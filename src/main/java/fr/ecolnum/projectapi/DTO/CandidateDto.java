@@ -1,11 +1,15 @@
 package fr.ecolnum.projectapi.DTO;
 
+import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.model.Pool;
+import fr.ecolnum.projectapi.repository.PoolRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import static fr.ecolnum.projectapi.util.GenericUtility.extractSetFromRepository;
 
 /**
  * DTO is a pattern (data transfert object) which use for the recursivity
@@ -40,9 +44,25 @@ public class CandidateDto {
         /**
          * just take all id contain in pool List
          */
-        for (Pool poolList : observeIn) {
-            evaluatedIn.add(poolList.getId());
+        if (observeIn != null) {
+            for (Pool poolList : observeIn) {
+                evaluatedIn.add(poolList.getId());
+            }
         }
+    }
+
+    public CandidateDto(String firstName, String lastName) {
+        this.id = 0;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public Candidate convertToCandidateObject(final PoolRepository poolRepository) throws IdNotFoundException {
+
+        Set<Pool> evaluatedIn = extractSetFromRepository(poolRepository, this.evaluatedIn);
+
+        return new Candidate(this.id, this.firstName, this.lastName, this.photoName, evaluatedIn);
+
     }
 
     public int getId() {

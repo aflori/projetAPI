@@ -1,6 +1,7 @@
 package fr.ecolnum.projectapi.controller;
 
-import fr.ecolnum.projectapi.model.Observer;
+import fr.ecolnum.projectapi.DTO.ObserverDto;
+import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.service.ObserverService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static fr.ecolnum.projectapi.util.GenericUtility.convertStringToJsonData;
 
 /**
  * This class manages the http requests of the Observer objects.
@@ -24,11 +27,16 @@ public class ObserverController {
             description = "Return the created observer and the created HTTP response",
             responseCode = "201"
     )
-    public ResponseEntity<?> createObserver(@RequestBody Observer observer) {
+    public ResponseEntity<?> createObserver(@RequestBody ObserverDto observer) {
 
-        Observer createdObserver = observerService.createObserver(observer);
 
-        return new ResponseEntity<>(createdObserver, HttpStatus.CREATED);
+        try {
+            ObserverDto createdObserver = observerService.createObserver(observer);
+            return new ResponseEntity<>(createdObserver, HttpStatus.CREATED);
+        } catch (IdNotFoundException e) {
+            return new ResponseEntity<>(convertStringToJsonData(e.getMessage()), HttpStatus.CONFLICT);
+        }
+
     }
 
     @Operation(summary = "Return all observers", description = "Return the list of all the observers from the database.")
@@ -38,7 +46,7 @@ public class ObserverController {
             responseCode = "200"
     )
     public ResponseEntity<?> getAllObservers() {
-        Iterable<Observer> observersList = observerService.getAllObservers();
+        Iterable<ObserverDto> observersList = observerService.getAllObservers();
         return new ResponseEntity<>(observersList, HttpStatus.OK);
     }
 }
