@@ -40,6 +40,15 @@ public class Observer {
     public Observer() {
     }
 
+    public Observer(int id, String lastName, String firstName, String email, String password, Set<Pool> observeIn) {
+        this.id = id;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.email = email;
+        this.password = password;
+        this.observeIn = observeIn;
+    }
+
     public int getId() {
         return id;
     }

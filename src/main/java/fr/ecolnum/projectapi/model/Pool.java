@@ -1,7 +1,6 @@
 package fr.ecolnum.projectapi.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Generated;
 
 import java.sql.Timestamp;
 import java.util.Set;
@@ -51,6 +50,22 @@ public class Pool {
             inverseJoinColumns = @JoinColumn(name = "observer_id")
     )
     private Set<Observer> containedObservers;
+
+    public Pool(Integer id, String name, Timestamp startDate, Timestamp endDate, String location,
+                Set<Candidate> evaluates, Set<Criteria> containedCriterias, Set<Observer> containedObservers) {
+        this.id = id;
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.location = location;
+        this.evaluates = evaluates;
+        this.containedCriterias = containedCriterias;
+        this.containedObservers = containedObservers;
+    }
+
+    public Pool() {
+
+    }
 
 
     public Integer getId() {

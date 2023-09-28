@@ -1,12 +1,16 @@
 package fr.ecolnum.projectapi.DTO;
 
+import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.model.Criteria;
-import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Pool;
+import fr.ecolnum.projectapi.repository.PoolRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import static fr.ecolnum.projectapi.util.GenericUtility.extractSetFromRepository;
+
 
 /**
  * DTO is a pattern (data transfert object) which use for the recursivity
@@ -39,9 +43,17 @@ public class CriteriaDto {
         /**
          * just take all id contain in pool List
          */
-        for (Pool poolList : existsIn) {
-            existInPool.add(poolList.getId());
+        if (existsIn != null) {
+            for (Pool poolList : existsIn) {
+                existInPool.add(poolList.getId());
+            }
         }
+    }
+
+    public Criteria convertToCriteriaObject(final PoolRepository poolRepository) throws IdNotFoundException {
+        Set<Pool> existsIn = extractSetFromRepository(poolRepository, this.existInPool);
+
+        return new Criteria(this.id, this.name, this.description, existsIn);
     }
 
     public int getId() {
