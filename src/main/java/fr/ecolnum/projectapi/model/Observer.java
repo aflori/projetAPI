@@ -29,6 +29,17 @@ public class Observer {
     @ManyToMany(mappedBy = "containedObservers")
     private Set<Pool> observeIn;
 
+    public Observer(int id, String lastName, String firstName, String email, String password) {
+        this.id = id;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.email = email;
+        this.password = password;
+    }
+
+    public Observer() {
+    }
+
     public int getId() {
         return id;
     }

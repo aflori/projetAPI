@@ -12,7 +12,7 @@ public class Criteria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  int id;
+    private int id;
 
     @Column(nullable = false)
     private String name;
