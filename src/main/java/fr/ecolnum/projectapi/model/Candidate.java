@@ -30,7 +30,7 @@ public class Candidate {
 
     //    @Column(nullable = false)
     @JsonIgnore
-    private String photoUrl;
+    private String photoName;
 
     @ManyToMany(mappedBy = "evaluates")
     private Set<Pool> evaluatedIn;
@@ -43,7 +43,7 @@ public class Candidate {
         this.firstName = firstName;
         this.lastName = lastName;
         this.evaluatedIn = null;
-        this.photoUrl = null;
+        this.photoName = null;
     }
 
 
@@ -94,11 +94,11 @@ public class Candidate {
                 '}';
     }
 
-    public String getPhotoUrl() {
-        return photoUrl;
+    public String getPhotoName() {
+        return photoName;
     }
 
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
+    public void setPhotoName(String photoName) {
+        this.photoName = photoName;
     }
 }

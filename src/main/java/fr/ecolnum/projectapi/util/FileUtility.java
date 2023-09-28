@@ -10,13 +10,13 @@ import java.io.IOException;
 
 public class FileUtility {
 
-    public static void changeFileName(String oldName, String newName) {
-        File oldF = new File(oldName);
-        File newF = new File(newName);
+    public static void changeFileName(File homeFolder, String oldName, String newName) {
+        File oldF = new File(homeFolder, oldName);
+        File newF = new File(homeFolder, newName);
         oldF.renameTo(newF);
     }
 
-    public static String extractPhotoExtension(MultipartFile photoCandidate) throws MultipartFileIsNotImageException {
+    public static String checkAndExtractPhotoExtension(MultipartFile photoCandidate) throws MultipartFileIsNotImageException {
 
         String photoType = photoCandidate.getContentType();
         if (photoType == null) {
@@ -31,9 +31,9 @@ public class FileUtility {
         throw new MultipartFileIsNotImageException("not an image file");
     }
 
-    public static void writePhotoIn(MultipartFile photoCandidate, String fileName) throws FileNotUpdatableException {
+    public static void writePhotoIn(MultipartFile photoCandidate, File emptyFile) throws FileNotUpdatableException {
         try {
-            FileOutputStream photoFile = new FileOutputStream(fileName, false);
+            FileOutputStream photoFile = new FileOutputStream(emptyFile, false);
             byte[] photoData = photoCandidate.getBytes();
             photoFile.write(photoData);
             photoFile.close();
@@ -43,13 +43,14 @@ public class FileUtility {
         }
     }
 
-    public static void createEmptyFileByName(String fileName) throws FileNotUpdatableException {
+    public static File createEmptyFileByName(File homeFolder, String fileName) throws FileNotUpdatableException {
         try {
-            File creationFile = new File(fileName);
+            File creationFile = new File(homeFolder, fileName);
             if (creationFile.exists()) {
                 creationFile.delete();
             }
             creationFile.createNewFile();
+            return creationFile;
 
         } catch (Exception e) {
             //could not create file
