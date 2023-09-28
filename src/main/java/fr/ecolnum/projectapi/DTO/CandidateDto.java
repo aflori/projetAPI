@@ -1,12 +1,15 @@
 package fr.ecolnum.projectapi.DTO;
 
+import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.model.Candidate;
-import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Pool;
+import fr.ecolnum.projectapi.repository.PoolRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import static fr.ecolnum.projectapi.util.GenericUtility.extractSetFromRepository;
 
 /**
  * DTO is a pattern (data transfert object) which use for the recursivity
@@ -14,9 +17,9 @@ import java.util.Set;
  */
 public class CandidateDto {
     private int id;
-    private String firstname;
-    private String lastname;
-    private String photoUrl;
+    private String firstName;
+    private String lastName;
+    private String photoName;
     /**
      * create an object for the list which are integers
      */
@@ -30,9 +33,9 @@ public class CandidateDto {
      */
     public CandidateDto(Candidate candidate) {
         this.id = candidate.getId();
-        this.firstname = candidate.getFirstName();
-        this.lastname = candidate.getLastName();
-        this.photoUrl = candidate.getPhotoUrl();
+        this.firstName = candidate.getFirstName();
+        this.lastName = candidate.getLastName();
+        this.photoName = candidate.getPhotoName();
         /**
          * transform the pool list in object observeIn which contain an ArrayList
          */
@@ -41,9 +44,19 @@ public class CandidateDto {
         /**
          * just take all id contain in pool List
          */
-        for (Pool poolList : observeIn) {
-            evaluatedIn.add(poolList.getId());
+        if (observeIn != null) {
+            for (Pool poolList : observeIn) {
+                evaluatedIn.add(poolList.getId());
+            }
         }
+    }
+
+    public Candidate convertToCandidateObject(final PoolRepository poolRepository) throws IdNotFoundException {
+
+        Set<Pool> evaluatedIn = extractSetFromRepository(poolRepository, this.evaluatedIn);
+
+        return new Candidate(this.id, this.firstName, this.lastName, this.photoName, evaluatedIn);
+
     }
 
     public int getId() {
@@ -54,28 +67,28 @@ public class CandidateDto {
         this.id = id;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getPhotoUrl() {
-        return photoUrl;
+    public String getPhotoName() {
+        return photoName;
     }
 
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
+    public void setPhotoName(String photoName) {
+        this.photoName = photoName;
     }
 
     public List<Integer> getEvaluatedIn() {

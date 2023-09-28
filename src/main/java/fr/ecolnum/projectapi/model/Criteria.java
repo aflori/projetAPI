@@ -23,6 +23,16 @@ public class Criteria {
     @ManyToMany(mappedBy = "containedCriterias")
     private Set<Pool> existsIn;
 
+    public Criteria(int id, String name, String description, Set<Pool> existsIn) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.existsIn = existsIn;
+    }
+
+    public Criteria() {
+    }
+
     public int getId() {
         return id;
     }

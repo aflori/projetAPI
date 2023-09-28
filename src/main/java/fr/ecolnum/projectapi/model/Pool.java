@@ -52,6 +52,18 @@ public class Pool {
     )
     private Set<Observer> containedObservers;
 
+    public Pool(Integer id, String name, Timestamp startDate, Timestamp endDate, String location,
+                Set<Candidate> evaluates, Set<Criteria> containedCriterias, Set<Observer> containedObservers) {
+        this.id = id;
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.location = location;
+        this.evaluates = evaluates;
+        this.containedCriterias = containedCriterias;
+        this.containedObservers = containedObservers;
+    }
+
 
     public Integer getId() {
         return id;

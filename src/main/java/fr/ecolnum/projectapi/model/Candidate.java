@@ -52,6 +52,14 @@ public class Candidate {
         this.id = i;
     }
 
+    public Candidate(int id, String firstName, String lastName, String photoName, Set<Pool> evaluatedIn) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.photoName = photoName;
+        this.evaluatedIn = evaluatedIn;
+    }
+
     public int getId() {
         return id;
     }

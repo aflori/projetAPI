@@ -32,7 +32,7 @@ public class PoolDto {
      * create objects for the list which are integers
      */
     private List<Integer> containedCandidate;
-    private List<Integer> containedCriteria;
+    private List<Integer> containedCriterias;
     private List<Integer> containedObservers;
 
     public PoolDto() {
@@ -57,11 +57,11 @@ public class PoolDto {
         containedObservers = new ArrayList<>();
 
         Set<Criteria> evaluateCriteria = pool.getContainedCriterias();
-        containedCriteria = new ArrayList<>();
+        containedCriterias = new ArrayList<>();
 
         if (evaluateCriteria != null) {
             for (Criteria criteriaList : evaluateCriteria) {
-                containedCriteria.add(criteriaList.getId());
+                containedCriterias.add(criteriaList.getId());
             }
         }
         if (evaluateObserver != null) {
@@ -76,6 +76,19 @@ public class PoolDto {
         }
     }
 
+    public Pool convertToPoolObject(final CandidateRepository candidateRepository,
+                                    final CriteriaRepository criteriaRepository,
+                                    final ObserverRepository observerRepository)
+            throws IdNotFoundException {
+
+        Set<Candidate> evaluates = extractSetFromRepository(candidateRepository, containedCandidate);
+
+        Set<Criteria> containedCriteria = extractSetFromRepository(criteriaRepository, this.containedCriterias);
+
+        Set<Observer> containedObserver = extractSetFromRepository(observerRepository, containedObservers);
+
+        return new Pool(this.id,this.name,this.startDate,this.endDate,this.location,evaluates,containedCriteria,containedObserver);
+    }
 
     public int getId() {
         return id;
@@ -126,11 +139,11 @@ public class PoolDto {
     }
 
     public List<Integer> getContainedCriterias() {
-        return containedCriteria;
+        return containedCriterias;
     }
 
     public void setContainedCriterias(List<Integer> containedCriterias) {
-        this.containedCriteria = containedCriterias;
+        this.containedCriterias = containedCriterias;
     }
 
     public List<Integer> getContainedObservers() {
@@ -139,29 +152,5 @@ public class PoolDto {
 
     public void setContainedObservers(List<Integer> containedObservers) {
         this.containedObservers = containedObservers;
-    }
-
-    public Pool convertToPoolObject(final CandidateRepository candidateRepository,
-                                    final CriteriaRepository criteriaRepository,
-                                    final ObserverRepository observerRepository)
-            throws IdNotFoundException {
-        Pool newPool = new Pool();
-
-        newPool.setId(id);
-        newPool.setName(name);
-        newPool.setStartDate(startDate);
-        newPool.setEndDate(endDate);
-        newPool.setLocation(location);
-
-        Set<Candidate> evaluates = extractSetFromRepository(candidateRepository, containedCandidate);
-        newPool.setEvaluates(evaluates);
-
-        Set<Criteria> containedCriteria = extractSetFromRepository(criteriaRepository, this.containedCriteria);
-        newPool.setContainedCriterias(containedCriteria);
-
-        Set<Observer> containedObserver = extractSetFromRepository(observerRepository, containedObservers);
-        newPool.setContainedObservers(containedObserver);
-
-        return newPool;
     }
 }
