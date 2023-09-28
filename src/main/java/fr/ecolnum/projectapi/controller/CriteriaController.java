@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 /**
  * This class manages the http requests of the Criteria objects.
  */
@@ -23,9 +24,9 @@ public class CriteriaController {
             description = "Return the created criteria and the created HTTP response",
             responseCode = "201"
     )
-    public ResponseEntity<?> createCriteria(@RequestBody Criteria criteria){
+    public ResponseEntity<?> createCriteria(@RequestBody Criteria criteria) {
 
-        Criteria createdCriteria =  criteriaService.createCriteria(criteria);
+        Criteria createdCriteria = criteriaService.createCriteria(criteria);
 
         return new ResponseEntity<>(createdCriteria, HttpStatus.CREATED);
     }

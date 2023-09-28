@@ -7,6 +7,7 @@ import fr.ecolnum.projectapi.model.Pool;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
 /**
  * DTO is a pattern (data transfert object) which use for the recursivity
  * DTO take only the id for the pools which associated no more
@@ -20,11 +21,11 @@ public class CandidateDto {
      * create an object for the list which are integers
      */
     private List<Integer> evaluatedIn;
+
     public CandidateDto() {
     }
 
     /**
-     *
      * @param candidate this construct take attributs of candidate
      */
     public CandidateDto(Candidate candidate) {

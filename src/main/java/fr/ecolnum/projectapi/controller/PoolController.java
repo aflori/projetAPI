@@ -1,21 +1,16 @@
 package fr.ecolnum.projectapi.controller;
 
-import fr.ecolnum.projectapi.model.Observer;
+import fr.ecolnum.projectapi.DTO.PoolDto;
+import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.service.PoolService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.Id;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Optional;
 
 /**
  * path for CRUD pool
@@ -50,7 +45,11 @@ public class PoolController {
             responseCode = "200"
     )
     public ResponseEntity<?> getPoolById(@PathVariable(value = "id") int id) {
-        return new ResponseEntity<>(poolService.finById(id), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(poolService.finById(id), HttpStatus.OK);
+        } catch (IdNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     /**
@@ -63,13 +62,17 @@ public class PoolController {
             description = "Return pools list and the OK HTTP response",
             responseCode = "201"
     )
-    public ResponseEntity<?> createPool(@RequestBody Pool pool) {
-        Pool createdPool = poolService.createPool(pool);
-        return new ResponseEntity<>(createdPool, HttpStatus.CREATED);
+    public ResponseEntity<?> createPool(@RequestBody PoolDto pool) {
+        PoolDto createdPool = null;
+        try {
+            createdPool = poolService.createPool(pool);
+            return new ResponseEntity<>(createdPool, HttpStatus.CREATED);
+        } catch (IdNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
     /**
-     *
      * @param poolId
      * @param poolModification it's pool's modification with her id / we add a new object like (candidate, Criteria, observer)
      * @return return just a status
@@ -80,9 +83,14 @@ public class PoolController {
             description = "Return pool modified and the OK HTTP response",
             responseCode = "201"
     )
-    public ResponseEntity<?> modifyPool(@PathVariable int poolId, @RequestBody Pool poolModification) {
-        poolService.modifyPool(poolId, poolModification);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> modifyPool(@PathVariable int poolId, @RequestBody PoolDto poolModification) {
+        PoolDto poolModified = null;
+        try {
+            poolModified = poolService.modifyPool(poolId, poolModification);
+            return new ResponseEntity<>(poolModified, HttpStatus.OK);
+        } catch (IdNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
 }

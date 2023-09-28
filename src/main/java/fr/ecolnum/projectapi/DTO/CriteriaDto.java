@@ -20,11 +20,11 @@ public class CriteriaDto {
      * create an object for the list which are integers
      */
     private List<Integer> existInPool;
+
     public CriteriaDto() {
     }
 
     /**
-     *
      * @param criteria this construct take attributs of criteria
      */
     public CriteriaDto(Criteria criteria) {

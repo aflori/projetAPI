@@ -29,9 +29,8 @@ public class CandidateService {
     /**
      * this method create a candidate in the database and import a photo in local
      *
-     * @param candidate candidate to be created in database
+     * @param candidate      candidate to be created in database
      * @param photoCandidate photo object of the associated candidate
-     *
      * @return the candidate (with its new ID and photo URL) created
      */
     public Candidate createCandidate(Candidate candidate, MultipartFile photoCandidate) throws MultipartFileIsNotImageException, FileNotUpdatableException {
@@ -61,9 +60,8 @@ public class CandidateService {
     }
 
     /**
-     *
-     * @param firstName firstName of Candidate
-     * @param lastName lastName of Candidate
+     * @param firstName      firstName of Candidate
+     * @param lastName       lastName of Candidate
      * @param photoCandidate photo of Candidate
      * @return return the new candidate from the database
      * @throws CandidateAlreadyExistsException if there is a duplicate

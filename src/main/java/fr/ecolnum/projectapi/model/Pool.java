@@ -18,39 +18,39 @@ public class Pool {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "name",nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "startDate",nullable = false)
+    @Column(name = "startDate", nullable = false)
     private Timestamp startDate;
-    @Column(name = "endDate",nullable = false)
+    @Column(name = "endDate", nullable = false)
     private Timestamp endDate;
-    @Column(name = "location",nullable = false)
+    @Column(name = "location", nullable = false)
     private String location;
 
     @ManyToMany
-    @JoinTable (
+    @JoinTable(
             name = "pool_candidate",
-            joinColumns = @JoinColumn(name="pool_id"),
-            inverseJoinColumns = @JoinColumn(name ="candidate_id")
+            joinColumns = @JoinColumn(name = "pool_id"),
+            inverseJoinColumns = @JoinColumn(name = "candidate_id")
     )
-    private Set <Candidate> evaluates;
+    private Set<Candidate> evaluates;
 
     @ManyToMany
-    @JoinTable (
+    @JoinTable(
             name = "pool_criteria",
-            joinColumns = @JoinColumn(name="pool_id"),
-            inverseJoinColumns = @JoinColumn(name ="criteria_id")
+            joinColumns = @JoinColumn(name = "pool_id"),
+            inverseJoinColumns = @JoinColumn(name = "criteria_id")
     )
-    private Set <Criteria> containedCriterias;
+    private Set<Criteria> containedCriterias;
 
 
     @ManyToMany
-    @JoinTable (
+    @JoinTable(
             name = "pool_observer",
-            joinColumns = @JoinColumn(name="pool_id"),
-            inverseJoinColumns = @JoinColumn(name ="observer_id")
+            joinColumns = @JoinColumn(name = "pool_id"),
+            inverseJoinColumns = @JoinColumn(name = "observer_id")
     )
-    private Set <Observer> containedObservers;
+    private Set<Observer> containedObservers;
 
 
     public Integer getId() {
