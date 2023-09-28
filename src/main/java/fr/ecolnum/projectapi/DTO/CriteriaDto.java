@@ -43,7 +43,7 @@ public class CriteriaDto {
         /**
          * just take all id contain in pool List
          */
-        if(existsIn != null) {
+        if (existsIn != null) {
             for (Pool poolList : existsIn) {
                 existInPool.add(poolList.getId());
             }
@@ -53,7 +53,7 @@ public class CriteriaDto {
     public Criteria convertToCriteriaObject(final PoolRepository poolRepository) throws IdNotFoundException {
         Set<Pool> existsIn = extractSetFromRepository(poolRepository, this.existInPool);
 
-        return  new Criteria(this.id,this.name,this.description,existsIn);
+        return new Criteria(this.id, this.name, this.description, existsIn);
     }
 
     public int getId() {

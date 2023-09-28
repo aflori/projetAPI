@@ -44,7 +44,7 @@ public class CandidateService {
     public CandidateDto createCandidate(String firstName, String lastName, MultipartFile photoCandidate) throws MultipartFileIsNotImageException, FileNotUpdatableException {
 
         // create a file for the project directory
-        Candidate candidate = new Candidate(firstName,lastName);
+        Candidate candidate = new Candidate(firstName, lastName);
 
         File homeFolder = new File(homePath);
 

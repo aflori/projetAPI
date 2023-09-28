@@ -87,7 +87,7 @@ public class PoolDto {
 
         Set<Observer> containedObserver = extractSetFromRepository(observerRepository, containedObservers);
 
-        return new Pool(this.id,this.name,this.startDate,this.endDate,this.location,evaluates,containedCriteria,containedObserver);
+        return new Pool(this.id, this.name, this.startDate, this.endDate, this.location, evaluates, containedCriteria, containedObserver);
     }
 
     public int getId() {

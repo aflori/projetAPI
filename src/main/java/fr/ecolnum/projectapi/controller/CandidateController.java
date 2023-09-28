@@ -90,9 +90,9 @@ public class CandidateController {
             CandidateDto createdCandidate = candidateService.checkDuplicate(firstName, lastName, photoCandidate);
             return new ResponseEntity<>(createdCandidate, HttpStatus.CREATED);
         } catch (CandidateAlreadyExistsException e) {
-            return new ResponseEntity<>(convertStringToJsonData(e.getMessage()),HttpStatus.MULTIPLE_CHOICES);
+            return new ResponseEntity<>(convertStringToJsonData(e.getMessage()), HttpStatus.MULTIPLE_CHOICES);
         } catch (MultipartFileIsNotImageException e) {
-            return new ResponseEntity<>(convertStringToJsonData(e.getMessage()),HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+            return new ResponseEntity<>(convertStringToJsonData(e.getMessage()), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
         } catch (FileNotUpdatableException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
