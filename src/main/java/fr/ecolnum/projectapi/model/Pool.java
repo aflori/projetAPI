@@ -64,6 +64,10 @@ public class Pool {
         this.containedObservers = containedObservers;
     }
 
+    public Pool() {
+
+    }
+
 
     public Integer getId() {
         return id;
