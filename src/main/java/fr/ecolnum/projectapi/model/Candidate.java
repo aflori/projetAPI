@@ -28,14 +28,16 @@ public class Candidate {
     @Column(nullable = false)
     private String lastName;
 
-//    @Column(nullable = false)
+    //    @Column(nullable = false)
     @JsonIgnore
     private String photoUrl;
 
     @ManyToMany(mappedBy = "evaluates")
     private Set<Pool> evaluatedIn;
 
-    public Candidate() {}
+    public Candidate() {
+    }
+
     public Candidate(String firstName, String lastName) {
         this.id = 0;
         this.firstName = firstName;
@@ -43,6 +45,13 @@ public class Candidate {
         this.evaluatedIn = null;
         this.photoUrl = null;
     }
+
+
+    public Candidate(int i, String firstName, String lastName) {
+        this(firstName, lastName);
+        this.id = i;
+    }
+
     public int getId() {
         return id;
     }

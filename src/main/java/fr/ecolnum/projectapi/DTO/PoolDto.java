@@ -1,14 +1,23 @@
 package fr.ecolnum.projectapi.DTO;
 
+import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.model.Criteria;
 import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Pool;
+import fr.ecolnum.projectapi.repository.CandidateRepository;
+import fr.ecolnum.projectapi.repository.CriteriaRepository;
+import fr.ecolnum.projectapi.repository.ObserverRepository;
 
 import java.sql.Timestamp;
+
+import static fr.ecolnum.projectapi.util.GenericUtility.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+
 /**
  * DTO is a pattern (data transfert object) which use for the recursivity
  * DTO take only the id for the pools which associated no more
@@ -23,14 +32,13 @@ public class PoolDto {
      * create objects for the list which are integers
      */
     private List<Integer> containedCandidate;
-    private List <Integer> containedCriterias;
-    private List <Integer> containedObservers;
+    private List<Integer> containedCriteria;
+    private List<Integer> containedObservers;
 
     public PoolDto() {
     }
 
     /**
-     *
      * @param pool this construct take attributs of pool
      */
     public PoolDto(Pool pool) {
@@ -49,17 +57,22 @@ public class PoolDto {
         containedObservers = new ArrayList<>();
 
         Set<Criteria> evaluateCriteria = pool.getContainedCriterias();
-        containedCriterias = new ArrayList<>();
+        containedCriteria = new ArrayList<>();
 
-        for (Criteria criteriaList : evaluateCriteria) {
-            containedCriterias.add(criteriaList.getId());
+        if (evaluateCriteria != null) {
+            for (Criteria criteriaList : evaluateCriteria) {
+                containedCriteria.add(criteriaList.getId());
+            }
         }
-
-        for (Observer observerList : evaluateObserver) {
-            containedObservers.add(observerList.getId());
+        if (evaluateObserver != null) {
+            for (Observer observerList : evaluateObserver) {
+                containedObservers.add(observerList.getId());
+            }
         }
-        for (Candidate candidateList : evaluate) {
-            containedCandidate.add(candidateList.getId());
+        if (evaluate != null) {
+            for (Candidate candidateList : evaluate) {
+                containedCandidate.add(candidateList.getId());
+            }
         }
     }
 
@@ -102,5 +115,53 @@ public class PoolDto {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public List<Integer> getContainedCandidate() {
+        return containedCandidate;
+    }
+
+    public void setContainedCandidate(List<Integer> containedCandidate) {
+        this.containedCandidate = containedCandidate;
+    }
+
+    public List<Integer> getContainedCriterias() {
+        return containedCriteria;
+    }
+
+    public void setContainedCriterias(List<Integer> containedCriterias) {
+        this.containedCriteria = containedCriterias;
+    }
+
+    public List<Integer> getContainedObservers() {
+        return containedObservers;
+    }
+
+    public void setContainedObservers(List<Integer> containedObservers) {
+        this.containedObservers = containedObservers;
+    }
+
+    public Pool convertToPoolObject(final CandidateRepository candidateRepository,
+                                    final CriteriaRepository criteriaRepository,
+                                    final ObserverRepository observerRepository)
+            throws IdNotFoundException {
+        Pool newPool = new Pool();
+
+        newPool.setId(id);
+        newPool.setName(name);
+        newPool.setStartDate(startDate);
+        newPool.setEndDate(endDate);
+        newPool.setLocation(location);
+
+        Set<Candidate> evaluates = extractSetFromRepository(candidateRepository, containedCandidate);
+        newPool.setEvaluates(evaluates);
+
+        Set<Criteria> containedCriteria = extractSetFromRepository(criteriaRepository, this.containedCriteria);
+        newPool.setContainedCriterias(containedCriteria);
+
+        Set<Observer> containedObserver = extractSetFromRepository(observerRepository, containedObservers);
+        newPool.setContainedObservers(containedObserver);
+
+        return newPool;
     }
 }

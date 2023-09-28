@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * interface use crud by extends
  */
-public interface PoolRepository extends JpaRepository<Pool,Integer> {
+public interface PoolRepository extends JpaRepository<Pool, Integer> {
 }

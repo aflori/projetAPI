@@ -10,17 +10,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 class ProjectApiApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
-	@Test
-	public void testCreateCandidateToPool() {
-		Pool pool = new Pool();
-		Candidate candidate = new Candidate("Aurelien");
 
-		// Inscrivez le participant à la piscine
-		pool.getName(candidate);
+    @Test
+    void contextLoads() {
+    }
 
-		assertTrue(pool.isPresent(candidate));
-	}
+
 }

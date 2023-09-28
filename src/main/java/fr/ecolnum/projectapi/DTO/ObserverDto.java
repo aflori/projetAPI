@@ -31,7 +31,6 @@ public class ObserverDto {
     }
 
     /**
-     *
      * @param observer this construct take attributs of observer
      */
     public ObserverDto(Observer observer) {
