@@ -6,11 +6,11 @@ import fr.ecolnum.projectapi.exception.CandidateAlreadyExistsException;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -22,6 +22,13 @@ import static fr.ecolnum.projectapi.util.FileUtility.*;
  */
 @Service
 public class CandidateService {
+
+    private final static boolean DEBUG = true;
+    private final static String photoPath = "assets/candidatePhoto/";
+
+    // get the project directory from application.properties
+    @Value("${homePath}")
+    private String homePath;
 
     @Autowired
     private CandidateRepository repository;
@@ -35,26 +42,33 @@ public class CandidateService {
      */
     public Candidate createCandidate(Candidate candidate, MultipartFile photoCandidate) throws MultipartFileIsNotImageException, FileNotUpdatableException {
 
-        if (photoCandidate == null) {
-            return repository.save(candidate);
+        // create a file for the project directory
+        File homeFolder = new File(homePath);
+
+        if (DEBUG == true) {
+            if (photoCandidate == null) {
+                return repository.save(candidate);
+            }
         }
-        String extensionPhoto = extractPhotoExtension(photoCandidate);
 
-        String fileName = "candidatePhoto/" + candidate.getFirstName() + '_' + candidate.getLastName() + '_';
+        String extensionPhoto = checkAndExtractPhotoExtension(photoCandidate);
 
-        createEmptyFileByName(fileName);
-        writePhotoIn(photoCandidate, fileName);
+        String fileName = candidate.getFirstName() + '_' + candidate.getLastName() + '_';
+        String directoryFileName = photoPath + fileName;
 
-        candidate.setPhotoUrl(fileName);
+        File emptyFile = createEmptyFileByName(homeFolder, directoryFileName);
+        writePhotoIn(photoCandidate, emptyFile);
+
 
         Candidate newCandidateSaved = repository.save(candidate);
 
+        //update the filename of the photo with the id of the candidate once he is created and his extension.
         String newFileName = fileName + candidate.getId() + extensionPhoto;
+        String newDirectoryFileName = photoPath + newFileName;
 
-        createEmptyFileByName(newFileName);
-        changeFileName(fileName, newFileName);
+        changeFileName(homeFolder, directoryFileName, newDirectoryFileName);
 
-        newCandidateSaved.setPhotoUrl(newFileName);
+        newCandidateSaved.setPhotoName(newFileName);
 
         return repository.save(newCandidateSaved);
     }
