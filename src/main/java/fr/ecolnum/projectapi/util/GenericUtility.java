@@ -17,6 +17,8 @@ public class GenericUtility {
 
         Set<Type> container = new HashSet<Type>();
 
+        if (listId == null) return container;
+
         for (Id id : listId) {
             Optional<Type> optionalType = repo.findById(id);
 
