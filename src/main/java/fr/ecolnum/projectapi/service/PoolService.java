@@ -55,14 +55,15 @@ public class PoolService {
         return new PoolDto(pool);
     }
 
-      public PoolDto createPool(PoolDto pool) throws IdNotFoundException {
+    public PoolDto createPool(PoolDto pool) throws IdNotFoundException {
 
-        Pool poolDB = pool.convertToPoolObject(candidateRepository,criteriaRepository,observerRepository);
+        Pool poolDB = pool.convertToPoolObject(candidateRepository, criteriaRepository, observerRepository);
         poolRepository.save(poolDB);
 
         PoolDto poolCreated = new PoolDto(poolDB);
         return poolCreated;
     }
+
     /**
      * @param poolId           recuperation id of pool
      * @param poolModification add to pools an observer or a criteria or candidate with poolId
@@ -93,11 +94,11 @@ public class PoolService {
     }
 
     public PoolDto modifyPool(int poolId, PoolDto linksToRegister) throws IdNotFoundException {
-        Pool links = linksToRegister.convertToPoolObject(candidateRepository,criteriaRepository,observerRepository);
+        Pool links = linksToRegister.convertToPoolObject(candidateRepository, criteriaRepository, observerRepository);
 
         Pool objectCreated = modifyPool(poolId, links);
 
-        return  new PoolDto(objectCreated);
+        return new PoolDto(objectCreated);
     }
 }
 

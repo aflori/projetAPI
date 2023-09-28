@@ -24,9 +24,9 @@ public class ObserverController {
             description = "Return the created observer and the created HTTP response",
             responseCode = "201"
     )
-    public ResponseEntity<?> createObserver(@RequestBody Observer observer){
+    public ResponseEntity<?> createObserver(@RequestBody Observer observer) {
 
-        Observer createdObserver =  observerService.createObserver(observer);
+        Observer createdObserver = observerService.createObserver(observer);
 
         return new ResponseEntity<>(createdObserver, HttpStatus.CREATED);
     }

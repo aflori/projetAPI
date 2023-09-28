@@ -10,16 +10,27 @@ import fr.ecolnum.projectapi.repository.CriteriaRepository;
 import fr.ecolnum.projectapi.repository.ObserverRepository;
 
 import java.sql.Timestamp;
-import java.util.*;
 
 import static fr.ecolnum.projectapi.util.GenericUtility.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+
+/**
+ * DTO is a pattern (data transfert object) which use for the recursivity
+ * DTO take only the id for the pools which associated no more
+ */
 public class PoolDto {
     private int id;
     private String name;
     private Timestamp startDate;
     private Timestamp endDate;
     private String location;
+    /**
+     * create objects for the list which are integers
+     */
     private List<Integer> containedCandidate;
     private List<Integer> containedCriteria;
     private List<Integer> containedObservers;
@@ -27,13 +38,18 @@ public class PoolDto {
     public PoolDto() {
     }
 
+    /**
+     * @param pool this construct take attributs of pool
+     */
     public PoolDto(Pool pool) {
         this.id = pool.getId();
         this.name = pool.getName();
         this.startDate = pool.getStartDate();
         this.endDate = pool.getEndDate();
         this.location = pool.getLocation();
-
+        /**
+         * transform the pool list in object which contain an ArrayList
+         */
         Set<Candidate> evaluate = pool.getEvaluates();
         containedCandidate = new ArrayList<>();
 
@@ -43,17 +59,17 @@ public class PoolDto {
         Set<Criteria> evaluateCriteria = pool.getContainedCriterias();
         containedCriteria = new ArrayList<>();
 
-        if(evaluateCriteria != null) {
+        if (evaluateCriteria != null) {
             for (Criteria criteriaList : evaluateCriteria) {
                 containedCriteria.add(criteriaList.getId());
             }
         }
-        if(evaluateObserver != null) {
+        if (evaluateObserver != null) {
             for (Observer observerList : evaluateObserver) {
                 containedObservers.add(observerList.getId());
             }
         }
-        if(evaluate != null) {
+        if (evaluate != null) {
             for (Candidate candidateList : evaluate) {
                 containedCandidate.add(candidateList.getId());
             }

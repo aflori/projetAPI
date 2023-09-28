@@ -12,14 +12,14 @@ import java.util.Set;
 
 import static fr.ecolnum.projectapi.util.GenericUtility.extractSetFromRepository;
 
-@Component
+
 public class UtilDebug {
-    @Autowired
+
     private CandidateRepository repository;
 
     public Set<Candidate> testGenericUtility(List<Integer> list) {
         try {
-            return  extractSetFromRepository(repository,list);
+            return extractSetFromRepository(repository, list);
         } catch (IdNotFoundException e) {
             throw new RuntimeException(e);
         }

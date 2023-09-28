@@ -17,10 +17,10 @@ public class GenericUtility {
 
         Set<Type> container = new HashSet<Type>();
 
-        for(Id id:listId) {
-            Optional<Type> optionalType= repo.findById(id);
+        for (Id id : listId) {
+            Optional<Type> optionalType = repo.findById(id);
 
-            if(optionalType.isEmpty())  throw new IdNotFoundException("candidate " + id + ": not found");
+            if (optionalType.isEmpty()) throw new IdNotFoundException("candidate " + id + ": not found");
 
             container.add(optionalType.get());
         }
