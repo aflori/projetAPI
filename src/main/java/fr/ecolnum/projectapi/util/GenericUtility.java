@@ -28,4 +28,8 @@ public class GenericUtility {
         }
         return container;
     }
+
+    public static String convertStringToJsonData(String str) {
+        return "\"{ \"error\":\"" + str + "\"}\"";
+    }
 }
