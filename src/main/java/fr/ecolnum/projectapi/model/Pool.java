@@ -1,7 +1,6 @@
 package fr.ecolnum.projectapi.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Generated;
 
 import java.sql.Timestamp;
 import java.util.Set;
