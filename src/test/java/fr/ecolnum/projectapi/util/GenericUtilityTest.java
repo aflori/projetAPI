@@ -1,5 +1,6 @@
 package fr.ecolnum.projectapi.util;
 
+import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static fr.ecolnum.projectapi.util.GenericUtility.extractSetFromRepository;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -21,10 +23,7 @@ import java.util.Set;
 @ExtendWith(MockitoExtension.class)
 public class GenericUtilityTest {
 
-    @InjectMocks
-    private UtilDebug utilityInterface;
-
-    //must have the same name as utility attribute
+    //object which must be simulated
     @Mock
     private CandidateRepository repository;
 
@@ -32,6 +31,7 @@ public class GenericUtilityTest {
     public void testExtractSetFromRepository() {
         List<Integer> listIdToTest = new ArrayList<>(List.of(1, 2, 3));
 
+        //simulated behavior
         when(repository.findById(1))
                 .thenReturn(
                         Optional.of(
@@ -55,17 +55,20 @@ public class GenericUtilityTest {
                         Optional.empty()
                 );
 
-        Set<Candidate> setResult = utilityInterface.testGenericUtility(listIdToTest);
+        //test if method get all object from list.
+        try {
+            Set<Candidate> setResult = extractSetFromRepository(repository, listIdToTest);
+            assertEquals(setResult.size(), listIdToTest.size());
+        } catch (IdNotFoundException e) {
+            fail();
+        }
 
-        assertEquals(setResult.size(), 3);
-
+        //add empty reference to the list
         listIdToTest.add(8);
 
-        try {
-            utilityInterface.testGenericUtility(listIdToTest);
-            fail();
-        } catch (RuntimeException ignore) {
-
-        }
+        //test if method throw the right exception when an empty reference is found
+        assertThrows(IdNotFoundException.class, () -> extractSetFromRepository(repository, listIdToTest));
     }
+
+
 }
