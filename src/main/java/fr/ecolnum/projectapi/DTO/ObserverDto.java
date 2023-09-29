@@ -58,6 +58,12 @@ public class ObserverDto {
         }
     }
 
+    public ObserverDto(int id, String firstname, String lastname) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+    }
+
     public Observer convertToObserverObject(final PoolRepository poolRepository) throws IdNotFoundException {
         Set<Pool> observeIn = extractSetFromRepository(poolRepository, this.containInPool);
 
