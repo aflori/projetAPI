@@ -1,6 +1,7 @@
 package fr.ecolnum.projectapi.service;
 
 import fr.ecolnum.projectapi.exception.FileNotUpdatableException;
+import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.exception.MultipartFileIsNotImageException;
 import fr.ecolnum.projectapi.exception.CandidateAlreadyExistsException;
 import fr.ecolnum.projectapi.DTO.CandidateDto;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 
 import static fr.ecolnum.projectapi.util.FileUtility.*;
@@ -32,7 +34,7 @@ public class CandidateService {
     private String homePath;
 
     @Autowired
-    private CandidateRepository repository;
+    private CandidateRepository candidateRepository;
 
     /**
      * this method create a candidate in the database and import a photo in local
@@ -50,7 +52,7 @@ public class CandidateService {
 
         if (DEBUG == true) {
             if (photoCandidate == null) {
-                Candidate createdCandidate = repository.save(candidate);
+                Candidate createdCandidate = candidateRepository.save(candidate);
                 return new CandidateDto(createdCandidate);
             }
         }
@@ -64,7 +66,7 @@ public class CandidateService {
         writePhotoIn(photoCandidate, emptyFile);
 
 
-        Candidate newCandidateSaved = repository.save(candidate);
+        Candidate newCandidateSaved = candidateRepository.save(candidate);
 
         //update the filename of the photo with the id of the candidate once he is created and his extension.
         String newFileName = fileName + candidate.getId() + extensionPhoto;
@@ -74,7 +76,7 @@ public class CandidateService {
 
         newCandidateSaved.setPhotoName(newFileName);
 
-        Candidate createdCandidate = repository.save(newCandidateSaved);
+        Candidate createdCandidate = candidateRepository.save(newCandidateSaved);
         return new CandidateDto(createdCandidate);
     }
 
@@ -91,7 +93,7 @@ public class CandidateService {
 
         boolean isDuplicate = false;
 
-        Iterable<Candidate> candidateList = repository.findByLastNameEquals(lastName);
+        Iterable<Candidate> candidateList = candidateRepository.findByLastNameEquals(lastName);
 
         Iterator<Candidate> iter;
         iter = candidateList.iterator();
@@ -112,10 +114,15 @@ public class CandidateService {
         }
     }
 
+    /**
+     *  service to return a list of candidate that has the same first name  and last name as the one given in parameter
+     * @param candidate the referent candidate
+     * @return a list of candidate with the same first name and last name
+     */
     public Iterable<CandidateDto> returnDuplicate(CandidateDto candidate) {
         String lastName = candidate.getLastName();
         String firstName = candidate.getFirstName();
-        Iterable<Candidate> candidateList = repository.findByLastNameEquals(lastName);
+        Iterable<Candidate> candidateList = candidateRepository.findByLastNameEquals(lastName);
 
         Set<CandidateDto> duplicateCandidate = new HashSet<>();
 
@@ -127,5 +134,34 @@ public class CandidateService {
         }
 
         return duplicateCandidate;
+    }
+
+    /**
+     * function made to return a list of candidate present in the repository
+     * @return a list of all existing candidate
+     */
+    public Iterable<CandidateDto> getAllCandidate() {
+        Iterable<Candidate> allCandidate = candidateRepository.findAll();
+        Set<CandidateDto> allCandidateDto = new HashSet<>();
+
+        for (Candidate candidate : allCandidate) {
+            allCandidateDto.add(new CandidateDto(candidate));
+        }
+        return allCandidateDto;
+    }
+
+    /**
+     *  function made to return a specific candidate
+     * @param id id of the wanted candidate
+     * @return the candidate with the parameter id
+     * @throws IdNotFoundException if the id is not given in database
+     */
+    public CandidateDto getCandidateById(int id) throws IdNotFoundException {
+        Optional<Candidate> candidate = candidateRepository.findById(id);
+
+        if (candidate.isEmpty()) {
+            throw new IdNotFoundException();
+        }
+        return new CandidateDto(candidate.get());
     }
 }
