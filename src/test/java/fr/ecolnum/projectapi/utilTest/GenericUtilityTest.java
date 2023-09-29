@@ -1,4 +1,4 @@
-package fr.ecolnum.projectapi.util;
+package fr.ecolnum.projectapi.utilTest;
 
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.model.Candidate;
