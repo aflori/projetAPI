@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -102,5 +101,43 @@ public class ObserverServiceTest {
 
     }
 
+    @Test
+    public void testFunctionGetAllWithAssociationTable() {
+
+        // observerRepository.findAll() mock
+
+        Observer[] arrayLocalObserver = {
+                new Observer(1, "t", "t", "tt@gmail.com", "12",
+                        Set.of(new Pool(1), new Pool(3))
+                ),
+                new Observer(3, "A", "Z", "az@gmail.com", "21",
+                        Set.of(new Pool(2), new Pool(5))),
+        };
+        List<Observer> listLocalObserver = List.of(arrayLocalObserver);
+        when(observerRepository.findAll())
+                .thenReturn(listLocalObserver);
+
+        Iterable<ObserverDto> allObserver = observerService.getAllObservers();
+
+        int numberElement = 0;
+        for (ObserverDto observerDto : allObserver) {
+
+            int id = observerDto.getId();
+            List<Integer> poolAssociated = observerDto.getContainInPool();
+
+            assert (
+                    (id == 1 && poolAssociated.containsAll(
+                            List.of(new Integer[]{1, 3})
+                    )) ||
+                    (id == 3 && poolAssociated.containsAll(
+                            List.of(new Integer[]{2,5})
+                    ))
+            );
+
+            numberElement++;
+        }
+        assertEquals(numberElement, listLocalObserver.size());
+
+    }
 
 }
