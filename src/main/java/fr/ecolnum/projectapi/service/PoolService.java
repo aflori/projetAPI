@@ -3,9 +3,6 @@ package fr.ecolnum.projectapi.service;
 import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.exception.PoolNotMatchingException;
-import fr.ecolnum.projectapi.model.Candidate;
-import fr.ecolnum.projectapi.model.Criteria;
-import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
 import fr.ecolnum.projectapi.repository.CriteriaRepository;
@@ -45,7 +42,7 @@ public class PoolService {
         return allPoolAvailable;
     }
 
-    public PoolDto finById(int id) throws IdNotFoundException {
+    public PoolDto findById(int id) throws IdNotFoundException {
         Optional<Pool> optionnalPool = poolRepository.findById(id);
 
         if (optionnalPool.isEmpty()) {
