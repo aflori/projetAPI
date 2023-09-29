@@ -3,6 +3,8 @@ package fr.ecolnum.projectapi.poolTest;
 
 import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.controller.PoolController;
+import fr.ecolnum.projectapi.exception.IdNotFoundException;
+import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.service.PoolService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +36,7 @@ public class PoolControllerTest {
     public void testGetAllPools() {
         //mock for poolService.getAllPools()
         final int numberPool = 3;
-        final int[] ids = {1,2,4};
+        final int[] ids = {1, 2, 4};
 
 
         //initializing object
@@ -69,8 +71,18 @@ public class PoolControllerTest {
     }
 
     @Test
-    public void testGetPoolByIdNoError() {
+    public void testGetPoolByIdNoError() throws IdNotFoundException {
+        PoolDto pool = new PoolDto();
+        int idTested = 3;
+        pool.setId(idTested);
+        when(poolService.findById(idTested))
+                .thenReturn(pool);
 
+        ResponseEntity<?> responseEntity = poolController.getPoolById(idTested);
+
+        assert (responseEntity.getStatusCode() == HttpStatus.OK &&
+                responseEntity.getBody() instanceof PoolDto &&
+                ((PoolDto) responseEntity.getBody()).getId() == idTested);
     }
 
     @Test
@@ -84,15 +96,17 @@ public class PoolControllerTest {
     }
 
     @Test
-    public void testCreatePoolWithError(){
+    public void testCreatePoolWithError() {
 
     }
 
-    @Test void testModifyPoolNoError(){
+    @Test
+    void testModifyPoolNoError() {
 
     }
 
-    @Test void testModifyPoolWithError(){
+    @Test
+    void testModifyPoolWithError() {
 
     }
 
