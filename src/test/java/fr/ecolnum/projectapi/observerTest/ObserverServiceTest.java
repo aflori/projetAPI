@@ -59,8 +59,8 @@ public class ObserverServiceTest {
         ObserverDto returnedFromCreateObserver = observerService.createObserver(observerDtoTest);
 
         assertEquals(returnedFromCreateObserver.getId(), 1);
-        assertEquals(returnedFromCreateObserver.getLastname(), lastName);
-        assertEquals(returnedFromCreateObserver.getFirstname(), firstName);
+        assertEquals(returnedFromCreateObserver.getLastName(), lastName);
+        assertEquals(returnedFromCreateObserver.getFirstName(), firstName);
         assertEquals(returnedFromCreateObserver.getEmail(), email);
         assertEquals(returnedFromCreateObserver.getPassword(), password);
 
@@ -87,8 +87,8 @@ public class ObserverServiceTest {
             int id = observerDto.getId();
             assert (id == 1 || id == 3 || id == 4);
 
-            String lastName = observerDto.getLastname();
-            String firstName = observerDto.getFirstname();
+            String lastName = observerDto.getLastName();
+            String firstName = observerDto.getFirstName();
 
             assert ((lastName.equals("toto") && firstName.equals("titi")) ||
                     (lastName.equals("Alex") && firstName.equals("Xela")) ||
