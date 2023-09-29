@@ -1,6 +1,7 @@
 package fr.ecolnum.projectapi.service;
 
 import fr.ecolnum.projectapi.exception.FileNotUpdatableException;
+import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.exception.MultipartFileIsNotImageException;
 import fr.ecolnum.projectapi.exception.CandidateAlreadyExistsException;
 import fr.ecolnum.projectapi.DTO.CandidateDto;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 
 import static fr.ecolnum.projectapi.util.FileUtility.*;
@@ -137,5 +139,14 @@ public class CandidateService {
             allCandidateDto.add(new CandidateDto(candidate));
         }
         return  allCandidateDto;
+    }
+
+    public CandidateDto getCandidateById(int id) throws IdNotFoundException {
+        Optional<Candidate> candidate = candidateRepository.findById(id);
+
+        if( candidate.isEmpty()) {
+            throw new IdNotFoundException();
+        }
+        return new CandidateDto(candidate.get());
     }
 }
