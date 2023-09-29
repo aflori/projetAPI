@@ -98,8 +98,16 @@ public class PoolControllerTest {
     }
 
     @Test
-    public void testCreatePoolNoError() {
+    public void testCreatePoolNoError() throws IdNotFoundException {
+        PoolDto poolDto = new PoolDto();
+        PoolDto mockReturn = new PoolDto();
+        when(poolService.createPool(poolDto))
+                .thenReturn(mockReturn);
 
+        ResponseEntity<?> resultController = poolController.createPool(poolDto);
+
+        assert (resultController.getStatusCode() == HttpStatus.CREATED &&
+                resultController.getBody() == mockReturn);
     }
 
     @Test
@@ -115,8 +123,17 @@ public class PoolControllerTest {
     }
 
     @Test
-    void testModifyPoolNoError() {
+    void testModifyPoolNoError() throws IdNotFoundException, PoolNotMatchingException {
+        int idDto = 3;
+        PoolDto poolDto = new PoolDto();
+        PoolDto mockReturn = new PoolDto();
+        when(poolService.modifyPool(idDto,poolDto))
+                .thenReturn(mockReturn);
 
+        ResponseEntity<?> resultController = poolController.modifyPool(idDto,poolDto);
+
+        assert (resultController.getStatusCode() == HttpStatus.OK &&
+                resultController.getBody() == mockReturn);
     }
 
     @Test
