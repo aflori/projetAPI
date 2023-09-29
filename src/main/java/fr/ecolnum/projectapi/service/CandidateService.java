@@ -114,6 +114,11 @@ public class CandidateService {
         }
     }
 
+    /**
+     *  service to return a list of candidate that has the same first name  and last name as the one given in parameter
+     * @param candidate the referent candidate
+     * @return a list of candidate with the same first name and last name
+     */
     public Iterable<CandidateDto> returnDuplicate(CandidateDto candidate) {
         String lastName = candidate.getLastName();
         String firstName = candidate.getFirstName();
@@ -131,6 +136,10 @@ public class CandidateService {
         return duplicateCandidate;
     }
 
+    /**
+     * function made to return a list of candidate present in the repository
+     * @return a list of all existing candidate
+     */
     public Iterable<CandidateDto> getAllCandidate() {
         Iterable<Candidate> allCandidate = candidateRepository.findAll();
         Set<CandidateDto> allCandidateDto = new HashSet<>();
@@ -138,13 +147,19 @@ public class CandidateService {
         for (Candidate candidate : allCandidate) {
             allCandidateDto.add(new CandidateDto(candidate));
         }
-        return  allCandidateDto;
+        return allCandidateDto;
     }
 
+    /**
+     *  function made to return a specific candidate
+     * @param id id of the wanted candidate
+     * @return the candidate with the parameter id
+     * @throws IdNotFoundException if the id is not given in database
+     */
     public CandidateDto getCandidateById(int id) throws IdNotFoundException {
         Optional<Candidate> candidate = candidateRepository.findById(id);
 
-        if( candidate.isEmpty()) {
+        if (candidate.isEmpty()) {
             throw new IdNotFoundException();
         }
         return new CandidateDto(candidate.get());
