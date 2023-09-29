@@ -5,7 +5,6 @@ import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.repository.PoolRepository;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -43,17 +42,19 @@ public class ObserverDto {
         this.lastname = observer.getLastName();
         this.email = observer.getEmail();
         this.password = observer.getPassword();
-        /**
+        /*
          * transform the pool list in object observeIn which contain an ArrayList
          */
 
         Set<Pool> observeIn = observer.getObserveIn();
         containInPool = new ArrayList<>();
-        /**
+        /*
          * just take all id contain in pool List
          */
-        for (Pool poolList : observeIn) {
-            containInPool.add(poolList.getId());
+        if(observeIn != null) {
+            for (Pool poolList : observeIn) {
+                containInPool.add(poolList.getId());
+            }
         }
     }
 
