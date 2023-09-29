@@ -4,6 +4,7 @@ package fr.ecolnum.projectapi.poolTest;
 import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.controller.PoolController;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
+import fr.ecolnum.projectapi.exception.PoolNotMatchingException;
 import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.service.PoolService;
 import org.junit.jupiter.api.Test;
@@ -119,8 +120,29 @@ public class PoolControllerTest {
     }
 
     @Test
-    void testModifyPoolWithError() {
+    void testModifyPoolWithErrorIdNotFound() throws IdNotFoundException, PoolNotMatchingException {
+        PoolDto poolTested = new PoolDto();
+        int poolIdTested = 1;
 
+        when(poolService.modifyPool(poolIdTested,poolTested))
+                .thenThrow(IdNotFoundException.class);
+
+        ResponseEntity<?> responseEntity = poolController.modifyPool(poolIdTested,poolTested);
+
+        assert (responseEntity.getStatusCode() == HttpStatus.CONFLICT);
+    }
+
+    @Test
+    void testModifyPoolWithErrorPoolNotMatching() throws IdNotFoundException, PoolNotMatchingException {
+        PoolDto poolTested = new PoolDto();
+        int poolIdTested = 1;
+
+        when(poolService.modifyPool(poolIdTested,poolTested))
+                .thenThrow(PoolNotMatchingException.class);
+
+        ResponseEntity<?> responseEntity = poolController.modifyPool(poolIdTested,poolTested);
+
+        assert (responseEntity.getStatusCode() == HttpStatus.CONFLICT);
     }
 
 }
