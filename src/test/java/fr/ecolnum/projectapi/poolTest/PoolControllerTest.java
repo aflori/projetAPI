@@ -86,8 +86,14 @@ public class PoolControllerTest {
     }
 
     @Test
-    public void testGetPoolByIdWithError() {
+    public void testGetPoolByIdWithError() throws IdNotFoundException {
+        int idTested = 3;
+        when(poolService.findById(idTested))
+                .thenThrow(IdNotFoundException.class);
 
+        ResponseEntity<?> responseEntity = poolController.getPoolById(idTested);
+
+        assert (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND);
     }
 
     @Test
