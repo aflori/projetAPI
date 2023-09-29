@@ -2,6 +2,7 @@ package fr.ecolnum.projectapi.controller;
 
 import fr.ecolnum.projectapi.exception.CandidateAlreadyExistsException;
 import fr.ecolnum.projectapi.exception.FileNotUpdatableException;
+import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.exception.MultipartFileIsNotImageException;
 import fr.ecolnum.projectapi.DTO.CandidateDto;
 import fr.ecolnum.projectapi.service.CandidateService;
@@ -104,6 +105,16 @@ public class CandidateController {
         Iterable<?> candidateLise = candidateService.getAllCandidate();
 
         return new ResponseEntity<>(candidateLise, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public  ResponseEntity<?> getCandidateById(@PathVariable int id){
+
+        try {
+            return new ResponseEntity<>(candidateService.getCandidateById(id), HttpStatus.OK);
+        } catch (IdNotFoundException e) {
+            return new ResponseEntity<>(convertStringToJsonData(e.getMessage()),HttpStatus.NOT_FOUND);
+        }
     }
 
 }
