@@ -127,7 +127,7 @@ public class CandidateController {
             summary = "return a specific candidate given in the Url"
     )
     @ApiResponse(
-            description = "candidate of a candidate choosen by its id",
+            description = "candidate of a candidate chosen by its id",
             responseCode = "200"
     )
     @GetMapping("/{id}")
@@ -138,6 +138,23 @@ public class CandidateController {
         } catch (IdNotFoundException e) {
             return new ResponseEntity<>(convertStringToJsonData(e.getMessage()), HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/duplicate")
+    @Operation(
+            summary = "get the list of candidate with the same first name and last name",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "candidate with a first name and last name",
+                    required = true
+            )
+    )
+    @ApiResponse(
+            description = "list of candidate with the same first name and last name with the one given in body",
+            responseCode = "200"
+    )
+    public ResponseEntity<?> getDuplicateNameCandidate(@RequestBody CandidateDto candidate) {
+        Iterable<CandidateDto> listDuplicate = candidateService.returnDuplicate(candidate);
+        return  new ResponseEntity<>(listDuplicate, HttpStatus.OK);
     }
 
 }
