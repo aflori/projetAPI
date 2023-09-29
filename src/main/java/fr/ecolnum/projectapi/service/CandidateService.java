@@ -33,9 +33,9 @@ public class CandidateService {
     @Value("${homePath}")
     private String homePath;
 
-    private String homePath2 = "\\Documents\\java\\projetAPI";
+    private String homePath2 = "\\Documents\\Programmes\\java\\projetAPI";
 
-    private final boolean isOnWindowsOS = false;
+    private final boolean isOnWindowsOS = true;
 
 
     @Autowired
