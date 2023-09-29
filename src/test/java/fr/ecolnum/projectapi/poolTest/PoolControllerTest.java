@@ -102,8 +102,15 @@ public class PoolControllerTest {
     }
 
     @Test
-    public void testCreatePoolWithError() {
+    public void testCreatePoolWithError() throws IdNotFoundException {
+        PoolDto poolTested = new PoolDto();
 
+        when(poolService.createPool(poolTested))
+                .thenThrow(IdNotFoundException.class);
+
+        ResponseEntity<?> responseEntity = poolController.createPool(poolTested);
+
+        assert (responseEntity.getStatusCode() == HttpStatus.CONFLICT);
     }
 
     @Test
