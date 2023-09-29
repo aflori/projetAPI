@@ -97,4 +97,13 @@ public class CandidateController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping
+    public  ResponseEntity<?> getAllCandidate(){
+
+        Iterable<?> candidateLise = candidateService.getAllCandidate();
+
+        return new ResponseEntity<>(candidateLise, HttpStatus.OK);
+    }
+
 }
