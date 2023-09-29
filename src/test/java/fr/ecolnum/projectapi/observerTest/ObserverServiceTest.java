@@ -4,6 +4,7 @@ package fr.ecolnum.projectapi.observerTest;
 import fr.ecolnum.projectapi.DTO.ObserverDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.model.Observer;
+import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.repository.ObserverRepository;
 import fr.ecolnum.projectapi.repository.PoolRepository;
 import fr.ecolnum.projectapi.service.ObserverService;
@@ -13,6 +14,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,12 +59,48 @@ public class ObserverServiceTest {
 
         ObserverDto returnedFromCreateObserver = observerService.createObserver(observerDtoTest);
 
-        assertEquals(returnedFromCreateObserver.getId(),1);
+        assertEquals(returnedFromCreateObserver.getId(), 1);
         assertEquals(returnedFromCreateObserver.getLastname(), lastName);
-        assertEquals(returnedFromCreateObserver.getFirstname(),firstName);
-        assertEquals(returnedFromCreateObserver.getEmail(),email);
-        assertEquals(returnedFromCreateObserver.getPassword(),password);
+        assertEquals(returnedFromCreateObserver.getFirstname(), firstName);
+        assertEquals(returnedFromCreateObserver.getEmail(), email);
+        assertEquals(returnedFromCreateObserver.getPassword(), password);
 
     }
+
+    @Test
+    public void testFunctionGetAll() {
+
+        // observerRepository.findAll() mock
+        Observer[] arrayLocalObserver = {
+                new Observer(1, "toto", "titi", "toti@gmail.com", "1234", null),
+                new Observer(3, "Alex", "Xela", "alexXela@gmail.com", "54321", null),
+                new Observer(4, "Thale", "Elle", "Thale.elle@gmail.com", "abcd", null)
+        };
+        List<Observer> listLocalObserver = List.of(arrayLocalObserver);
+        when(observerRepository.findAll())
+                .thenReturn(listLocalObserver);
+
+        Iterable<ObserverDto> allObserver = observerService.getAllObservers();
+
+        int numberElement = 0;
+        for (ObserverDto observerDto : allObserver) {
+
+            int id = observerDto.getId();
+            assert (id == 1 || id == 3 || id == 4);
+
+            String lastName = observerDto.getLastname();
+            String firstName = observerDto.getFirstname();
+
+            assert ((lastName.equals("toto") && firstName.equals("titi")) ||
+                    (lastName.equals("Alex") && firstName.equals("Xela")) ||
+                    (lastName.equals("Thale") && firstName.equals("Elle"))
+            );
+
+            numberElement++;
+        }
+        assertEquals(numberElement, listLocalObserver.size());
+
+    }
+
 
 }
