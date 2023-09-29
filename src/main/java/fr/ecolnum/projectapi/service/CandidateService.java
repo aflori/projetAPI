@@ -33,6 +33,11 @@ public class CandidateService {
     @Value("${homePath}")
     private String homePath;
 
+    private String homePath2 = "\\Documents\\java\\projetAPI";
+
+    private final boolean isOnWindowsOS = false;
+
+
     @Autowired
     private CandidateRepository candidateRepository;
 
@@ -48,6 +53,9 @@ public class CandidateService {
         // create a file for the project directory
         Candidate candidate = new Candidate(firstName, lastName);
 
+        if(this.isOnWindowsOS){
+            homePath ="C:" + homePath + homePath2;
+        }
         File homeFolder = new File(homePath);
 
         if (DEBUG == true) {
