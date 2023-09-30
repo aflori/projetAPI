@@ -21,6 +21,7 @@ import static fr.ecolnum.projectapi.util.GenericUtility.convertStringToJsonData;
  */
 @RestController
 @RequestMapping("/api/admin/candidate")
+@CrossOrigin
 public class CandidateController {
 
     @Autowired
@@ -100,7 +101,8 @@ public class CandidateController {
     }
 
     /**
-     *  function to get all candidate registered
+     * function to get all candidate registered
+     *
      * @return a list of candidate
      */
     @Operation(
@@ -119,7 +121,8 @@ public class CandidateController {
     }
 
     /**
-     *  endpoint to return a specific candidate
+     * endpoint to return a specific candidate
+     *
      * @param id if of the candidate we are searching for
      * @return candidate containing the good id
      */
@@ -154,7 +157,7 @@ public class CandidateController {
     )
     public ResponseEntity<?> getDuplicateNameCandidate(@RequestBody CandidateDto candidate) {
         Iterable<CandidateDto> listDuplicate = candidateService.returnDuplicate(candidate);
-        return  new ResponseEntity<>(listDuplicate, HttpStatus.OK);
+        return new ResponseEntity<>(listDuplicate, HttpStatus.OK);
     }
 
 }

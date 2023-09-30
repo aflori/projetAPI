@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Controller
 @RequestMapping(path = "/api/admin/pool")
+@CrossOrigin
 public class PoolController {
     @Autowired
     private PoolService poolService;

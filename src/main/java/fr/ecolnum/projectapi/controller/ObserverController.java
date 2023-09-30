@@ -17,6 +17,7 @@ import static fr.ecolnum.projectapi.util.GenericUtility.convertStringToJsonData;
  */
 @RestController
 @RequestMapping("/api/admin/observer")
+@CrossOrigin
 public class ObserverController {
     @Autowired
     private ObserverService observerService;

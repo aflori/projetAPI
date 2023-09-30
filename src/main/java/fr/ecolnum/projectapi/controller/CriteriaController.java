@@ -17,6 +17,7 @@ import static fr.ecolnum.projectapi.util.GenericUtility.convertStringToJsonData;
  */
 @RestController
 @RequestMapping("/api/admin/criteria")
+@CrossOrigin
 public class CriteriaController {
     @Autowired
     private CriteriaService criteriaService;
