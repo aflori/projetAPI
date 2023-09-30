@@ -30,7 +30,7 @@ function getPoolTag(pool) {
 
 function showPoolsOnStream(arrayData, bodyTag) {
     for (const pool of arrayData) {
-        // console.log(pool);
+        console.log(pool);
         const tag = getPoolTag(pool);
         bodyTag.appendChild(tag);
     }

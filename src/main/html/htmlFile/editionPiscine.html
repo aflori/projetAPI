@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>édition piscine</title>
+</head>
+<body>
+<form>
+    <section>
+        <label>
+            S'il s'agit de la création d'un piscine, laisser le champ blanc, sinon donner son numéro ID
+            <input type="number" name="id">
+        </label>
+    </section>
+    <section>
+        <label>
+            Nom de la piscine
+            <input type="text" name="name">
+        </label>
+    </section>
+    <section>
+        <label>
+            début des épreuves
+            <input type="datetime-local" name="startDate">
+        </label>
+    </section>
+    <section>
+        <label>
+            fin des épreuves
+            <input type="datetime-local" name="endDate">
+        </label>
+    </section>
+    <section>
+        <label>
+            Lieu:
+            <input type="text" name="location">
+        </label>
+    </section>
+
+    <button type="submit">confirmer la selection ou la création de la piscine</button>
+
+</form>
+</body>
+<script src="../JS/globalVar.js"></script>
+<script src="../JS/adminEditPool.js"></script>
+</html>
