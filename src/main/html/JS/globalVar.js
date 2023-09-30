@@ -19,22 +19,22 @@ const ApiInteraction = {
         return this.__API_ADDRESS + this.__OBSERVER_API;
     },
 
-    get _adminPoolControllerUrl () {
+    get _adminPoolControllerUrl() {
         return this.adminURI + this.__POOL_CONTROLLER;
     },
-    get _adminCandidateControllerUrl () {
+    get _adminCandidateControllerUrl() {
         return this.adminURI + this.__CANDIDATE_CONTROLLER;
     },
-    get _adminCandidateGroupControllerUrl () {
+    get _adminCandidateGroupControllerUrl() {
         return this.adminURI + this.__CANDIDATE_GROUP_CONTROLLER;
     },
-    get _adminUserControllerUrl () {
+    get _adminUserControllerUrl() {
         return this.adminURI + this.__USER_CONTROLLER;
     },
-    get _adminCriteriaControllerUrl () {
+    get _adminCriteriaControllerUrl() {
         return this.adminURI + this.__CRITERIA_CONTROLLER;
     },
-    get _getAdminCategoryControllerUrl () {
+    get _getAdminCategoryControllerUrl() {
         return this.adminURI + this.__CATEGORY_CRITERIA_CONTROLLER;
     },
 
@@ -44,10 +44,7 @@ const ApiInteraction = {
         if (apiResponse.ok) {
             return await apiResponse.json();
         } else {
-            return {
-                error: "request failed",
-                http_code: apiResponse.status
-            };
+            return apiResponse.status;
         }
     },
     _getRequestJsonContent: function (jsonContent, method) {
@@ -69,46 +66,46 @@ const ApiInteraction = {
 
 
     getAllPools: async function () {
-        const url = this._adminPoolControllerUrl();
+        const url = this._adminPoolControllerUrl;
         const requestContent = this._getRequestJsonContent(null, "GET");
         return await this._doRequest(url, requestContent);
     },
     getPool: async function (id) {
-        const url = this._adminPoolControllerUrl() + '/' + id;
+        const url = this._adminPoolControllerUrl + '/' + id;
         const requestContent = this._getRequestJsonContent(null, "GET");
         return await this._doRequest(url, requestContent);
     },
     createPool: async function (pool) {
-        const url = this._adminPoolControllerUrl();
+        const url = this._adminPoolControllerUrl;
         const requestContent = this._getRequestJsonContent(pool, "POST");
         return await this._doRequest(url, requestContent);
     },
     modifyPool: async function (pool) {
-        const url = this._adminPoolControllerUrl() + '/' + pool.id;
+        const url = this._adminPoolControllerUrl + '/' + pool.id;
         const requestContent = this._getRequestJsonContent(pool, "PUT");
         return await this._doRequest(url, requestContent);
     },
 
-    getAllUser: async function() {
+    getAllUser: async function () {
         const url = this._adminUserControllerUrl;
-        const requestContent = this._getRequestJsonContent(null,"GET");
+        const requestContent = this._getRequestJsonContent(null, "GET");
         return await this._doRequest(url, requestContent);
     },
-    createUser: async function(user) {
+    createUser: async function (user) {
         const url = this._adminUserControllerUrl;
-        const requestContent = this._getRequestJsonContent(user,"POST");
-        return await this._doRequest(url,requestContent);
+        const requestContent = this._getRequestJsonContent(user, "POST");
+        return await this._doRequest(url, requestContent);
     },
 
-    createCriteria: async function(criteria) {
+    createCriteria: async function (criteria) {
         const url = this._adminCriteriaControllerUrl;
-        const requestContent = this._getRequestJsonContent(criteria,"POST");
-        return await this._doRequest(url,requestContent);
+        const requestContent = this._getRequestJsonContent(criteria, "POST");
+        return await this._doRequest(url, requestContent);
     },
-    getAllCriteria: async function() {
+    getAllCriteria: async function () {
         const url = this._adminCriteriaControllerUrl;
-        const requestContent = this._getRequestJsonContent(null,"GET");
-        return await this._doRequest(url,requestContent);
+        const requestContent = this._getRequestJsonContent(null, "GET");
+        return await this._doRequest(url, requestContent);
     }
 
 
