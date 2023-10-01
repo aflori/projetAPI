@@ -47,7 +47,7 @@ const ApiInteraction = {
             return apiResponse.status;
         }
     },
-    _getRequestJsonContent: function (jsonContent, method) {
+    _getRequestJsonBody: function (jsonContent, method) {
         const content = {
             method: method
         }
@@ -67,47 +67,52 @@ const ApiInteraction = {
 
     getAllPools: async function () {
         const url = this._adminPoolControllerUrl;
-        const requestContent = this._getRequestJsonContent(null, "GET");
+        const requestContent = this._getRequestJsonBody(null, "GET");
         return await this._doRequest(url, requestContent);
     },
     getPool: async function (id) {
         const url = this._adminPoolControllerUrl + '/' + id;
-        const requestContent = this._getRequestJsonContent(null, "GET");
+        const requestContent = this._getRequestJsonBody(null, "GET");
         return await this._doRequest(url, requestContent);
     },
     createPool: async function (pool) {
         const url = this._adminPoolControllerUrl;
-        const requestContent = this._getRequestJsonContent(pool, "POST");
+        const requestContent = this._getRequestJsonBody(pool, "POST");
         return await this._doRequest(url, requestContent);
     },
     modifyPool: async function (pool) {
         const url = this._adminPoolControllerUrl + '/' + pool.id;
-        const requestContent = this._getRequestJsonContent(pool, "PUT");
+        const requestContent = this._getRequestJsonBody(pool, "PUT");
         return await this._doRequest(url, requestContent);
     },
 
     getAllUser: async function () {
         const url = this._adminUserControllerUrl;
-        const requestContent = this._getRequestJsonContent(null, "GET");
+        const requestContent = this._getRequestJsonBody(null, "GET");
         return await this._doRequest(url, requestContent);
     },
     createUser: async function (user) {
         const url = this._adminUserControllerUrl;
-        const requestContent = this._getRequestJsonContent(user, "POST");
+        const requestContent = this._getRequestJsonBody(user, "POST");
         return await this._doRequest(url, requestContent);
     },
 
     createCriteria: async function (criteria) {
         const url = this._adminCriteriaControllerUrl;
-        const requestContent = this._getRequestJsonContent(criteria, "POST");
+        const requestContent = this._getRequestJsonBody(criteria, "POST");
         return await this._doRequest(url, requestContent);
     },
     getAllCriteria: async function () {
         const url = this._adminCriteriaControllerUrl;
-        const requestContent = this._getRequestJsonContent(null, "GET");
+        const requestContent = this._getRequestJsonBody(null, "GET");
+        return await this._doRequest(url, requestContent);
+    },
+
+    getAllCandidate: async function() {
+        const url = this._adminCandidateControllerUrl;
+        const requestContent = this._getRequestJsonBody(null, "GET");
         return await this._doRequest(url, requestContent);
     }
-
 
 };
 
