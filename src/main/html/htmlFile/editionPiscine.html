@@ -5,41 +5,54 @@
     <title>édition piscine</title>
 </head>
 <body>
-<form>
-    <section>
-        <label>
-            S'il s'agit de la création d'un piscine, laisser le champ blanc, sinon donner son numéro ID
-            <input type="number" name="id">
-        </label>
-    </section>
-    <section>
-        <label>
-            Nom de la piscine
-            <input type="text" name="name" required>
-        </label>
-    </section>
-    <section>
-        <label>
-            début des épreuves
-            <input type="date" name="startDate" required>
-        </label>
-    </section>
-    <section>
-        <label>
-            fin des épreuves
-            <input type="date" name="endDate" required>
-        </label>
-    </section>
-    <section>
-        <label>
-            Lieu:
-            <input type="text" name="location" required>
-        </label>
-    </section>
+<h1> Administration piscine</h1>
+<section id="poolsList">
+    <h2>liste des piscines existantes:</h2>
+</section>
+<section id="poolCreationForm">
+    <h2> administration de piscine:</h2>
+    <form>
+        <section>
+            <label>
+                S'il s'agit de la création d'un piscine, laisser le champ blanc, sinon donner son numéro ID
+                <input type="number" name="id">
+            </label>
+        </section>
+        <section>
+            <label>
+                Nom de la piscine
+                <input type="text" name="name" required>
+            </label>
+        </section>
+        <section>
+            <label>
+                début des épreuves
+                <input type="date" name="startDate" required>
+            </label>
+        </section>
+        <section>
+            <label>
+                fin des épreuves
+                <input type="date" name="endDate" required>
+            </label>
+        </section>
+        <section>
+            <label>
+                Lieu:
+                <input type="text" name="location" required>
+            </label>
+        </section>
 
-    <button type="submit">confirmer la selection ou la création de la piscine</button>
+        <button type="submit">confirmer la selection ou la création de la piscine</button>
+    </form>
+</section>
+<section id="criteriaList"></section>
+<section id="criteriaForm"></section>
+<section id="observerList"></section>
+<section id="observerForm"></section>
+<section id="candidateList"></section>
+<section id="candidateForm"></section>
 
-</form>
 </body>
 <script src="../JS/globalVar.js"></script>
 <script src="../JS/adminEditPool.js"></script>
