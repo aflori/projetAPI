@@ -37,7 +37,7 @@ public class CandidateService {
     /**
      * this method create a candidate in the database and import a photo in local
      *
-     * @param candidate      candidate to be created in database
+     *
      * @param photoCandidate photo object of the associated candidate
      * @return the candidate (with its new ID and photo URL) created
      */

@@ -35,6 +35,8 @@ public class Candidate {
     @ManyToMany(mappedBy = "evaluates")
     private Set<Pool> evaluatedIn;
 
+    @ManyToMany(mappedBy = "group")
+    private Set<Group> groupIn;
     public Candidate() {
     }
 

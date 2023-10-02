@@ -5,7 +5,6 @@ import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.repository.PoolRepository;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -19,8 +18,8 @@ import static fr.ecolnum.projectapi.util.GenericUtility.extractSetFromRepository
  */
 public class ObserverDto {
     private int id;
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private String password;
     private String email;
     /**
@@ -39,8 +38,8 @@ public class ObserverDto {
      */
     public ObserverDto(Observer observer) {
         this.id = observer.getId();
-        this.firstname = observer.getFirstName();
-        this.lastname = observer.getLastName();
+        this.firstName = observer.getFirstName();
+        this.lastName = observer.getLastName();
         this.email = observer.getEmail();
         this.password = observer.getPassword();
         /**
@@ -60,7 +59,7 @@ public class ObserverDto {
     public Observer convertToObserverObject(final PoolRepository poolRepository) throws IdNotFoundException {
         Set<Pool> observeIn = extractSetFromRepository(poolRepository, this.containInPool);
 
-        return new Observer(this.id, this.lastname, this.firstname, this.email, this.password, observeIn);
+        return new Observer(this.id, this.lastName, this.firstName, this.email, this.password, observeIn);
     }
 
     public int getId() {
@@ -71,20 +70,20 @@ public class ObserverDto {
         this.id = id;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getPassword() {

@@ -45,7 +45,7 @@ public class PoolService {
         return allPoolAvailable;
     }
 
-    public PoolDto finById(int id) throws IdNotFoundException {
+    public PoolDto findById(int id) throws IdNotFoundException {
         Optional<Pool> optionnalPool = poolRepository.findById(id);
 
         if (optionnalPool.isEmpty()) {

@@ -26,6 +26,9 @@ public class Pool {
     @Column(name = "location", nullable = false)
     private String location;
 
+    @OneToMany(mappedBy = "pool")
+    private Set<Group> containIn;
+
     @ManyToMany
     @JoinTable(
             name = "pool_candidate",

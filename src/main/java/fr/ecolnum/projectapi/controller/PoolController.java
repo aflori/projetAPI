@@ -47,7 +47,7 @@ public class PoolController {
     )
     public ResponseEntity<?> getPoolById(@PathVariable(value = "id") int id) {
         try {
-            return new ResponseEntity<>(poolService.finById(id), HttpStatus.OK);
+            return new ResponseEntity<>(poolService.findById(id), HttpStatus.OK);
         } catch (IdNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
