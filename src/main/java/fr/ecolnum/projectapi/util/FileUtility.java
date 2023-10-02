@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -85,6 +86,11 @@ public class FileUtility {
 
     }
 
+    public static Set<String[]> parseCsvFile(MultipartFile csvFile) {
+
+
+        return null;
+    }
     protected static Map<String, File> runThroughZipContentAndGetPhotoMap(Path basePath, ZipInputStream zip, MimetypesFileTypeMap typeFinder) throws IOException {
         Map<String, File> listOfPhotoMappedByName = new HashMap<>();
 
