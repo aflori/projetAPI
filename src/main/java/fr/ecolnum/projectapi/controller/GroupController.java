@@ -2,7 +2,9 @@ package fr.ecolnum.projectapi.controller;
 
 import fr.ecolnum.projectapi.DTO.CriteriaDto;
 import fr.ecolnum.projectapi.DTO.GroupDto;
+import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
+import fr.ecolnum.projectapi.model.Group;
 import fr.ecolnum.projectapi.service.GroupService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,13 +27,20 @@ public class GroupController {
             responseCode = "201"
     )
     public ResponseEntity<?> createGroup(@RequestBody GroupDto group) {
-        GroupDto createdGroup = groupService.createGroup(group);
-        return new ResponseEntity<>(createdGroup, HttpStatus.CREATED);
+        GroupDto createdGroup = null;
+        try {
+            createdGroup = groupService.createGroup(group);
+            return new ResponseEntity<>(createdGroup, HttpStatus.CREATED);
+        }
+        catch (IdNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
-    @Operation(summary = "Return all criterias", description = "Return the list of all the criterias from the database.")
+
+    @Operation(summary = "Return all group", description = "Return the list of all the group from the database.")
     @GetMapping
     @ApiResponse(
-            description = "Return criterias list and the OK HTTP response",
+            description = "Return group list and the OK HTTP response",
             responseCode = "200"
     )
     public ResponseEntity<?> getAllGroup() {

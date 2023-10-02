@@ -1,6 +1,7 @@
 package fr.ecolnum.projectapi.service;
 
 import fr.ecolnum.projectapi.DTO.GroupDto;
+import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.model.Group;
 import fr.ecolnum.projectapi.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,9 @@ public class GroupService {
     @Autowired
     private GroupRepository groupRepository;
 
-    public GroupDto createGroup(GroupDto groupDto) {
-        Group group = new Group();
-        group = (Group) groupRepository.save(group);
+    public GroupDto createGroup(GroupDto groupDto) throws IdNotFoundException {
+        Group group = new Group(groupDto.getId(), groupDto.getName());
+        group = groupRepository.save(group);
         return new GroupDto(group);
     }
 

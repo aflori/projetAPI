@@ -12,6 +12,27 @@ public class Group {
     @Column(name = "name", nullable = false)
     private String name;
 
+    /**
+     * plusieurs groupes peuvent appartenir a une piscine
+     */
+    @ManyToOne
+    @JoinColumn(name = "pool_id")
+    private Pool belongsToPool;
+    /**
+     * un groupe peut avoir plusieurs candidats et un candidat peut appartenir a plusieurs groupes
+     * un groupe possede une liste de candidats danc l'objet group
+     */
+    @ManyToMany
+    @JoinTable(
+            name = "group_candidate",
+            joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "candidate_id")
+    )
+    private Set<Candidate> containedCandidates;
+
+    /**
+     * Construct empty and with id and name
+     */
     public Group() {
     }
 
@@ -20,18 +41,17 @@ public class Group {
         this.name = name;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "pool_id")
-    private Pool pool;
+    public Group(int id, String name, Pool belongsToPool) {
+        this.id = id;
+        this.name = name;
+        this.belongsToPool = belongsToPool;
+    }
 
-    @ManyToMany
-    @JoinTable(
-            name = "group_candidate",
-            joinColumns = @JoinColumn(name = "group_id"),
-            inverseJoinColumns = @JoinColumn(name = "candidate_id")
-    )
-    private Set<Candidate> group;
-
+    /**
+     * setter and getter
+     *
+     * @return
+     */
     public Integer getId() {
         return id;
     }
@@ -46,5 +66,21 @@ public class Group {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Pool getBelongsToPool() {
+        return belongsToPool;
+    }
+
+    public void setBelongsToPool(Pool belongsToPool) {
+        this.belongsToPool = belongsToPool;
+    }
+
+    public Set<Candidate> getContainedCandidates() {
+        return containedCandidates;
+    }
+
+    public void setContainedCandidates(Set<Candidate> containedCandidates) {
+        this.containedCandidates = containedCandidates;
     }
 }

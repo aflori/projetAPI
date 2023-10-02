@@ -2,6 +2,7 @@ package fr.ecolnum.projectapi.controller;
 
 import fr.ecolnum.projectapi.exception.CandidateAlreadyExistsException;
 import fr.ecolnum.projectapi.exception.FileNotUpdatableException;
+import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.exception.MultipartFileIsNotImageException;
 import fr.ecolnum.projectapi.DTO.CandidateDto;
 import fr.ecolnum.projectapi.service.CandidateService;
@@ -66,11 +67,19 @@ public class CandidateController {
     }
 
     /**
-     * @param firstName      firstName of checked candidate
-     * @param lastName       lastName of checked candidate
-     * @param photoCandidate
+     *
+     * @param candidate
      * @return
      */
+    @PostMapping("/group")
+    public ResponseEntity<?> addToGroup(@RequestBody CandidateDto candidate){
+        try {
+            CandidateDto addedToGroup = candidateService.addToGroup(candidate);
+            return new ResponseEntity<>(addedToGroup, HttpStatus.OK);
+        } catch (IdNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
     @PostMapping("/checkDuplicate")
     @Operation(
             summary = "Check for duplicate candidate in the database then create it",

@@ -1,11 +1,14 @@
 package fr.ecolnum.projectapi.service;
 
 import fr.ecolnum.projectapi.exception.FileNotUpdatableException;
+import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.exception.MultipartFileIsNotImageException;
 import fr.ecolnum.projectapi.exception.CandidateAlreadyExistsException;
 import fr.ecolnum.projectapi.DTO.CandidateDto;
 import fr.ecolnum.projectapi.model.Candidate;
+import fr.ecolnum.projectapi.model.Group;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
+import fr.ecolnum.projectapi.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,8 +35,9 @@ public class CandidateService {
     private String homePath;
 
     @Autowired
-    private CandidateRepository repository;
-
+    private CandidateRepository candidateRepository;
+    @Autowired
+    private GroupRepository groupRepository;
     /**
      * this method create a candidate in the database and import a photo in local
      *
@@ -50,7 +54,7 @@ public class CandidateService {
 
         if (DEBUG == true) {
             if (photoCandidate == null) {
-                Candidate createdCandidate = repository.save(candidate);
+                Candidate createdCandidate = candidateRepository.save(candidate);
                 return new CandidateDto(createdCandidate);
             }
         }
@@ -64,7 +68,7 @@ public class CandidateService {
         writePhotoIn(photoCandidate, emptyFile);
 
 
-        Candidate newCandidateSaved = repository.save(candidate);
+        Candidate newCandidateSaved = candidateRepository.save(candidate);
 
         //update the filename of the photo with the id of the candidate once he is created and his extension.
         String newFileName = fileName + candidate.getId() + extensionPhoto;
@@ -74,7 +78,7 @@ public class CandidateService {
 
         newCandidateSaved.setPhotoName(newFileName);
 
-        Candidate createdCandidate = repository.save(newCandidateSaved);
+        Candidate createdCandidate = candidateRepository.save(newCandidateSaved);
         return new CandidateDto(createdCandidate);
     }
 
@@ -91,7 +95,7 @@ public class CandidateService {
 
         boolean isDuplicate = false;
 
-        Iterable<Candidate> candidateList = repository.findByLastNameEquals(lastName);
+        Iterable<Candidate> candidateList = candidateRepository.findByLastNameEquals(lastName);
 
         Iterator<Candidate> iter;
         iter = candidateList.iterator();
@@ -115,7 +119,7 @@ public class CandidateService {
     public Iterable<CandidateDto> returnDuplicate(CandidateDto candidate) {
         String lastName = candidate.getLastName();
         String firstName = candidate.getFirstName();
-        Iterable<Candidate> candidateList = repository.findByLastNameEquals(lastName);
+        Iterable<Candidate> candidateList = candidateRepository.findByLastNameEquals(lastName);
 
         Set<CandidateDto> duplicateCandidate = new HashSet<>();
 
@@ -127,5 +131,10 @@ public class CandidateService {
         }
 
         return duplicateCandidate;
+    }
+    public Candidate addToGroup(CandidateDto candidateDto) throws IdNotFoundException{
+        Candidate candidate = candidateDto.convertToCandidateObject(groupRepository);
+        candidate = candidateRepository.save(candidate);
+        return new CandidateDto(candidate);
     }
 }

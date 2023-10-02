@@ -1,3 +1,4 @@
+/*
 package fr.ecolnum.projectapi.criteriaService;
 
 import fr.ecolnum.projectapi.DTO.CriteriaDto;
@@ -16,7 +17,10 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
-/*@SpringBootTest
+*/
+
+/**
+@SpringBootTest
 public class CriteriaTest {
     @InjectMocks
     public CriteriaService criteriaService;

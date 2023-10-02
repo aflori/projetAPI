@@ -25,7 +25,9 @@ public class Pool {
     private Timestamp endDate;
     @Column(name = "location", nullable = false)
     private String location;
-
+    /**
+     * une piscine peut avoir plsusieurs groupes
+     */
     @OneToMany(mappedBy = "pool")
     private Set<Group> containIn;
 

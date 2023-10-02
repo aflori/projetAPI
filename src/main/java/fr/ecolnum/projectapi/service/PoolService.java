@@ -25,7 +25,6 @@ import java.util.Set;
 public class PoolService {
     @Autowired
     private PoolRepository poolRepository;
-
     @Autowired
     private CandidateRepository candidateRepository;
     @Autowired

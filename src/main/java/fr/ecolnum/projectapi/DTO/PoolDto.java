@@ -8,9 +8,7 @@ import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
 import fr.ecolnum.projectapi.repository.CriteriaRepository;
 import fr.ecolnum.projectapi.repository.ObserverRepository;
-
 import java.sql.Timestamp;
-
 import static fr.ecolnum.projectapi.util.GenericUtility.*;
 
 import java.util.ArrayList;
