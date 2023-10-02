@@ -1,12 +1,20 @@
 package fr.ecolnum.projectapi.util;
 
 import fr.ecolnum.projectapi.exception.FileNotUpdatableException;
+import fr.ecolnum.projectapi.exception.MultipartFileIsNotAnArchiveException;
 import fr.ecolnum.projectapi.exception.MultipartFileIsNotImageException;
+import jakarta.activation.MimetypesFileTypeMap;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class FileUtility {
 
@@ -56,5 +64,48 @@ public class FileUtility {
             //could not create file
             throw new FileNotUpdatableException();
         }
+    }
+
+    public static Map<String, File> getPhotoFromZipArchive(MultipartFile zipFileContainingPhoto, Path basePath) throws MultipartFileIsNotAnArchiveException, FileNotUpdatableException {
+        if (!"application/zip".equals(zipFileContainingPhoto.getContentType())) {
+            throw new MultipartFileIsNotAnArchiveException();
+        }
+
+
+        try {
+            ZipInputStream zipContent = new ZipInputStream(zipFileContainingPhoto.getInputStream());
+
+            MimetypesFileTypeMap typeFinder = new MimetypesFileTypeMap();
+
+            return runThroughZipContentAndGetPhotoMap(basePath, zipContent, typeFinder);
+
+        } catch (IOException e) {
+            throw new FileNotUpdatableException();
+        }
+
+    }
+
+    protected static Map<String, File> runThroughZipContentAndGetPhotoMap(Path basePath, ZipInputStream zip, MimetypesFileTypeMap typeFinder) throws IOException {
+        Map<String, File> listOfPhotoMappedByName = new HashMap<>();
+
+
+        for (ZipEntry singlePhotoInZip = zip.getNextEntry(); singlePhotoInZip != null; singlePhotoInZip = zip.getNextEntry()) {
+
+            String photoType = typeFinder.getContentType(singlePhotoInZip.getName());
+
+            //ignore non-image file
+            if (!photoType.startsWith("image")) {
+                continue;
+            }
+            extractPhotoFromZip(basePath, singlePhotoInZip, zip, listOfPhotoMappedByName);
+        }
+        return  listOfPhotoMappedByName;
+    }
+
+    protected static void extractPhotoFromZip(Path basePath, ZipEntry photo, ZipInputStream zip, Map<String, File> mapToUpdate) throws IOException {
+        Path photoPath = basePath.resolve(photo.getName());
+        Files.createDirectories(photoPath.getParent());
+        Files.copy(zip, photoPath);
+        mapToUpdate.put(photo.getName(), new File(photoPath.toUri()));
     }
 }
