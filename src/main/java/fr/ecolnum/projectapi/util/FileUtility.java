@@ -1,19 +1,18 @@
 package fr.ecolnum.projectapi.util;
 
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
 import fr.ecolnum.projectapi.exception.FileNotUpdatableException;
 import fr.ecolnum.projectapi.exception.MultipartFileIsNotAnArchiveException;
 import fr.ecolnum.projectapi.exception.MultipartFileIsNotImageException;
 import jakarta.activation.MimetypesFileTypeMap;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -86,11 +85,35 @@ public class FileUtility {
 
     }
 
-    public static Set<String[]> parseCsvFile(MultipartFile csvFile) {
+    public static Set<String[]> parseCsvFile(MultipartFile csvFile) throws IOException {
+        Reader reader = new InputStreamReader(csvFile.getInputStream());
+        CSVReader csvReader = new CSVReaderBuilder(reader)
+                .withCSVParser(new CSVParserBuilder()
+                        .withSeparator(';')
+                        .build()
+                ).build();
 
+        List<String[]> allLines = csvReader.readAll();
+        Set<String[]> allLinesWithoutComment = new HashSet<>(allLines.size());
 
-        return null;
+        for (String[] line : allLines) {
+            if (isEmptyLine(line) || isCommentLine(line)) {
+                continue;
+            }
+            allLinesWithoutComment.add(line);
+        }
+        return allLinesWithoutComment;
+
     }
+
+    protected static boolean isEmptyLine(String[] line) {
+        return line.length == 0 || (line.length == 1 && line[0].isEmpty());
+    }
+
+    protected static boolean isCommentLine(String[] line) {
+        return line[0].charAt(0) == '#';
+    }
+
     protected static Map<String, File> runThroughZipContentAndGetPhotoMap(Path basePath, ZipInputStream zip, MimetypesFileTypeMap typeFinder) throws IOException {
         Map<String, File> listOfPhotoMappedByName = new HashMap<>();
 
@@ -105,7 +128,7 @@ public class FileUtility {
             }
             extractPhotoFromZip(basePath, singlePhotoInZip, zip, listOfPhotoMappedByName);
         }
-        return  listOfPhotoMappedByName;
+        return listOfPhotoMappedByName;
     }
 
     protected static void extractPhotoFromZip(Path basePath, ZipEntry photo, ZipInputStream zip, Map<String, File> mapToUpdate) throws IOException {
