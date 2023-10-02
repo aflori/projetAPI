@@ -7,16 +7,20 @@ import fr.ecolnum.projectapi.exception.CandidateAlreadyExistsException;
 import fr.ecolnum.projectapi.DTO.CandidateDto;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
+import jakarta.activation.MimetypesFileTypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.Set;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import static fr.ecolnum.projectapi.util.FileUtility.*;
 
@@ -28,6 +32,7 @@ public class CandidateService {
 
     private final static boolean DEBUG = true;
     private final static String photoPath = "assets/candidatePhoto/";
+    private final static String archivePath = "assets/zipPhoto/";
 
     // get the project directory from application.properties
     @Value("${homePath}")
@@ -39,7 +44,8 @@ public class CandidateService {
     /**
      * this method create a candidate in the database and import a photo in local
      *
-     * @param candidate      candidate to be created in database
+     * @param firstName
+     * @param lastName       candidate's first and last name
      * @param photoCandidate photo object of the associated candidate
      * @return the candidate (with its new ID and photo URL) created
      */
@@ -115,7 +121,8 @@ public class CandidateService {
     }
 
     /**
-     *  service to return a list of candidate that has the same first name  and last name as the one given in parameter
+     * service to return a list of candidate that has the same first name  and last name as the one given in parameter
+     *
      * @param candidate the referent candidate
      * @return a list of candidate with the same first name and last name
      */
@@ -138,6 +145,7 @@ public class CandidateService {
 
     /**
      * function made to return a list of candidate present in the repository
+     *
      * @return a list of all existing candidate
      */
     public Iterable<CandidateDto> getAllCandidate() {
@@ -151,7 +159,8 @@ public class CandidateService {
     }
 
     /**
-     *  function made to return a specific candidate
+     * function made to return a specific candidate
+     *
      * @param id id of the wanted candidate
      * @return the candidate with the parameter id
      * @throws IdNotFoundException if the id is not given in database
@@ -163,5 +172,35 @@ public class CandidateService {
             throw new IdNotFoundException();
         }
         return new CandidateDto(candidate.get());
+    }
+
+    public List<CandidateDto> importCandidateList(MultipartFile csvFile, MultipartFile photoZip) throws IOException {
+        if (csvFile.getContentType().compareTo("text/csv") == 0) {
+            System.out.println("csvFile est bien un fichier csv");
+            
+            //parse zip
+            if (photoZip.getContentType().compareTo("application/zip") == 0) {
+                System.out.println("photoFolder est bien une archive");
+                ZipInputStream zipFile = new ZipInputStream(photoZip.getInputStream());
+                Path path = Paths.get(homePath + '/' + archivePath);
+
+                ZipEntry photo = zipFile.getNextEntry();
+                MimetypesFileTypeMap fileTypeParser = new MimetypesFileTypeMap();
+                while (photo != null) {
+
+                    Path resolvedPath = path.resolve(photo.getName());
+                    String imgType = fileTypeParser.getContentType(photo.getName());
+                    if (imgType.startsWith("image")) {
+                        Files.copy(zipFile, resolvedPath);
+                    } else if (photo.isDirectory()) {
+                        Files.createDirectories(resolvedPath);
+                    }
+
+
+                    photo = zipFile.getNextEntry();
+                }
+            }
+        }
+        return null;
     }
 }
