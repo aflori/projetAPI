@@ -99,6 +99,24 @@ public class CandidateController {
         }
     }
 
+    @PostMapping("/list")
+    @Operation(
+            summary = "Import a list of candidate into database with a boolean for duplicate",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "a csv file containing for each candidate a first name, last name and a photo name," +
+                            "and a folder containing all the candidate photo",
+                    required = true
+            )
+    )
+    @ApiResponse(
+            description = "candidates created by server or duplicated",
+            responseCode = "201 or 300"
+    )
+    public  ResponseEntity<?> importList(@RequestPart MultipartFile listCsv, @RequestPart MultipartFile photoFolder) {
+
+        return  new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
     /**
      *  function to get all candidate registered
      * @return a list of candidate
@@ -156,5 +174,7 @@ public class CandidateController {
         Iterable<CandidateDto> listDuplicate = candidateService.returnDuplicate(candidate);
         return  new ResponseEntity<>(listDuplicate, HttpStatus.OK);
     }
+
+
 
 }
