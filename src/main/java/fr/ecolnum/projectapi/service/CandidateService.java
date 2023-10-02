@@ -37,8 +37,8 @@ public class CandidateService {
     /**
      * this method create a candidate in the database and import a photo in local
      *
-     * @param firstName
-     * @param lastName       candidate's first and last name
+     * @param firstName      candidate's first  name
+     * @param lastName       candidate's last name
      * @param photoCandidate photo object of the associated candidate
      * @return the candidate (with its new ID and photo URL) created
      */
@@ -169,16 +169,18 @@ public class CandidateService {
 
     public List<CandidateDto> importCandidateList(MultipartFile csvFile, MultipartFile photoZip) throws MultipartFileIsNotCsvException, MultipartFileIsNotAnArchiveException, IOException {
 
-        //string are flipped because of potential
-        if (!"text/csv".equals(csvFile.getContentType())) {
+
+        if (!csvFile.getContentType().equals("text/csv")) {
             throw new MultipartFileIsNotCsvException();
         }
 
         Path path = Paths.get(homePath + '/' + archivePath);
 
         try {
+            Set<String[]> listCandidateImported = parseCsvFile(csvFile);
             Map<String, File> listPhotoByName = getPhotoFromZipArchive(photoZip, path);
-//            System.out.println(listPhotoByName);
+            System.out.println(listCandidateImported);
+            System.out.println(listPhotoByName);
         } catch (FileNotUpdatableException e) {
             throw new RuntimeException(e);
         }
