@@ -1,13 +1,9 @@
 package fr.ecolnum.projectapi.service;
 
-import fr.ecolnum.projectapi.exception.FileNotUpdatableException;
-import fr.ecolnum.projectapi.exception.IdNotFoundException;
-import fr.ecolnum.projectapi.exception.MultipartFileIsNotImageException;
-import fr.ecolnum.projectapi.exception.CandidateAlreadyExistsException;
+import fr.ecolnum.projectapi.exception.*;
 import fr.ecolnum.projectapi.DTO.CandidateDto;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
-import jakarta.activation.MimetypesFileTypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,12 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import static fr.ecolnum.projectapi.util.FileUtility.*;
 
@@ -32,7 +25,7 @@ public class CandidateService {
 
     private final static boolean DEBUG = true;
     private final static String photoPath = "assets/candidatePhoto/";
-    private final static String archivePath = "assets/zipPhoto/";
+    private final static String archivePath = "assets/zip/";
 
     // get the project directory from application.properties
     @Value("${homePath}")
@@ -174,33 +167,22 @@ public class CandidateService {
         return new CandidateDto(candidate.get());
     }
 
-    public List<CandidateDto> importCandidateList(MultipartFile csvFile, MultipartFile photoZip) throws IOException {
-        if (csvFile.getContentType().compareTo("text/csv") == 0) {
-            System.out.println("csvFile est bien un fichier csv");
-            
-            //parse zip
-            if (photoZip.getContentType().compareTo("application/zip") == 0) {
-                System.out.println("photoFolder est bien une archive");
-                ZipInputStream zipFile = new ZipInputStream(photoZip.getInputStream());
-                Path path = Paths.get(homePath + '/' + archivePath);
+    public List<CandidateDto> importCandidateList(MultipartFile csvFile, MultipartFile photoZip) throws MultipartFileIsNotCsvException, MultipartFileIsNotAnArchiveException, IOException {
 
-                ZipEntry photo = zipFile.getNextEntry();
-                MimetypesFileTypeMap fileTypeParser = new MimetypesFileTypeMap();
-                while (photo != null) {
-
-                    Path resolvedPath = path.resolve(photo.getName());
-                    String imgType = fileTypeParser.getContentType(photo.getName());
-                    if (imgType.startsWith("image")) {
-                        Files.copy(zipFile, resolvedPath);
-                    } else if (photo.isDirectory()) {
-                        Files.createDirectories(resolvedPath);
-                    }
-
-
-                    photo = zipFile.getNextEntry();
-                }
-            }
+        //string are flipped because of potential
+        if (!"text/csv".equals(csvFile.getContentType())) {
+            throw new MultipartFileIsNotCsvException();
         }
+
+        Path path = Paths.get(homePath + '/' + archivePath);
+
+        try {
+            Map<String, File> listPhotoByName = getPhotoFromZipArchive(photoZip, path);
+//            System.out.println(listPhotoByName);
+        } catch (FileNotUpdatableException e) {
+            throw new RuntimeException(e);
+        }
+
         return null;
     }
 }
