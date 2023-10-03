@@ -47,5 +47,17 @@ public class GroupController {
         Iterable<GroupDto> groupList = groupService.getAllGroup();
         return new ResponseEntity<>(groupList, HttpStatus.OK);
     }
-
+    @Operation(summary = "Return groups by id", description = "Return group by id from the database.")
+    @GetMapping("/{id}")
+    @ApiResponse(
+            description = "Return group by id and the OK HTTP response",
+            responseCode = "200"
+    )
+    public ResponseEntity<?> getGroupById(@PathVariable(value = "id") int id) {
+        try {
+            return new ResponseEntity<>(groupService.findById(id), HttpStatus.OK);
+        } catch (IdNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
