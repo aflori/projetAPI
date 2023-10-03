@@ -208,12 +208,46 @@ public class CandidateService {
             return list;
         } catch (FileNotUpdatableException e) {
             throw new IOException(e);
+        } catch (MultipartFileIsNotImageException ignored) {
+            return null;
         }
 
     }
 
-    protected OptionnalCandidateDto createCandidate(String firstName, String lastName, File photo) {
+    protected OptionnalCandidateDto createCandidate(String firstName, String lastName, File photo) throws MultipartFileIsNotImageException {
 
-        return new OptionnalCandidateDto(firstName, lastName, true);
+        Candidate candidate = new Candidate(firstName, lastName);
+
+        File homeFolder = new File(homePath);
+
+        if (DEBUG == true) {
+            if (photo == null) {
+                Candidate createdCandidate = candidateRepository.save(candidate);
+                return new OptionnalCandidateDto(createdCandidate);
+            }
+        }
+
+        String extensionPhoto = checkAndExtractPhotoExtension(photo);
+
+//        String fileName = candidate.getFirstName() + '_' + candidate.getLastName() + '_';
+//        String directoryFileName = photoPath + fileName;
+//
+//        File emptyFile = createEmptyFileByName(homeFolder, directoryFileName);
+//        writePhotoIn(photoCandidate, emptyFile);
+//
+//
+//        Candidate newCandidateSaved = candidateRepository.save(candidate);
+//
+//        //update the filename of the photo with the id of the candidate once he is created and his extension.
+//        String newFileName = fileName + candidate.getId() + extensionPhoto;
+//        String newDirectoryFileName = photoPath + newFileName;
+//
+//        changeFileName(homeFolder, directoryFileName, newDirectoryFileName);
+//
+//        newCandidateSaved.setPhotoName(newFileName);
+//
+//        Candidate createdCandidate = candidateRepository.save(newCandidateSaved);
+//        return new OptionnalCandidateDto(firstName, lastName, true);
+        return null;
     }
 }

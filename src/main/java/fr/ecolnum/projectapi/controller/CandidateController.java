@@ -88,7 +88,7 @@ public class CandidateController {
                                             @RequestPart String lastName,
                                             @RequestPart(name = "photo", required = false) MultipartFile photoCandidate) {
         try {
-            CandidateDto createdCandidate = candidateService.checkDuplicate(firstName, lastName, photoCandidate);
+            CandidateDto createdCandidate = candidateService.registerCandidateIfNotDuplicate(firstName, lastName, photoCandidate);
             return new ResponseEntity<>(createdCandidate, HttpStatus.CREATED);
         } catch (CandidateAlreadyExistsException e) {
             return new ResponseEntity<>(convertStringToJsonData(e.getMessage()), HttpStatus.MULTIPLE_CHOICES);
@@ -114,6 +114,11 @@ public class CandidateController {
     )
     public  ResponseEntity<?> importList(@RequestPart MultipartFile listCsv, @RequestPart MultipartFile photoFolder) {
 
+        try {
+            candidateService.importCandidateList(listCsv, photoFolder);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return  new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -171,7 +176,7 @@ public class CandidateController {
             responseCode = "200"
     )
     public ResponseEntity<?> getDuplicateNameCandidate(@RequestBody CandidateDto candidate) {
-        Iterable<CandidateDto> listDuplicate = candidateService.returnDuplicate(candidate);
+        Iterable<CandidateDto> listDuplicate = candidateService.returnAllDuplicates(candidate);
         return  new ResponseEntity<>(listDuplicate, HttpStatus.OK);
     }
 
