@@ -135,6 +135,6 @@ public class CandidateService {
     public Candidate addToGroup(CandidateDto candidateDto) throws IdNotFoundException{
         Candidate candidate = candidateDto.convertToCandidateObject(groupRepository);
         candidate = candidateRepository.save(candidate);
-        return new CandidateDto(candidate);
+        return new Candidate();
     }
 }

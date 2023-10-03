@@ -28,8 +28,8 @@ public class Pool {
     /**
      * une piscine peut avoir plsusieurs groupes
      */
-    @OneToMany(mappedBy = "pool")
-    private Set<Group> containIn;
+    @OneToMany(mappedBy = "belongsToPool")
+       private Set<Group> containIn;
 
     @ManyToMany
     @JoinTable(
@@ -66,6 +66,11 @@ public class Pool {
         this.evaluates = evaluates;
         this.containedCriterias = containedCriterias;
         this.containedObservers = containedObservers;
+    }
+
+    public Pool(Set<Group> containIn) {
+
+        this.containIn = containIn;
     }
 
     public Pool() {

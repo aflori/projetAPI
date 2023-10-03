@@ -16,8 +16,8 @@ public class GroupDto {
     public GroupDto() {
     }
     public Group convertToGroupObject(final CandidateRepository candidateRepository) throws IdNotFoundException {
-        Set<Candidate> belongsTo = extractSetFromRepository(candidateRepository, belongsTo);
-        return new Group(this.id, this.name, this.belongsTo);
+        Set<Candidate> belongsTo = extractSetFromRepository(candidateRepository, containedCandidates);
+        return new Group(this.id, this.name, (Pool) this.containedCandidates);
     }
     public GroupDto(Group group) {
         this.id = group.getId();

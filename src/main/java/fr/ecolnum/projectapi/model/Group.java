@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(name = "group_table")
 public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +30,6 @@ public class Group {
             inverseJoinColumns = @JoinColumn(name = "candidate_id")
     )
     private Set<Candidate> containedCandidates;
-
     /**
      * Construct empty and with id and name
      */

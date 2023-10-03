@@ -5,6 +5,7 @@ import fr.ecolnum.projectapi.exception.FileNotUpdatableException;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.exception.MultipartFileIsNotImageException;
 import fr.ecolnum.projectapi.DTO.CandidateDto;
+import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.service.CandidateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -74,7 +75,7 @@ public class CandidateController {
     @PostMapping("/group")
     public ResponseEntity<?> addToGroup(@RequestBody CandidateDto candidate){
         try {
-            CandidateDto addedToGroup = candidateService.addToGroup(candidate);
+            Candidate addedToGroup = candidateService.addToGroup(candidate);
             return new ResponseEntity<>(addedToGroup, HttpStatus.OK);
         } catch (IdNotFoundException e) {
             throw new RuntimeException(e);
