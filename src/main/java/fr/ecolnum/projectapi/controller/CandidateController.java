@@ -1,9 +1,7 @@
 package fr.ecolnum.projectapi.controller;
 
-import fr.ecolnum.projectapi.exception.CandidateAlreadyExistsException;
-import fr.ecolnum.projectapi.exception.FileNotUpdatableException;
-import fr.ecolnum.projectapi.exception.IdNotFoundException;
-import fr.ecolnum.projectapi.exception.MultipartFileIsNotImageException;
+import fr.ecolnum.projectapi.DTO.OptionnalCandidateDto;
+import fr.ecolnum.projectapi.exception.*;
 import fr.ecolnum.projectapi.DTO.CandidateDto;
 import fr.ecolnum.projectapi.service.CandidateService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import static fr.ecolnum.projectapi.util.GenericUtility.convertStringToJsonData;
 
@@ -112,18 +112,21 @@ public class CandidateController {
             description = "candidates created by server or duplicated",
             responseCode = "201 or 300"
     )
-    public  ResponseEntity<?> importList(@RequestPart MultipartFile listCsv, @RequestPart MultipartFile photoFolder) {
+    public ResponseEntity<?> importList(@RequestPart MultipartFile listCsv, @RequestPart MultipartFile photoFolder) {
 
         try {
-            candidateService.importCandidateList(listCsv, photoFolder);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            Iterable<OptionnalCandidateDto> listCandidate = candidateService.importCandidateList(listCsv, photoFolder);
+            return new ResponseEntity<>(listCandidate, HttpStatus.CREATED);
+        } catch (MultipartFileIsNotCsvException | MultipartFileIsNotAnArchiveException e) {
+            return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+        } catch (IOException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return  new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     /**
-     *  function to get all candidate registered
+     * function to get all candidate registered
+     *
      * @return a list of candidate
      */
     @Operation(
@@ -142,7 +145,8 @@ public class CandidateController {
     }
 
     /**
-     *  endpoint to return a specific candidate
+     * endpoint to return a specific candidate
+     *
      * @param id if of the candidate we are searching for
      * @return candidate containing the good id
      */
@@ -177,9 +181,7 @@ public class CandidateController {
     )
     public ResponseEntity<?> getDuplicateNameCandidate(@RequestBody CandidateDto candidate) {
         Iterable<CandidateDto> listDuplicate = candidateService.returnAllDuplicates(candidate);
-        return  new ResponseEntity<>(listDuplicate, HttpStatus.OK);
+        return new ResponseEntity<>(listDuplicate, HttpStatus.OK);
     }
-
-
 
 }
