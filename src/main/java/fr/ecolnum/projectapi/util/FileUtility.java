@@ -18,11 +18,7 @@ import java.util.zip.ZipInputStream;
 
 public class FileUtility {
 
-    public static void changeFileName(File homeFolder, String oldName, String newName) {
-        File oldF = new File(homeFolder, oldName);
-        File newF = new File(homeFolder, newName);
-        oldF.renameTo(newF);
-    }
+
     public static File changeFileName(File oldF, File newFileFolder, String newFileName) {
         File newF = new File(newFileFolder, newFileName);
         oldF.renameTo(newF);
@@ -52,7 +48,6 @@ public class FileUtility {
         MimetypesFileTypeMap typeFinder = new MimetypesFileTypeMap();
         String fileType = typeFinder.getContentType(photoCandidate);
         return getPhotoExtension(fileType);
-//        return "";
     }
 
     public static void writePhotoIn(MultipartFile photoCandidate, File emptyFile) throws FileNotUpdatableException {
