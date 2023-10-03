@@ -30,13 +30,23 @@ public class FileUtility {
         if (photoType == null) {
             throw new MultipartFileIsNotImageException("no file found");
         }
-        String fileType = photoType.substring(0, 5);
-        String fileExtension = photoType.substring(6);
+        return getPhotoExtension(photoType);
+    }
 
-        if (fileType.equals("image")) {
+    protected static String getPhotoExtension(String fileName) throws MultipartFileIsNotImageException {
+
+        if (fileName.startsWith("image")) {
+            String fileExtension = fileName.substring(6);
             return '.' + fileExtension;
         }
         throw new MultipartFileIsNotImageException("not an image file");
+    }
+
+    public static String checkAndExtractPhotoExtension(File photoCandidate) throws MultipartFileIsNotImageException {
+        MimetypesFileTypeMap typeFinder = new MimetypesFileTypeMap();
+        String fileType = typeFinder.getContentType(photoCandidate);
+        return getPhotoExtension(fileType);
+//        return "";
     }
 
     public static void writePhotoIn(MultipartFile photoCandidate, File emptyFile) throws FileNotUpdatableException {
@@ -75,9 +85,7 @@ public class FileUtility {
         try {
             ZipInputStream zipContent = new ZipInputStream(zipFileContainingPhoto.getInputStream());
 
-            MimetypesFileTypeMap typeFinder = new MimetypesFileTypeMap();
-
-            return runThroughZipContentAndGetPhotoMap(basePath, zipContent, typeFinder);
+            return runThroughZipContentAndGetPhotoMap(basePath, zipContent);
 
         } catch (IOException e) {
             throw new FileNotUpdatableException();
@@ -114,8 +122,9 @@ public class FileUtility {
         return line[0].charAt(0) == '#';
     }
 
-    protected static Map<String, File> runThroughZipContentAndGetPhotoMap(Path basePath, ZipInputStream zip, MimetypesFileTypeMap typeFinder) throws IOException {
+    protected static Map<String, File> runThroughZipContentAndGetPhotoMap(Path basePath, ZipInputStream zip) throws IOException {
         Map<String, File> listOfPhotoMappedByName = new HashMap<>();
+        MimetypesFileTypeMap typeFinder = new MimetypesFileTypeMap();
 
 
         for (ZipEntry singlePhotoInZip = zip.getNextEntry(); singlePhotoInZip != null; singlePhotoInZip = zip.getNextEntry()) {
@@ -132,7 +141,7 @@ public class FileUtility {
     }
 
     protected static void extractPhotoFromZip(Path basePath, String photoName, ZipInputStream zipFile, Map<String, File> mapToUpdate) throws IOException {
-        Path photoPath = basePath.resolve(photoName);   // creating good
+        Path photoPath = basePath.resolve(photoName);   // creating good path
         Files.createDirectories(photoPath.getParent()); // creating parent repository if not exist
         Files.copy(zipFile, photoPath);                 // importing variable file to goof folder
 

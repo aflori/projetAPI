@@ -2,6 +2,7 @@ package fr.ecolnum.projectapi.service;
 
 import fr.ecolnum.projectapi.exception.*;
 import fr.ecolnum.projectapi.DTO.CandidateDto;
+import fr.ecolnum.projectapi.DTO.OptionnalCandidateDto;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class CandidateService {
 
     private final static boolean DEBUG = true;
     private final static String photoPath = "assets/candidatePhoto/";
-    private final static String archivePath = "assets/zip/";
+    private final static String temporaryPhotoFolder = "assets/tempPhoto/";
 
     // get the project directory from application.properties
     @Value("${homePath}")
@@ -86,32 +87,38 @@ public class CandidateService {
      * @return return the new candidate from the database
      * @throws CandidateAlreadyExistsException if there is a duplicate
      */
-    public CandidateDto checkDuplicate(String firstName,
-                                       String lastName,
-                                       MultipartFile photoCandidate) throws CandidateAlreadyExistsException, MultipartFileIsNotImageException, FileNotUpdatableException {
+    public CandidateDto registerCandidateIfNotDuplicate(String firstName,
+                                                        String lastName,
+                                                        MultipartFile photoCandidate) throws CandidateAlreadyExistsException, MultipartFileIsNotImageException, FileNotUpdatableException {
 
-        boolean isDuplicate = false;
 
+        if (hasDuplicate(firstName, lastName)) {
+            throw new CandidateAlreadyExistsException("This name is already used");
+        }
+
+        return createCandidate(firstName, lastName, photoCandidate);
+    }
+
+
+    protected boolean hasDuplicate(String firstName, String lastName) {
         Iterable<Candidate> candidateList = candidateRepository.findByLastNameEquals(lastName);
 
-        Iterator<Candidate> iter;
-        iter = candidateList.iterator();
 
-        while (iter.hasNext() && !isDuplicate) {
-            Candidate candidateDB = iter.next();
-            String firstNameDB = candidateDB.getFirstName();
-            if (firstName.equalsIgnoreCase(firstNameDB)) {
-                isDuplicate = true;
-            }
-        }
+        for (Candidate candidateDB : candidateList) {
 
-        if (isDuplicate) {
-            throw new CandidateAlreadyExistsException("This name is already used");
-        } else {
-            CandidateDto candidateToCreate = new CandidateDto(firstName, lastName);
-            return createCandidate(candidateToCreate.getFirstName(), candidateToCreate.getLastName(), photoCandidate);
+            if (isSamePerson(firstName, lastName, candidateDB)) return true;
+
         }
+        return false;
     }
+
+    private boolean isSamePerson(String firstName, String lastName, Candidate candidateDB) {
+        String firstNameCandidate = candidateDB.getFirstName();
+        String lastNameDBCandidate = candidateDB.getLastName();
+
+        return firstName.equalsIgnoreCase(firstNameCandidate) && lastName.equalsIgnoreCase(lastNameDBCandidate);
+    }
+
 
     /**
      * service to return a list of candidate that has the same first name  and last name as the one given in parameter
@@ -119,7 +126,7 @@ public class CandidateService {
      * @param candidate the referent candidate
      * @return a list of candidate with the same first name and last name
      */
-    public Iterable<CandidateDto> returnDuplicate(CandidateDto candidate) {
+    public Iterable<CandidateDto> returnAllDuplicates(CandidateDto candidate) {
         String lastName = candidate.getLastName();
         String firstName = candidate.getFirstName();
         Iterable<Candidate> candidateList = candidateRepository.findByLastNameEquals(lastName);
@@ -127,8 +134,7 @@ public class CandidateService {
         Set<CandidateDto> duplicateCandidate = new HashSet<>();
 
         for (Candidate dbCandidate : candidateList) {
-            String firstNameDB = dbCandidate.getFirstName();
-            if (firstName.equalsIgnoreCase(firstNameDB)) {
+            if (this.isSamePerson(firstName, lastName, dbCandidate)) {
                 duplicateCandidate.add(new CandidateDto(dbCandidate));
             }
         }
@@ -169,29 +175,45 @@ public class CandidateService {
 
     /**
      * service made to import a list of candidates
-     * @param csvFile correspond to the csv file containing all information to the candidates imported
+     *
+     * @param csvFile  correspond to the csv file containing all information to the candidates imported
      * @param photoZip represent the zip package containing all photos of the candidates
      * @return list of candidateDto imported with a boolean indicating if candidate is already in dataBase
-     * @throws MultipartFileIsNotCsvException if variable csvFile is not a csv
+     * @throws MultipartFileIsNotCsvException       if variable csvFile is not a csv
      * @throws MultipartFileIsNotAnArchiveException if photoZip is not an archive
-     * @throws IOException if file creation bugged
+     * @throws IOException                          if file creation bugged
      */
-    public List<CandidateDto> importCandidateList(MultipartFile csvFile, MultipartFile photoZip) throws MultipartFileIsNotCsvException, MultipartFileIsNotAnArchiveException, IOException {
+    public List<OptionnalCandidateDto> importCandidateList(MultipartFile csvFile, MultipartFile photoZip) throws MultipartFileIsNotCsvException, MultipartFileIsNotAnArchiveException, IOException {
 
 
         if (!csvFile.getContentType().equals("text/csv")) {
             throw new MultipartFileIsNotCsvException();
         }
 
-        Path path = Paths.get(homePath + '/' + archivePath);
+        Path path = Paths.get(homePath + '/' + temporaryPhotoFolder);
 
         try {
             Set<String[]> listCandidateImported = parseCsvFile(csvFile);
             Map<String, File> listPhotoByName = getPhotoFromZipArchive(photoZip, path);
+            List<OptionnalCandidateDto> list = new ArrayList<>();
+
+            for (String[] candidateData : listCandidateImported) {
+
+                String firstName = candidateData[0];
+                String lastName = candidateData[1];
+                File photoFile = listPhotoByName.get(candidateData[2]);
+                list.add(this.createCandidate(firstName, lastName, photoFile));
+            }
+
+            return list;
         } catch (FileNotUpdatableException e) {
             throw new IOException(e);
         }
 
-        return null;
+    }
+
+    protected OptionnalCandidateDto createCandidate(String firstName, String lastName, File photo) {
+
+        return new OptionnalCandidateDto(firstName, lastName, true);
     }
 }
