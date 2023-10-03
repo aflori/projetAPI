@@ -50,7 +50,7 @@ public class CandidateService {
 
         File homeFolder = new File(homePath);
 
-        if (DEBUG == true) {
+        if (DEBUG) {
             if (photoCandidate == null) {
                 Candidate createdCandidate = candidateRepository.save(candidate);
                 return new CandidateDto(createdCandidate);
@@ -190,7 +190,8 @@ public class CandidateService {
             throw new MultipartFileIsNotCsvException();
         }
 
-        Path path = Paths.get(homePath + '/' + temporaryPhotoFolder);
+        String tempFolderName = homePath + '/' + temporaryPhotoFolder;
+        Path path = Paths.get(tempFolderName);
 
         try {
             Set<String[]> listCandidateImported = parseCsvFile(csvFile);
@@ -205,6 +206,8 @@ public class CandidateService {
                 list.add(this.createCandidate(firstName, lastName, photoFile));
             }
 
+            File tempFolder = new File(tempFolderName);
+            deleteFolderContent(tempFolder);
             return list;
         } catch (FileNotUpdatableException e) {
             throw new IOException(e);
@@ -218,36 +221,31 @@ public class CandidateService {
 
         Candidate candidate = new Candidate(firstName, lastName);
 
-        File homeFolder = new File(homePath);
 
-        if (DEBUG == true) {
+        if (DEBUG) {
             if (photo == null) {
                 Candidate createdCandidate = candidateRepository.save(candidate);
                 return new OptionnalCandidateDto(createdCandidate);
             }
         }
+        if (!photo.exists()) {
+            throw new MultipartFileIsNotImageException();
+        }
+
+        File homeFolder = new File(homePath + '/' + photoPath);
 
         String extensionPhoto = checkAndExtractPhotoExtension(photo);
 
-//        String fileName = candidate.getFirstName() + '_' + candidate.getLastName() + '_';
-//        String directoryFileName = photoPath + fileName;
-//
-//        File emptyFile = createEmptyFileByName(homeFolder, directoryFileName);
-//        writePhotoIn(photoCandidate, emptyFile);
-//
-//
-//        Candidate newCandidateSaved = candidateRepository.save(candidate);
-//
-//        //update the filename of the photo with the id of the candidate once he is created and his extension.
-//        String newFileName = fileName + candidate.getId() + extensionPhoto;
-//        String newDirectoryFileName = photoPath + newFileName;
-//
-//        changeFileName(homeFolder, directoryFileName, newDirectoryFileName);
-//
-//        newCandidateSaved.setPhotoName(newFileName);
-//
-//        Candidate createdCandidate = candidateRepository.save(newCandidateSaved);
-//        return new OptionnalCandidateDto(firstName, lastName, true);
-        return null;
+        Candidate newCandidateSaved = candidateRepository.save(candidate);
+
+        String photoName = candidate.getFirstName() + '_' + candidate.getLastName() + '_' + candidate.getId() + extensionPhoto;
+
+        File newFile = changeFileName(photo, homeFolder, photoName);
+
+        newCandidateSaved.setPhotoName(newFile.toURI().toString());
+
+        newCandidateSaved = candidateRepository.save(newCandidateSaved); // saved photoName
+
+        return new OptionnalCandidateDto(newCandidateSaved);
     }
 }
