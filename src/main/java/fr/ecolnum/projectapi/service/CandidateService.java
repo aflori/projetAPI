@@ -2,7 +2,7 @@ package fr.ecolnum.projectapi.service;
 
 import fr.ecolnum.projectapi.exception.*;
 import fr.ecolnum.projectapi.DTO.CandidateDto;
-import fr.ecolnum.projectapi.DTO.OptionnalCandidateDto;
+import fr.ecolnum.projectapi.DTO.resultImportListDto;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,7 +162,7 @@ public class CandidateService {
      * @throws MultipartFileIsNotAnArchiveException if photoZip is not an archive
      * @throws IOException                          if file creation bugged
      */
-    public Iterable<OptionnalCandidateDto> importCandidateList(MultipartFile csvFile, MultipartFile photoZip) throws MultipartFileIsNotCsvException, MultipartFileIsNotAnArchiveException, IOException {
+    public resultImportListDto importCandidateList(MultipartFile csvFile, MultipartFile photoZip) throws MultipartFileIsNotCsvException, MultipartFileIsNotAnArchiveException, IOException {
 
 
         if (!csvFile.getContentType().equals("text/csv")) {
@@ -171,24 +171,35 @@ public class CandidateService {
 
         String tempFolderName = homePath + temporaryPhotoFolder;
         Path path = Paths.get(tempFolderName);
-
         try {
             Set<String[]> listCandidateImported = parseCsvFile(csvFile);
             Map<String, File> listPhotoByName = getPhotoFromZipArchive(photoZip, path);
-            List<OptionnalCandidateDto> list = new ArrayList<>();
+
+            int sizeMaxSet = listCandidateImported.size();
+
+            Set<CandidateDto> importedCandidate = new HashSet<>(sizeMaxSet);
+            Set<CandidateDto> duplicateCandidate = new HashSet<>(sizeMaxSet);
+            Set<CandidateDto> candidateWithoutPhoto = new HashSet<>(sizeMaxSet);
 
             for (String[] candidateData : listCandidateImported) {
 
                 String firstName = candidateData[0];
                 String lastName = candidateData[1];
                 File photoFile = listPhotoByName.get(candidateData[2]);
-                CandidateDto candidateAdded = this.createCandidate(firstName, lastName, photoFile);
-                list.add(new OptionnalCandidateDto(candidateAdded, false));
+                if (photoFile == null) {
+                    candidateWithoutPhoto.add(new CandidateDto(firstName, lastName));
+                } else if (hasDuplicate(firstName, lastName)) {
+                    duplicateCandidate.add(new CandidateDto(firstName, lastName));
+                } else {
+                    CandidateDto candidateAdded = this.createCandidate(firstName, lastName, photoFile);
+                    importedCandidate.add(candidateAdded);
+                }
             }
 
             File tempFolder = new File(tempFolderName);
             deleteFolderContent(tempFolder);
-            return list;
+
+            return new resultImportListDto(importedCandidate, duplicateCandidate, candidateWithoutPhoto);
         } catch (FileNotUpdatableException e) {
             throw new IOException(e);
         } catch (MultipartFileIsNotImageException ignored) {
@@ -205,7 +216,7 @@ public class CandidateService {
         if (DEBUG) {
             if (photo == null) {
                 Candidate createdCandidate = candidateRepository.save(candidate);
-                return new OptionnalCandidateDto(createdCandidate);
+                return new CandidateDto(createdCandidate);
             }
         }
         if (!photo.exists()) {

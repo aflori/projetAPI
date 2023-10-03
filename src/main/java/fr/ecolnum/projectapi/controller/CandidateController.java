@@ -1,6 +1,6 @@
 package fr.ecolnum.projectapi.controller;
 
-import fr.ecolnum.projectapi.DTO.OptionnalCandidateDto;
+import fr.ecolnum.projectapi.DTO.resultImportListDto;
 import fr.ecolnum.projectapi.exception.*;
 import fr.ecolnum.projectapi.DTO.CandidateDto;
 import fr.ecolnum.projectapi.service.CandidateService;
@@ -115,7 +115,7 @@ public class CandidateController {
     public ResponseEntity<?> importList(@RequestPart MultipartFile listCsv, @RequestPart MultipartFile photoFolder) {
 
         try {
-            Iterable<OptionnalCandidateDto> listCandidate = candidateService.importCandidateList(listCsv, photoFolder);
+            resultImportListDto listCandidate = candidateService.importCandidateList(listCsv, photoFolder);
             return new ResponseEntity<>(listCandidate, HttpStatus.CREATED);
         } catch (MultipartFileIsNotCsvException | MultipartFileIsNotAnArchiveException e) {
             return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
