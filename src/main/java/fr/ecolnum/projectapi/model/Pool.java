@@ -67,6 +67,10 @@ public class Pool {
 
     }
 
+    public Pool(Integer id) {
+        this.id = id;
+    }
+
 
     public Integer getId() {
         return id;
