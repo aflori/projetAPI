@@ -115,4 +115,8 @@ public class CandidateDto {
     public void setEvaluatedIn(List<Integer> evaluatedIn) {
         this.evaluatedIn = evaluatedIn;
     }
+
+    public Candidate convertToCandidateObject() {
+        return null;
+    }
 }

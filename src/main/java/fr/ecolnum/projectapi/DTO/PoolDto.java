@@ -32,7 +32,7 @@ public class PoolDto {
     private List<Integer> containedCandidate;
     private List<Integer> containedCriterias;
     private List<Integer> containedObservers;
-
+    private List<Integer> existIn;
     public PoolDto() {
     }
 
@@ -85,7 +85,7 @@ public class PoolDto {
 
         Set<Observer> containedObserver = extractSetFromRepository(observerRepository, containedObservers);
 
-        return new Pool(this.id, this.name, this.startDate, this.endDate, this.location, evaluates, containedCriteria, containedObserver);
+        return new Pool(this.id, this.name, this.startDate, this.endDate, this.location, existIn, evaluates, containedCriteria, containedObserver);
     }
 
     public int getId() {
@@ -150,5 +150,13 @@ public class PoolDto {
 
     public void setContainedObservers(List<Integer> containedObservers) {
         this.containedObservers = containedObservers;
+    }
+
+    public List<Integer> getExistIn() {
+        return existIn;
+    }
+
+    public void setExistIn(List<Integer> existIn) {
+        this.existIn = existIn;
     }
 }

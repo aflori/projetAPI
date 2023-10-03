@@ -132,9 +132,16 @@ public class CandidateService {
 
         return duplicateCandidate;
     }
-    public Candidate addToGroup(CandidateDto candidateDto) throws IdNotFoundException{
-        Candidate candidate = candidateDto.convertToCandidateObject(groupRepository);
-        candidate = candidateRepository.save(candidate);
-        return new Candidate();
+
+    public Candidate addToGroup(CandidateDto candidateDto, Integer groupId) throws IdNotFoundException {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IdNotFoundException("Group not found with id: " + groupId));
+        Candidate candidate = candidateDto.convertToCandidateObject();
+
+        group.getContainedCandidates().add(candidate);
+
+        groupRepository.save(group);
+
+        return candidate;
     }
 }

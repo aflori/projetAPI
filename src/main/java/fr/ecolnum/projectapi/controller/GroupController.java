@@ -1,11 +1,14 @@
 package fr.ecolnum.projectapi.controller;
 
+import fr.ecolnum.projectapi.DTO.CandidateDto;
 import fr.ecolnum.projectapi.DTO.CriteriaDto;
 import fr.ecolnum.projectapi.DTO.GroupDto;
 import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
+import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.model.Group;
 import fr.ecolnum.projectapi.service.GroupService;
+import fr.ecolnum.projectapi.service.CandidateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,8 @@ import static fr.ecolnum.projectapi.util.GenericUtility.convertStringToJsonData;
 public class GroupController {
     @Autowired
     private GroupService groupService;
+    @Autowired
+    private CandidateService candidateService;
     @Operation(summary = "Create a group", description = "Add a new Group object to the database.")
     @PostMapping
     @ApiResponse(
@@ -36,7 +41,15 @@ public class GroupController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
-
+    @PostMapping("/{groupId}")
+    public ResponseEntity<?> addToGroup(@RequestBody CandidateDto candidate, @PathVariable Integer groupId){
+        try {
+            Candidate addedToGroup = candidateService.addToGroup(candidate, groupId);
+            return new ResponseEntity<>(addedToGroup, HttpStatus.OK);
+        } catch (IdNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
     @Operation(summary = "Return all group", description = "Return the list of all the group from the database.")
     @GetMapping
     @ApiResponse(

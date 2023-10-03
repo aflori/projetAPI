@@ -69,18 +69,10 @@ public class CandidateController {
 
     /**
      *
-     * @param candidate
+     * @param
      * @return
      */
-    @PostMapping("/group")
-    public ResponseEntity<?> addToGroup(@RequestBody CandidateDto candidate){
-        try {
-            Candidate addedToGroup = candidateService.addToGroup(candidate);
-            return new ResponseEntity<>(addedToGroup, HttpStatus.OK);
-        } catch (IdNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
     @PostMapping("/checkDuplicate")
     @Operation(
             summary = "Check for duplicate candidate in the database then create it",
