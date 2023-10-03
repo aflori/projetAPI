@@ -44,40 +44,19 @@ public class CandidateService {
      * @return the candidate (with its new ID and photo URL) created
      */
     public CandidateDto createCandidate(String firstName, String lastName, MultipartFile photoCandidate) throws MultipartFileIsNotImageException, FileNotUpdatableException {
+        String temporaryFolderName = homePath + '/' + temporaryPhotoFolder;
+        File temporaryFolder = new File(temporaryFolderName);
+        String extension = checkAndExtractPhotoExtension(photoCandidate);
 
-        // create a file for the project directory
-        Candidate candidate = new Candidate(firstName, lastName);
+        File temporaryPhotoFile = createEmptyFileByName(temporaryFolder, firstName + '_' + lastName + extension);
+        writePhotoIn(photoCandidate, temporaryPhotoFile);
 
-        File homeFolder = new File(homePath);
+        CandidateDto candidateDto = createCandidate(firstName, lastName, temporaryPhotoFile);
 
-        if (DEBUG) {
-            if (photoCandidate == null) {
-                Candidate createdCandidate = candidateRepository.save(candidate);
-                return new CandidateDto(createdCandidate);
-            }
-        }
+        temporaryPhotoFile.delete();
 
-        String extensionPhoto = checkAndExtractPhotoExtension(photoCandidate);
+        return candidateDto;
 
-        String fileName = candidate.getFirstName() + '_' + candidate.getLastName() + '_';
-        String directoryFileName = photoPath + fileName;
-
-        File emptyFile = createEmptyFileByName(homeFolder, directoryFileName);
-        writePhotoIn(photoCandidate, emptyFile);
-
-
-        Candidate newCandidateSaved = candidateRepository.save(candidate);
-
-        //update the filename of the photo with the id of the candidate once he is created and his extension.
-        String newFileName = fileName + candidate.getId() + extensionPhoto;
-        String newDirectoryFileName = photoPath + newFileName;
-
-        changeFileName(homeFolder, directoryFileName, newDirectoryFileName);
-
-        newCandidateSaved.setPhotoName(newFileName);
-
-        Candidate createdCandidate = candidateRepository.save(newCandidateSaved);
-        return new CandidateDto(createdCandidate);
     }
 
     /**
@@ -203,7 +182,8 @@ public class CandidateService {
                 String firstName = candidateData[0];
                 String lastName = candidateData[1];
                 File photoFile = listPhotoByName.get(candidateData[2]);
-                list.add(this.createCandidate(firstName, lastName, photoFile));
+                CandidateDto candidateAdded = this.createCandidate(firstName, lastName, photoFile);
+                list.add(new OptionnalCandidateDto(candidateAdded, false));
             }
 
             File tempFolder = new File(tempFolderName);
@@ -217,7 +197,7 @@ public class CandidateService {
 
     }
 
-    protected OptionnalCandidateDto createCandidate(String firstName, String lastName, File photo) throws MultipartFileIsNotImageException {
+    protected CandidateDto createCandidate(String firstName, String lastName, File photo) throws MultipartFileIsNotImageException {
 
         Candidate candidate = new Candidate(firstName, lastName);
 
@@ -246,6 +226,6 @@ public class CandidateService {
 
         newCandidateSaved = candidateRepository.save(newCandidateSaved); // saved photoName
 
-        return new OptionnalCandidateDto(newCandidateSaved);
+        return new CandidateDto(newCandidateSaved);
     }
 }
