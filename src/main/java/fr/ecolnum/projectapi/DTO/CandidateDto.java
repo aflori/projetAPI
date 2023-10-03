@@ -26,7 +26,7 @@ public class CandidateDto {
      * create an object for the list which are integers
      */
     private List<Integer> evaluatedIn;
-    private List<Integer> belongsToPool;
+    private List<Integer> belongsToGroup;
 
 
     /**
@@ -53,7 +53,7 @@ public class CandidateDto {
     }
 
     public Candidate convertToCandidateObject(final GroupRepository groupRepository) throws IdNotFoundException {
-        Set<Group> belongsTo = extractSetFromRepository(groupRepository, this.belongsToPool);
+        Set<Group> belongsTo = extractSetFromRepository(groupRepository, this.belongsToGroup);
 
         return new Candidate(this.id, this.firstName, this.lastName, belongsTo);
     }
@@ -62,11 +62,11 @@ public class CandidateDto {
         this.firstName = firstName;
         this.lastName = lastName;
     }
-    public CandidateDto(String firstName, String lastName,List<Integer> belongsToPool) {
+    public CandidateDto(String firstName, String lastName,List<Integer> belongsToGroup) {
         this.id = 0;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.belongsToPool = belongsToPool;
+        this.belongsToGroup = belongsToGroup;
     }
     public Candidate convertToCandidateObject(final PoolRepository poolRepository) throws IdNotFoundException {
 
