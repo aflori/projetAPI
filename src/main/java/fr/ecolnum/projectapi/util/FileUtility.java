@@ -126,15 +126,17 @@ public class FileUtility {
             if (!photoType.startsWith("image")) {
                 continue;
             }
-            extractPhotoFromZip(basePath, singlePhotoInZip, zip, listOfPhotoMappedByName);
+            extractPhotoFromZip(basePath, singlePhotoInZip.getName(), zip, listOfPhotoMappedByName);
         }
         return listOfPhotoMappedByName;
     }
 
-    protected static void extractPhotoFromZip(Path basePath, ZipEntry photo, ZipInputStream zip, Map<String, File> mapToUpdate) throws IOException {
-        Path photoPath = basePath.resolve(photo.getName());
-        Files.createDirectories(photoPath.getParent());
-        Files.copy(zip, photoPath);
-        mapToUpdate.put(photo.getName(), new File(photoPath.toUri()));
+    protected static void extractPhotoFromZip(Path basePath, String photoName, ZipInputStream zipFile, Map<String, File> mapToUpdate) throws IOException {
+        Path photoPath = basePath.resolve(photoName);   // creating good
+        Files.createDirectories(photoPath.getParent()); // creating parent repository if not exist
+        Files.copy(zipFile, photoPath);                 // importing variable file to goof folder
+
+
+        mapToUpdate.put(photoName, new File(photoPath.toUri()));
     }
 }
