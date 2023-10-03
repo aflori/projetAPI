@@ -36,12 +36,12 @@ public class CandidateDto {
         this.firstName = candidate.getFirstName();
         this.lastName = candidate.getLastName();
         this.photoName = candidate.getPhotoName();
-        /**
+        /*
          * transform the pool list in object observeIn which contain an ArrayList
          */
         Set<Pool> observeIn = candidate.getEvaluatedIn();
         evaluatedIn = new ArrayList<>();
-        /**
+        /*
          * just take all id contain in pool List
          */
         if (observeIn != null) {
@@ -55,6 +55,16 @@ public class CandidateDto {
         this.id = 0;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public CandidateDto(CandidateDto candidate) {
+        this.id = candidate.id;
+        this.firstName = candidate.firstName;
+        this.lastName = candidate.lastName;
+        this.photoName = candidate.photoName;
+        // I don't want to change the original Dto id list by changing this one
+        // so I put a copy by using List.copyOf()
+        this.evaluatedIn = List.copyOf(candidate.evaluatedIn);
     }
 
     public Candidate convertToCandidateObject(final PoolRepository poolRepository) throws IdNotFoundException {
