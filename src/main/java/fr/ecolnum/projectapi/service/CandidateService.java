@@ -167,6 +167,15 @@ public class CandidateService {
         return new CandidateDto(candidate.get());
     }
 
+    /**
+     * service made to import a list of candidates
+     * @param csvFile correspond to the csv file containing all information to the candidates imported
+     * @param photoZip represent the zip package containing all photos of the candidates
+     * @return list of candidateDto imported with a boolean indicating if candidate is already in dataBase
+     * @throws MultipartFileIsNotCsvException if variable csvFile is not a csv
+     * @throws MultipartFileIsNotAnArchiveException if photoZip is not an archive
+     * @throws IOException if file creation bugged
+     */
     public List<CandidateDto> importCandidateList(MultipartFile csvFile, MultipartFile photoZip) throws MultipartFileIsNotCsvException, MultipartFileIsNotAnArchiveException, IOException {
 
 
@@ -179,10 +188,8 @@ public class CandidateService {
         try {
             Set<String[]> listCandidateImported = parseCsvFile(csvFile);
             Map<String, File> listPhotoByName = getPhotoFromZipArchive(photoZip, path);
-            System.out.println(listCandidateImported);
-            System.out.println(listPhotoByName);
         } catch (FileNotUpdatableException e) {
-            throw new RuntimeException(e);
+            throw new IOException(e);
         }
 
         return null;
