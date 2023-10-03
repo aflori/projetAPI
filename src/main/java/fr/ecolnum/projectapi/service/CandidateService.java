@@ -25,8 +25,8 @@ import static fr.ecolnum.projectapi.util.FileUtility.*;
 public class CandidateService {
 
     private final static boolean DEBUG = true;
-    private final static String photoPath = "assets/candidatePhoto/";
-    private final static String temporaryPhotoFolder = "assets/tempPhoto/";
+    private final static String photoPath = "/assets/candidatePhoto/";
+    private final static String temporaryPhotoFolder = "/assets/tempPhoto/";
 
     // get the project directory from application.properties
     @Value("${homePath}")
@@ -44,7 +44,7 @@ public class CandidateService {
      * @return the candidate (with its new ID and photo URL) created
      */
     public CandidateDto createCandidate(String firstName, String lastName, MultipartFile photoCandidate) throws MultipartFileIsNotImageException, FileNotUpdatableException {
-        String temporaryFolderName = homePath + '/' + temporaryPhotoFolder;
+        String temporaryFolderName = homePath + temporaryPhotoFolder;
         File temporaryFolder = new File(temporaryFolderName);
         String extension = checkAndExtractPhotoExtension(photoCandidate);
 
@@ -162,14 +162,14 @@ public class CandidateService {
      * @throws MultipartFileIsNotAnArchiveException if photoZip is not an archive
      * @throws IOException                          if file creation bugged
      */
-    public List<OptionnalCandidateDto> importCandidateList(MultipartFile csvFile, MultipartFile photoZip) throws MultipartFileIsNotCsvException, MultipartFileIsNotAnArchiveException, IOException {
+    public Iterable<OptionnalCandidateDto> importCandidateList(MultipartFile csvFile, MultipartFile photoZip) throws MultipartFileIsNotCsvException, MultipartFileIsNotAnArchiveException, IOException {
 
 
         if (!csvFile.getContentType().equals("text/csv")) {
             throw new MultipartFileIsNotCsvException();
         }
 
-        String tempFolderName = homePath + '/' + temporaryPhotoFolder;
+        String tempFolderName = homePath + temporaryPhotoFolder;
         Path path = Paths.get(tempFolderName);
 
         try {
@@ -212,7 +212,7 @@ public class CandidateService {
             throw new MultipartFileIsNotImageException();
         }
 
-        File homeFolder = new File(homePath + '/' + photoPath);
+        File homeFolder = new File(homePath + photoPath);
 
         String extensionPhoto = checkAndExtractPhotoExtension(photo);
 
@@ -222,7 +222,7 @@ public class CandidateService {
 
         File newFile = changeFileName(photo, homeFolder, photoName);
 
-        newCandidateSaved.setPhotoName(newFile.toURI().toString());
+        newCandidateSaved.setPhotoName(photoPath + newFile.getName());
 
         newCandidateSaved = candidateRepository.save(newCandidateSaved); // saved photoName
 
