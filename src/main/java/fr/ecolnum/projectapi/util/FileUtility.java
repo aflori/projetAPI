@@ -23,6 +23,12 @@ public class FileUtility {
         File newF = new File(homeFolder, newName);
         oldF.renameTo(newF);
     }
+    public static File changeFileName(File oldF, File newFileFolder, String newFileName) {
+        File newF = new File(newFileFolder, newFileName);
+        oldF.renameTo(newF);
+
+        return newF;
+    }
 
     public static String checkAndExtractPhotoExtension(MultipartFile photoCandidate) throws MultipartFileIsNotImageException {
 
@@ -147,5 +153,27 @@ public class FileUtility {
 
 
         mapToUpdate.put(photoName, new File(photoPath.toUri()));
+    }
+
+    public static void deleteFolderContent(File folder) {
+        File[] files = folder.listFiles();
+        if(files!= null) {
+            for(File file: files) {
+                if(file.getName().equals(".gitkeep")) {
+                    continue;
+                }
+
+                if(file.isDirectory()) {
+                    deleteFolder(file);
+                } else {
+                    file.delete();
+                }
+            }
+        }
+    }
+
+    public static void deleteFolder(File folder) {
+        deleteFolderContent(folder);
+        folder.delete();
     }
 }
