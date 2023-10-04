@@ -175,11 +175,11 @@ public class CandidateService {
             Set<String[]> listCandidateImported = parseCsvFile(csvFile);
             Map<String, File> listPhotoByName = getPhotoFromZipArchive(photoZip, path);
 
-            int sizeMaxSet = listCandidateImported.size();
+            int maxSize = listCandidateImported.size();
 
-            Set<CandidateDto> importedCandidate = new HashSet<>(sizeMaxSet);
-            Set<CandidateDto> duplicateCandidate = new HashSet<>(sizeMaxSet);
-            Set<CandidateDto> candidateWithoutPhoto = new HashSet<>(sizeMaxSet);
+            Set<CandidateDto> importedCandidate = new HashSet<>(maxSize);
+            Set<CandidateDto> duplicateCandidate = new HashSet<>(maxSize);
+            Set<CandidateDto> candidateWithoutPhoto = new HashSet<>(maxSize);
 
             for (String[] candidateData : listCandidateImported) {
 
