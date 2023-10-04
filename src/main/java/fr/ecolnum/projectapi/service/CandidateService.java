@@ -2,7 +2,7 @@ package fr.ecolnum.projectapi.service;
 
 import fr.ecolnum.projectapi.exception.*;
 import fr.ecolnum.projectapi.DTO.CandidateDto;
-import fr.ecolnum.projectapi.DTO.resultImportListDto;
+import fr.ecolnum.projectapi.DTO.ResultImportListDto;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,7 +162,7 @@ public class CandidateService {
      * @throws MultipartFileIsNotAnArchiveException if photoZip is not an archive
      * @throws IOException                          if file creation bugged
      */
-    public resultImportListDto importCandidateList(MultipartFile csvFile, MultipartFile photoZip) throws MultipartFileIsNotCsvException, MultipartFileIsNotAnArchiveException, IOException {
+    public ResultImportListDto importCandidateList(MultipartFile csvFile, MultipartFile photoZip) throws MultipartFileIsNotCsvException, MultipartFileIsNotAnArchiveException, IOException {
 
 
         if (!csvFile.getContentType().equals("text/csv")) {
@@ -199,7 +199,7 @@ public class CandidateService {
             File tempFolder = new File(tempFolderName);
             deleteFolderContent(tempFolder);
 
-            return new resultImportListDto(importedCandidate, duplicateCandidate, candidateWithoutPhoto);
+            return new ResultImportListDto(importedCandidate, duplicateCandidate, candidateWithoutPhoto);
         } catch (FileNotUpdatableException e) {
             throw new IOException(e);
         } catch (MultipartFileIsNotImageException ignored) {

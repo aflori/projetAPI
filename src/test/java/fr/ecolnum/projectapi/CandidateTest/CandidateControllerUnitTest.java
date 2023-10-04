@@ -2,7 +2,7 @@ package fr.ecolnum.projectapi.CandidateTest;
 
 
 import fr.ecolnum.projectapi.DTO.CandidateDto;
-import fr.ecolnum.projectapi.DTO.resultImportListDto;
+import fr.ecolnum.projectapi.DTO.ResultImportListDto;
 import fr.ecolnum.projectapi.controller.CandidateController;
 import fr.ecolnum.projectapi.exception.MultipartFileIsNotAnArchiveException;
 import fr.ecolnum.projectapi.service.CandidateService;
@@ -27,7 +27,6 @@ import java.util.Set;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
@@ -54,7 +53,7 @@ public class CandidateControllerUnitTest {
         MockMultipartFile archiveMock = new MockMultipartFile("photoFolder", archiveFile);
 
         when(candidateService.importCandidateList(csvMock, archiveMock))
-                .thenReturn(new resultImportListDto(
+                .thenReturn(new ResultImportListDto(
                         Set.of(
                                 new CandidateDto("alpha", "beta"),
                                 new CandidateDto("gamma", "delta"),

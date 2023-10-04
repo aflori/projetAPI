@@ -1,17 +1,17 @@
 package fr.ecolnum.projectapi.DTO;
 
-public class resultImportListDto {
+public class ResultImportListDto {
     private Iterable<CandidateDto> imported;
     private Iterable<CandidateDto> duplicate;
     private Iterable<CandidateDto> photoMissing;
 
-    public resultImportListDto(Iterable<CandidateDto> imported, Iterable<CandidateDto> duplicate, Iterable<CandidateDto> photoMissing) {
+    public ResultImportListDto(Iterable<CandidateDto> imported, Iterable<CandidateDto> duplicate, Iterable<CandidateDto> photoMissing) {
         this.imported = imported;
         this.duplicate = duplicate;
         this.photoMissing = photoMissing;
     }
 
-    public resultImportListDto() {
+    public ResultImportListDto() {
     }
 
     public Iterable<CandidateDto> getImported() {
