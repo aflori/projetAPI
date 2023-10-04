@@ -53,7 +53,7 @@ public class PoolController {
     }
 
     /**
-     * @param pool
+     * @param pool DtoObject with necessary data for pool creation
      * @return pool created
      */
     @Operation(summary = "Create a pool", description = "Add a new Pool object to the database.")
@@ -63,7 +63,7 @@ public class PoolController {
             responseCode = "201"
     )
     public ResponseEntity<?> createPool(@RequestBody PoolDto pool) {
-        PoolDto createdPool = null;
+        PoolDto createdPool;
         try {
             createdPool = poolService.createPool(pool);
             return new ResponseEntity<>(createdPool, HttpStatus.CREATED);
@@ -73,7 +73,7 @@ public class PoolController {
     }
 
     /**
-     * @param poolId
+     * @param poolId id of the pool which will be modified
      * @param poolModification it's pool's modification with her id / we add a new object like (candidate, Criteria, observer)
      * @return return just a status
      */
@@ -84,7 +84,7 @@ public class PoolController {
             responseCode = "201"
     )
     public ResponseEntity<?> modifyPool(@PathVariable int poolId, @RequestBody PoolDto poolModification) {
-        PoolDto poolModified = null;
+        PoolDto poolModified;
         try {
             poolModified = poolService.modifyPool(poolId, poolModification);
             return new ResponseEntity<>(poolModified, HttpStatus.OK);

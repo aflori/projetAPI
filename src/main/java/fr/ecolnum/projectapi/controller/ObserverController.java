@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ import static fr.ecolnum.projectapi.util.GenericUtility.convertStringToJsonData;
  */
 @RestController
 @RequestMapping("/api/admin/observer")
+@Secured("ROLE_ADMIN")
 public class ObserverController {
     @Autowired
     private ObserverService observerService;
@@ -30,6 +32,7 @@ public class ObserverController {
             description = "Return the created observer and the created HTTP response",
             responseCode = "201"
     )
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<?> createObserver(@RequestBody ObserverDto observer) {
 
 
@@ -48,6 +51,7 @@ public class ObserverController {
             description = "Return the modified observer and the created HTTP response",
             responseCode = "201"
     )
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     public ResponseEntity<?> editObserver(@PathVariable int id, @RequestBody ObserverDto observer) {
 
 

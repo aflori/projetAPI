@@ -3,7 +3,6 @@ package fr.ecolnum.projectapi.DTO;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Pool;
-import fr.ecolnum.projectapi.model.Role;
 import fr.ecolnum.projectapi.repository.PoolRepository;
 
 import java.util.ArrayList;
