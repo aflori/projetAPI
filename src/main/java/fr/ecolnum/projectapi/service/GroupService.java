@@ -1,7 +1,9 @@
 package fr.ecolnum.projectapi.service;
 
+import fr.ecolnum.projectapi.DTO.CandidateDto;
 import fr.ecolnum.projectapi.DTO.GroupDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
+import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.model.Group;
 import fr.ecolnum.projectapi.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +43,16 @@ public class GroupService {
             allGroupDto.add(new GroupDto(group));
         }
         return allGroupDto;
+    }
+    public Candidate addToGroup(CandidateDto candidateDto, Integer groupId) throws IdNotFoundException {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IdNotFoundException("Group not found with id: " + groupId));
+        Candidate candidate = candidateDto.convertToCandidateObject();
+
+        group.getContainedCandidates().add(candidate);
+
+        groupRepository.save(group);
+
+        return candidate;
     }
 }

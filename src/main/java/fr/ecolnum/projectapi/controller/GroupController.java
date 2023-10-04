@@ -23,8 +23,6 @@ import static fr.ecolnum.projectapi.util.GenericUtility.convertStringToJsonData;
 public class GroupController {
     @Autowired
     private GroupService groupService;
-    @Autowired
-    private CandidateService candidateService;
     @Operation(summary = "Create a group", description = "Add a new Group object to the database.")
     @PostMapping
     @ApiResponse(
@@ -44,7 +42,7 @@ public class GroupController {
     @PostMapping("/{groupId}")
     public ResponseEntity<?> addToGroup(@RequestBody CandidateDto candidate, @PathVariable Integer groupId){
         try {
-            Candidate addedToGroup = candidateService.addToGroup(candidate, groupId);
+            Candidate addedToGroup = groupService.addToGroup(candidate, groupId);
             return new ResponseEntity<>(addedToGroup, HttpStatus.OK);
         } catch (IdNotFoundException e) {
             throw new RuntimeException(e);

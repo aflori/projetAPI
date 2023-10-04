@@ -27,7 +27,8 @@ public class CandidateDto {
      */
     private List<Integer> evaluatedIn;
     private List<Integer> belongsToGroup;
-
+    public CandidateDto() {
+    }
 
     /**
      * @param candidate this construct take attributs of candidate
