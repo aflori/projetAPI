@@ -37,6 +37,9 @@ public class ObserverService implements UserDetailsService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private PoolRepository poolRepository;
+
     /**
      * This method is used to authenticate a user with his email from the database
      * @param email email of the user
@@ -56,9 +59,6 @@ public class ObserverService implements UserDetailsService {
     }
 
 
-
-    @Autowired
-    private PoolRepository poolRepository;
 
     public ObserverDto createObserver(ObserverDto observerDto) throws IdNotFoundException, NameNotFoundException {
 

@@ -23,8 +23,13 @@ import static fr.ecolnum.projectapi.util.GenericUtility.convertStringToJsonData;
 @RequestMapping("/api/admin/observer")
 @Secured("ROLE_ADMIN")
 public class ObserverController {
+
+    private final ObserverService observerService;
+
     @Autowired
-    private ObserverService observerService;
+    public ObserverController(ObserverService observerService) {
+        this.observerService = observerService;
+    }
 
     @Operation(summary = "Create an observer", description = "Add a new Observer object to the database.")
     @PostMapping
@@ -32,7 +37,6 @@ public class ObserverController {
             description = "Return the created observer and the created HTTP response",
             responseCode = "201"
     )
-    @Secured("ROLE_ADMIN")
     public ResponseEntity<?> createObserver(@RequestBody ObserverDto observer) {
 
 

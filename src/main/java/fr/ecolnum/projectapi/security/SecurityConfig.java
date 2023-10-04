@@ -41,14 +41,14 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                //replace by securedEnabled
-               /* .authorizeHttpRequests((requests) -> requests
+                //replaced by securedEnabled
+               .authorizeHttpRequests((requests) -> requests
                         .anyRequest().permitAll() // no authentication needed for dev and test purpose
-                        .requestMatchers("/api/admin/criteria").permitAll() // you don't need to be authenticated
-                        .requestMatchers("/api/admin/candidate").hasRole("ADMIN") // you need to be authenticated with admin role
-                        .requestMatchers("/api/admin/**").hasAnyRole("ADMIN","USER") // you need to be authenticated with admin or user role
-                        .anyRequest().authenticated() // you need to be authenticated no matter your role
-                )*/
+//                        .requestMatchers("/api/admin/criteria").permitAll() // you don't need to be authenticated
+//                        .requestMatchers("/api/admin/candidate").hasRole("ADMIN") // you need to be authenticated with admin role
+//                        .requestMatchers("/api/admin/**").hasAnyRole("ADMIN","USER") // you need to be authenticated with admin or user role
+//                        .anyRequest().authenticated() // you need to be authenticated no matter your role
+                )
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }
