@@ -2,6 +2,7 @@ package fr.ecolnum.projectapi.controller;
 
 import fr.ecolnum.projectapi.DTO.ObserverDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
+import fr.ecolnum.projectapi.exception.NameNotFoundException;
 import fr.ecolnum.projectapi.model.Role;
 import fr.ecolnum.projectapi.service.ObserverService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.naming.NameNotFoundException;
 import java.util.Set;
 
 import static fr.ecolnum.projectapi.util.GenericUtility.convertStringToJsonData;

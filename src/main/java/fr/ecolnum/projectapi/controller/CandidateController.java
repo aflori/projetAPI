@@ -11,13 +11,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import static fr.ecolnum.projectapi.util.GenericUtility.convertStringToJsonData;
-import static org.springframework.security.authorization.AuthorityAuthorizationManager.hasRole;
 
 /**
  * Class made to represent Controller on candidate operation

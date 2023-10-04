@@ -1,9 +1,8 @@
 package fr.ecolnum.projectapi.service;
 
-import fr.ecolnum.projectapi.DTO.CandidateDto;
 import fr.ecolnum.projectapi.DTO.ObserverDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
-import fr.ecolnum.projectapi.model.Candidate;
+import fr.ecolnum.projectapi.exception.NameNotFoundException;
 import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Role;
 import fr.ecolnum.projectapi.repository.ObserverRepository;
@@ -16,10 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.naming.NameNotFoundException;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -68,7 +64,7 @@ public class ObserverService implements UserDetailsService {
         Set<Role> observerRole = new HashSet<>();
         Optional<Role> userRole = roleRepository.findByName("ROLE_USER");
         if (userRole.isEmpty()) {
-            throw new NameNotFoundException();
+            throw new NameNotFoundException("This name does not exist");
         }
         observerRole.add(userRole.get());
 
@@ -115,7 +111,7 @@ public class ObserverService implements UserDetailsService {
         for(Role role : roleSet) {
             Optional<Role> tableRole = roleRepository.findByName(role.getName());
             if (tableRole.isEmpty()) {
-                throw new NameNotFoundException();
+                throw new NameNotFoundException("This name does not exist.");
             }
             role.setId(tableRole.get().getId());
         }
