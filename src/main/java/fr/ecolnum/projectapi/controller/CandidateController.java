@@ -118,7 +118,7 @@ public class CandidateController {
             resultImportListDto listCandidate = candidateService.importCandidateList(listCsv, photoFolder);
             return new ResponseEntity<>(listCandidate, HttpStatus.CREATED);
         } catch (MultipartFileIsNotCsvException | MultipartFileIsNotAnArchiveException e) {
-            return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
         } catch (IOException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
