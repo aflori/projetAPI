@@ -11,5 +11,5 @@ import java.util.Optional;
  */
 @Repository
 public interface ObserverRepository extends JpaRepository<Observer, Integer> {
-    Observer findByEmail(String email);
+    Optional<Observer> findByEmail(String email);
 }

@@ -2,8 +2,7 @@ package fr.ecolnum.projectapi.controller;
 
 import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
-import fr.ecolnum.projectapi.exception.PoolNotMatchingException;
-import fr.ecolnum.projectapi.model.Pool;
+import fr.ecolnum.projectapi.exception.IdNotMatchingException;
 import fr.ecolnum.projectapi.service.PoolService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -89,7 +88,7 @@ public class PoolController {
         try {
             poolModified = poolService.modifyPool(poolId, poolModification);
             return new ResponseEntity<>(poolModified, HttpStatus.OK);
-        } catch (IdNotFoundException | PoolNotMatchingException e) {
+        } catch (IdNotFoundException | IdNotMatchingException e) {
             return new ResponseEntity<>("{\"Error\" :\"" + e.getMessage() + "\"}", HttpStatus.CONFLICT);
         }
     }

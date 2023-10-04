@@ -3,6 +3,7 @@ package fr.ecolnum.projectapi.DTO;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Pool;
+import fr.ecolnum.projectapi.model.Role;
 import fr.ecolnum.projectapi.repository.PoolRepository;
 
 import java.util.ArrayList;
@@ -66,7 +67,6 @@ public class ObserverDto {
 
     public Observer convertToObserverObject(final PoolRepository poolRepository) throws IdNotFoundException {
         Set<Pool> observeIn = extractSetFromRepository(poolRepository, this.containInPool);
-
         return new Observer(this.id, this.lastName, this.firstName, this.email, this.password, observeIn);
     }
 

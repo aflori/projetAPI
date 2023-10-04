@@ -2,10 +2,7 @@ package fr.ecolnum.projectapi.service;
 
 import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
-import fr.ecolnum.projectapi.exception.PoolNotMatchingException;
-import fr.ecolnum.projectapi.model.Candidate;
-import fr.ecolnum.projectapi.model.Criteria;
-import fr.ecolnum.projectapi.model.Observer;
+import fr.ecolnum.projectapi.exception.IdNotMatchingException;
 import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
 import fr.ecolnum.projectapi.repository.CriteriaRepository;
@@ -64,9 +61,9 @@ public class PoolService {
     }
 
 
-    public PoolDto modifyPool(int poolId, PoolDto modifiedPoolDTO) throws IdNotFoundException, PoolNotMatchingException {
+    public PoolDto modifyPool(int poolId, PoolDto modifiedPoolDTO) throws IdNotFoundException, IdNotMatchingException {
         if (poolId != modifiedPoolDTO.getId()) {
-            throw new PoolNotMatchingException("Pool Id from request does not match Id from poolDTO.");
+            throw new IdNotMatchingException("Pool Id from request does not match Id from poolDTO.");
         }
         if (poolRepository.findById(poolId).isEmpty()) {
             throw new IdNotFoundException("This Pool does not exist.");

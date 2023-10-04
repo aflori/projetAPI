@@ -42,6 +42,24 @@ public class ObserverController {
 
     }
 
+    @Operation(summary = "Modify an observer", description = "Modify an Observer in the database.")
+    @PutMapping("/{id}")
+    @ApiResponse(
+            description = "Return the modified observer and the created HTTP response",
+            responseCode = "201"
+    )
+    public ResponseEntity<?> editObserver(@PathVariable int id, @RequestBody ObserverDto observer) {
+
+
+        try {
+            ObserverDto modifiedObserver = observerService.editObserver(id, observer);
+            return new ResponseEntity<>(modifiedObserver, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(convertStringToJsonData(e.getMessage()), HttpStatus.CONFLICT);
+        }
+
+    }
+
     @Operation(summary = "Return all observers", description = "Return the list of all the observers from the database.")
     @GetMapping
     @ApiResponse(
