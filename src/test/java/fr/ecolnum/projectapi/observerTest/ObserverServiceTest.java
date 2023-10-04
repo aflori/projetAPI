@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.naming.NameNotFoundException;
 import java.util.List;
 import java.util.Set;
 
@@ -37,7 +38,7 @@ public class ObserverServiceTest {
     ObserverDto observerDtoTest;
 
     @Test
-    public void testFunctionCreate() throws IdNotFoundException {
+    public void testFunctionCreate() throws IdNotFoundException, NameNotFoundException {
 
         //observer tested value
 

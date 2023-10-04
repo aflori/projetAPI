@@ -1,8 +1,6 @@
 package fr.ecolnum.projectapi.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import java.util.Set;
 
@@ -31,8 +29,7 @@ public class Observer {
     @ManyToMany(mappedBy = "containedObservers")
     private Set<Pool> observeIn;
 
-    @ManyToMany
-    @LazyCollection(LazyCollectionOption.FALSE) //don't wait to call method from roles before loading them
+    @ManyToMany(fetch=FetchType.EAGER) //load relation by default
     private Set<Role> roles;
 
     public Observer(int id, String lastName, String firstName, String email, String password) {

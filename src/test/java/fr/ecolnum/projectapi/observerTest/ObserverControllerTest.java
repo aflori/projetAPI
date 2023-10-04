@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import javax.naming.NameNotFoundException;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -33,7 +34,7 @@ public class ObserverControllerTest {
 
 
     @Test
-    public void testEndpointCreateObserver() throws IdNotFoundException {
+    public void testEndpointCreateObserver() throws IdNotFoundException, NameNotFoundException {
 
         //mock for working correctly test
         Observer originObserver = new Observer(1, null, null, null, null);
