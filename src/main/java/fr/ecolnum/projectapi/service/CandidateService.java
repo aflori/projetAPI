@@ -192,6 +192,7 @@ public class CandidateService {
                     duplicateCandidate.add(new CandidateDto(firstName, lastName));
                 } else {
                     CandidateDto candidateAdded = this.createCandidate(firstName, lastName, photoFile);
+                    listPhotoByName.remove(candidateData[2]); //should not be used again if another candidate has the same photo
                     importedCandidate.add(candidateAdded);
                 }
             }
