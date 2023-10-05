@@ -6,6 +6,7 @@ import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.exception.NameNotFoundException;
 import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Pool;
+import fr.ecolnum.projectapi.model.Role;
 import fr.ecolnum.projectapi.repository.ObserverRepository;
 import fr.ecolnum.projectapi.repository.PoolRepository;
 import fr.ecolnum.projectapi.repository.RoleRepository;
@@ -18,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -60,6 +62,12 @@ public class ObserverServiceTest {
         when(observerRepository.save(observerConvertedFromDto))
                 .thenReturn(observerAfterSaveDone);
 
+        when(roleRepository.findByName(eq("ROLE_USER")))
+                .thenReturn(
+                        Optional.of(
+                                new Role()
+                        )
+                );
         ObserverDto returnedFromCreateObserver = observerService.createObserver(observerDtoTest);
 
         assertEquals(returnedFromCreateObserver.getId(), 1);
