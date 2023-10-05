@@ -6,6 +6,7 @@ import fr.ecolnum.projectapi.DTO.ResultImportListDto;
 import fr.ecolnum.projectapi.exception.MultipartFileIsNotCsvException;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
+import fr.ecolnum.projectapi.repository.GroupRepository;
 import fr.ecolnum.projectapi.service.CandidateService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,6 +43,7 @@ public class CandidateServiceUnitTest {
 
     private final CandidateRepository candidateRepository;
 
+    private final GroupRepository groupRepository;
     private final CandidateService candidateService;
 
     private final MockMultipartFile csvMock;
@@ -52,7 +54,8 @@ public class CandidateServiceUnitTest {
     public CandidateServiceUnitTest() throws IOException {
         this.homeRepository = "/home/aurelien/Documents/java/project-api";
         this.candidateRepository = Mockito.mock(CandidateRepository.class);
-        this.candidateService = new CandidateService(homeRepository, candidateRepository);
+        this.groupRepository = Mockito.mock(GroupRepository.class);
+        this.candidateService = new CandidateService(homeRepository, candidateRepository, groupRepository);
 
         //as test are always launch in home folder, we can put it without absolute path
         InputStream archiveFile = new FileInputStream("src/test/resources/test/candidate/test.zip");
@@ -146,6 +149,7 @@ public class CandidateServiceUnitTest {
         //returning if regex is found
         return matcher.find();
     }
+
     private static <E> int getIterableSize(Iterable<E> iterable) {
         int cpt = 0;
         for (E element : iterable) {

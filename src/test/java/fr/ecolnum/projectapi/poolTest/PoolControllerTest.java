@@ -4,8 +4,7 @@ package fr.ecolnum.projectapi.poolTest;
 import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.controller.PoolController;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
-import fr.ecolnum.projectapi.exception.PoolNotMatchingException;
-import fr.ecolnum.projectapi.model.Pool;
+import fr.ecolnum.projectapi.exception.IdNotMatchingException;
 import fr.ecolnum.projectapi.service.PoolService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -123,41 +122,41 @@ public class PoolControllerTest {
     }
 
     @Test
-    void testModifyPoolNoError() throws IdNotFoundException, PoolNotMatchingException {
+    void testModifyPoolNoError() throws IdNotFoundException, IdNotMatchingException {
         int idDto = 3;
         PoolDto poolDto = new PoolDto();
         PoolDto mockReturn = new PoolDto();
-        when(poolService.modifyPool(idDto,poolDto))
+        when(poolService.modifyPool(idDto, poolDto))
                 .thenReturn(mockReturn);
 
-        ResponseEntity<?> resultController = poolController.modifyPool(idDto,poolDto);
+        ResponseEntity<?> resultController = poolController.modifyPool(idDto, poolDto);
 
         assert (resultController.getStatusCode() == HttpStatus.OK &&
                 resultController.getBody() == mockReturn);
     }
 
     @Test
-    void testModifyPoolWithErrorIdNotFound() throws IdNotFoundException, PoolNotMatchingException {
+    void testModifyPoolWithErrorIdNotFound() throws IdNotFoundException, IdNotMatchingException {
         PoolDto poolTested = new PoolDto();
         int poolIdTested = 1;
 
-        when(poolService.modifyPool(poolIdTested,poolTested))
+        when(poolService.modifyPool(poolIdTested, poolTested))
                 .thenThrow(IdNotFoundException.class);
 
-        ResponseEntity<?> responseEntity = poolController.modifyPool(poolIdTested,poolTested);
+        ResponseEntity<?> responseEntity = poolController.modifyPool(poolIdTested, poolTested);
 
         assert (responseEntity.getStatusCode() == HttpStatus.CONFLICT);
     }
 
     @Test
-    void testModifyPoolWithErrorPoolNotMatching() throws IdNotFoundException, PoolNotMatchingException {
+    void testModifyPoolWithErrorPoolNotMatching() throws IdNotFoundException, IdNotMatchingException {
         PoolDto poolTested = new PoolDto();
         int poolIdTested = 1;
 
-        when(poolService.modifyPool(poolIdTested,poolTested))
-                .thenThrow(PoolNotMatchingException.class);
+        when(poolService.modifyPool(poolIdTested, poolTested))
+                .thenThrow(IdNotMatchingException.class);
 
-        ResponseEntity<?> responseEntity = poolController.modifyPool(poolIdTested,poolTested);
+        ResponseEntity<?> responseEntity = poolController.modifyPool(poolIdTested, poolTested);
 
         assert (responseEntity.getStatusCode() == HttpStatus.CONFLICT);
     }

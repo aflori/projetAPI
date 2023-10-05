@@ -1,8 +1,9 @@
 package fr.ecolnum.projectapi.controller;
 
+import fr.ecolnum.projectapi.DTO.GroupDto;
 import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
-import fr.ecolnum.projectapi.exception.PoolNotMatchingException;
+import fr.ecolnum.projectapi.exception.IdNotMatchingException;
 import fr.ecolnum.projectapi.service.PoolService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -53,7 +54,7 @@ public class PoolController {
     }
 
     /**
-     * @param pool
+     * @param pool DtoObject with necessary data for pool creation
      * @return pool created
      */
     @Operation(summary = "Create a pool", description = "Add a new Pool object to the database.")
@@ -63,7 +64,7 @@ public class PoolController {
             responseCode = "201"
     )
     public ResponseEntity<?> createPool(@RequestBody PoolDto pool) {
-        PoolDto createdPool = null;
+        PoolDto createdPool;
         try {
             createdPool = poolService.createPool(pool);
             return new ResponseEntity<>(createdPool, HttpStatus.CREATED);
@@ -72,8 +73,25 @@ public class PoolController {
         }
     }
 
+    @Operation(summary = "add a group of candidate to a pool",
+            description = "add a group of candidate to the pool corresponding to the URL id (before group) ")
+    @PutMapping("/{id}/group")
+    @ApiResponse(
+            description = "Return the list of group added to pool.",
+            responseCode = "201"
+    )
+    public ResponseEntity<?> addGroup(@RequestBody GroupDto groupDto, @PathVariable int id) {
+        GroupDto addedGroup;
+        try {
+            addedGroup = poolService.addGroup(groupDto, id);
+            return new ResponseEntity<>(addedGroup, HttpStatus.OK);
+        } catch (IdNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
     /**
-     * @param poolId
+     * @param poolId           id of the pool which will be modified
      * @param poolModification it's pool's modification with her id / we add a new object like (candidate, Criteria, observer)
      * @return return just a status
      */
@@ -84,11 +102,11 @@ public class PoolController {
             responseCode = "201"
     )
     public ResponseEntity<?> modifyPool(@PathVariable int poolId, @RequestBody PoolDto poolModification) {
-        PoolDto poolModified = null;
+        PoolDto poolModified;
         try {
             poolModified = poolService.modifyPool(poolId, poolModification);
             return new ResponseEntity<>(poolModified, HttpStatus.OK);
-        } catch (IdNotFoundException | PoolNotMatchingException e) {
+        } catch (IdNotFoundException | IdNotMatchingException e) {
             return new ResponseEntity<>("{\"Error\" :\"" + e.getMessage() + "\"}", HttpStatus.CONFLICT);
         }
     }

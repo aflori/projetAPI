@@ -3,10 +3,12 @@ package fr.ecolnum.projectapi.observerTest;
 
 import fr.ecolnum.projectapi.DTO.ObserverDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
+import fr.ecolnum.projectapi.exception.NameNotFoundException;
 import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.repository.ObserverRepository;
 import fr.ecolnum.projectapi.repository.PoolRepository;
+import fr.ecolnum.projectapi.repository.RoleRepository;
 import fr.ecolnum.projectapi.service.ObserverService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,8 +20,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 import java.util.Set;
 
-import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
 @SpringBootTest
@@ -35,9 +37,11 @@ public class ObserverServiceTest {
     PoolRepository poolRepository;
     @Mock
     ObserverDto observerDtoTest;
+    @Mock
+    RoleRepository roleRepository;
 
     @Test
-    public void testFunctionCreate() throws IdNotFoundException {
+    public void testFunctionCreate() throws IdNotFoundException, NameNotFoundException {
 
         //observer tested value
 
@@ -129,9 +133,9 @@ public class ObserverServiceTest {
                     (id == 1 && poolAssociated.containsAll(
                             List.of(new Integer[]{1, 3})
                     )) ||
-                    (id == 3 && poolAssociated.containsAll(
-                            List.of(new Integer[]{2,5})
-                    ))
+                            (id == 3 && poolAssociated.containsAll(
+                                    List.of(new Integer[]{2, 5})
+                            ))
             );
 
             numberElement++;

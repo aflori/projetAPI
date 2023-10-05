@@ -3,6 +3,7 @@ package fr.ecolnum.projectapi.observerTest;
 import fr.ecolnum.projectapi.DTO.ObserverDto;
 import fr.ecolnum.projectapi.controller.ObserverController;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
+import fr.ecolnum.projectapi.exception.NameNotFoundException;
 import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.service.ObserverService;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -33,7 +33,7 @@ public class ObserverControllerTest {
 
 
     @Test
-    public void testEndpointCreateObserver() throws IdNotFoundException {
+    public void testEndpointCreateObserver() throws IdNotFoundException, NameNotFoundException {
 
         //mock for working correctly test
         Observer originObserver = new Observer(1, null, null, null, null);

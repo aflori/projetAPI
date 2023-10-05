@@ -1,4 +1,4 @@
-package fr.ecolnum.projectapi;
+package fr.ecolnum.projectapi.criteriaService;
 
 import fr.ecolnum.projectapi.model.Criteria;
 import fr.ecolnum.projectapi.repository.CriteriaRepository;

@@ -2,7 +2,9 @@ package fr.ecolnum.projectapi.DTO;
 
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.model.Candidate;
+import fr.ecolnum.projectapi.model.Group;
 import fr.ecolnum.projectapi.model.Pool;
+import fr.ecolnum.projectapi.repository.GroupRepository;
 import fr.ecolnum.projectapi.repository.PoolRepository;
 
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ public class CandidateDto {
      * create an object for the list which are integers
      */
     private List<Integer> evaluatedIn;
+    private List<Integer> belongsToGroup;
 
     public CandidateDto() {
     }
@@ -57,6 +60,14 @@ public class CandidateDto {
         this.lastName = lastName;
     }
 
+    public CandidateDto(String firstName, String lastName, List<Integer> belongsToGroup) {
+        this.id = 0;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.belongsToGroup = belongsToGroup;
+    }
+
+
     public CandidateDto(CandidateDto candidate) {
         this.id = candidate.id;
         this.firstName = candidate.firstName;
@@ -67,11 +78,11 @@ public class CandidateDto {
         this.evaluatedIn = List.copyOf(candidate.evaluatedIn);
     }
 
-    public Candidate convertToCandidateObject(final PoolRepository poolRepository) throws IdNotFoundException {
+    public Candidate convertToCandidateObject(final PoolRepository poolRepository, final GroupRepository groupRepository) throws IdNotFoundException {
 
         Set<Pool> evaluatedIn = extractSetFromRepository(poolRepository, this.evaluatedIn);
-
-        return new Candidate(this.id, this.firstName, this.lastName, this.photoName, evaluatedIn);
+        Set<Group> belongsTo = extractSetFromRepository(groupRepository, this.belongsToGroup);
+        return new Candidate(this.id, this.firstName, this.lastName, this.photoName, evaluatedIn, belongsTo);
 
     }
 

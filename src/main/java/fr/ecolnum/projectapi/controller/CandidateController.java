@@ -3,6 +3,7 @@ package fr.ecolnum.projectapi.controller;
 import fr.ecolnum.projectapi.DTO.ResultImportListDto;
 import fr.ecolnum.projectapi.exception.*;
 import fr.ecolnum.projectapi.DTO.CandidateDto;
+import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.service.CandidateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -35,6 +36,7 @@ public class CandidateController {
      * @return the candidate created with Http code 201
      * @author aflori
      */
+
     @PostMapping
     @Operation(
             summary = "Create a new candidate",
@@ -72,6 +74,7 @@ public class CandidateController {
      * @param photoCandidate photo of checked candidate
      * @return Candidate created if candidate did not already exist, if not, a message with multiples choice http code
      */
+
     @PostMapping("/checkDuplicate")
     @Operation(
             summary = "Check for duplicate candidate in the database then create it",

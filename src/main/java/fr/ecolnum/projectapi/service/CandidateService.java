@@ -5,6 +5,7 @@ import fr.ecolnum.projectapi.DTO.CandidateDto;
 import fr.ecolnum.projectapi.DTO.ResultImportListDto;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
+import fr.ecolnum.projectapi.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,10 +33,14 @@ public class CandidateService {
     private String homePath;
 
     private CandidateRepository candidateRepository;
+    private GroupRepository groupRepository;
 
-    public CandidateService(@Value("${homePath}") String homePath, @Autowired CandidateRepository candidateRepository) {
+    public CandidateService(@Value("${homePath}") String homePath,
+                            @Autowired CandidateRepository candidateRepository,
+                            @Autowired GroupRepository groupRepository) {
         this.homePath = homePath;
         this.candidateRepository = candidateRepository;
+        this.groupRepository = groupRepository;
     }
 
     /**
@@ -44,7 +49,7 @@ public class CandidateService {
      * @param firstName      candidate's first  name
      * @param lastName       candidate's last name
      * @param photoCandidate photo object of the associated candidate
-     * @return the candidate (with its new ID and photo URL) created
+     * @return the candidate (with its new ID and photo pass) created
      */
     public CandidateDto createCandidate(String firstName, String lastName, MultipartFile photoCandidate) throws MultipartFileIsNotImageException, FileNotUpdatableException {
         String temporaryFolderName = homePath + temporaryPhotoFolder;
@@ -101,7 +106,6 @@ public class CandidateService {
         return firstName.equalsIgnoreCase(firstNameCandidate) && lastName.equalsIgnoreCase(lastNameDBCandidate);
     }
 
-
     /**
      * service to return a list of candidate that has the same first name  and last name as the one given in parameter
      *
@@ -116,7 +120,8 @@ public class CandidateService {
         Set<CandidateDto> duplicateCandidate = new HashSet<>();
 
         for (Candidate dbCandidate : candidateList) {
-            if (this.isSamePerson(firstName, lastName, dbCandidate)) {
+            Candidate actualCandidate = new Candidate(firstName,lastName);
+            if (actualCandidate.equals(dbCandidate)) {
                 duplicateCandidate.add(new CandidateDto(dbCandidate));
             }
         }

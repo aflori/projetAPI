@@ -35,6 +35,11 @@ public class Candidate {
 
     @ManyToMany(mappedBy = "evaluates")
     private Set<Pool> evaluatedIn;
+    /**
+     * Un candidat peut avoir plusieurs groupes / objet groupIn pour la list des groupes
+     */
+    @ManyToMany(mappedBy = "containedCandidates")
+    private Set<Group> belongsTo;
 
     public Candidate() {
     }
@@ -51,6 +56,21 @@ public class Candidate {
     public Candidate(int i, String firstName, String lastName) {
         this(firstName, lastName);
         this.id = i;
+    }
+
+    public Candidate(int i, String firstName, String lastName, Set<Group> belongsTo) {
+        this(firstName, lastName);
+        this.id = i;
+        this.belongsTo = belongsTo;
+    }
+
+    public Candidate(int id, String firstName, String lastName, String photoName, Set<Pool> evaluatedIn, Set<Group> belongsTo) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.photoName = photoName;
+        this.evaluatedIn = evaluatedIn;
+        this.belongsTo = belongsTo;
     }
 
     public Candidate(int id, String firstName, String lastName, String photoName, Set<Pool> evaluatedIn) {
@@ -111,12 +131,20 @@ public class Candidate {
         this.photoName = photoName;
     }
 
+    public Set<Group> getBelongsTo() {
+        return belongsTo;
+    }
+
+    public void setBelongsTo(Set<Group> belongsTo) {
+        this.belongsTo = belongsTo;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Candidate candidate = (Candidate) o;
-        return id == candidate.id && Objects.equals(firstName, candidate.firstName) && Objects.equals(lastName, candidate.lastName);
+        return Objects.equals(firstName, candidate.firstName) && Objects.equals(lastName, candidate.lastName);
     }
 
     @Override

@@ -1,12 +1,9 @@
 package fr.ecolnum.projectapi.repository;
 
-import fr.ecolnum.projectapi.model.Pool;
+import fr.ecolnum.projectapi.model.Group;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-/**
- * interface use crud by extends
- */
 @Repository
-public interface PoolRepository extends JpaRepository<Pool, Integer> {
+public interface GroupRepository extends JpaRepository<Group, Integer> {
 }

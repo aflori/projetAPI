@@ -29,6 +29,9 @@ public class Observer {
     @ManyToMany(mappedBy = "containedObservers")
     private Set<Pool> observeIn;
 
+    @ManyToMany(fetch = FetchType.EAGER) //load relation by default
+    private Set<Role> roles;
+
     public Observer(int id, String lastName, String firstName, String email, String password) {
         this.id = id;
         this.lastName = lastName;
@@ -95,5 +98,13 @@ public class Observer {
 
     public void setObserveIn(Set<Pool> observeIn) {
         this.observeIn = observeIn;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

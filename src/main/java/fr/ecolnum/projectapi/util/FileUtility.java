@@ -151,17 +151,17 @@ public class FileUtility {
         mapToUpdate.put(photoName, new File(photoPath.toUri()));
     }
 
-    public static void deleteFolderContentExcept(File folder, Function<File,Boolean> exception) {
+    public static void deleteFolderContentExcept(File folder, Function<File, Boolean> exception) {
         File[] files = folder.listFiles();
-        if(files!= null) {
-            for(File file: files) {
+        if (files != null) {
+            for (File file : files) {
 
-                if(isNotSupposedToBeDeleted(exception, file)) {
+                if (isNotSupposedToBeDeleted(exception, file)) {
                     continue;
                 }
 
-                if(file.isDirectory()) {
-                    deleteFolder(file,exception);
+                if (file.isDirectory()) {
+                    deleteFolder(file, exception);
                 } else {
                     file.delete();
                 }

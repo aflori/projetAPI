@@ -34,19 +34,20 @@ public class PoolServiceTest {
 
 
     @Test
-    public void testGetAllPools(){
+    public void testGetAllPools() {
 
     }
 
     @Test
-    public  void testFindByIdNoException() {
+    public void testFindByIdNoException() {
 
     }
 
     @Test
-    public void testFindByIdWithException(){
+    public void testFindByIdWithException() {
 
     }
+
     @Test
     public void testCreatePoolNoException() {
 
@@ -58,12 +59,12 @@ public class PoolServiceTest {
     }
 
     @Test
-    public void testModifyPoolNoException(){
+    public void testModifyPoolNoException() {
 
     }
 
     @Test
-    public void testModifyPoolIdNotFoundException(){
+    public void testModifyPoolIdNotFoundException() {
 
     }
 
