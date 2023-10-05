@@ -41,7 +41,7 @@ public class Group {
         this.name = name;
     }
 
-    public Group(int id, String name, Pool belongsToPool) {
+    public Group(int id, String name, Pool belongsToPool, Set<Candidate> containedCandidates) {
         this.id = id;
         this.name = name;
         this.belongsToPool = belongsToPool;

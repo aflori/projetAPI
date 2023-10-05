@@ -6,6 +6,7 @@ import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.model.Group;
 import fr.ecolnum.projectapi.repository.GroupRepository;
+import fr.ecolnum.projectapi.repository.PoolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
@@ -20,8 +21,11 @@ public class GroupService {
     private GroupRepository groupRepository;
     @Autowired
     private CandidateRepository candidateRepository;
+    @Autowired
+    private PoolRepository poolRepository;
+
     public GroupDto createGroup(GroupDto groupDto) throws IdNotFoundException {
-        Group group = groupDto.convertToGroupObject(candidateRepository);
+        Group group = groupDto.convertToGroupObject(candidateRepository, poolRepository);
         group = groupRepository.save(group);
         return new GroupDto(group);
     }
@@ -44,15 +48,19 @@ public class GroupService {
         }
         return allGroupDto;
     }
-    public Candidate addToGroup(CandidateDto candidateDto, Integer groupId) throws IdNotFoundException {
+    public GroupDto addToGroup(int candidateId, Integer groupId) throws IdNotFoundException {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new IdNotFoundException("Group not found with id: " + groupId));
-        Candidate candidate = candidateDto.convertToCandidateObject();
+        Optional<Candidate> optionalCandidate = candidateRepository.findById(candidateId);
 
-        group.getContainedCandidates().add(candidate);
+        if (optionalCandidate.isEmpty()) {
+            throw new IdNotFoundException("Candidate not found with id: " + candidateId);
+        }
 
-        groupRepository.save(group);
+        group.getContainedCandidates().add(optionalCandidate.get());
 
-        return candidate;
+        group = groupRepository.save(group);
+
+        return new GroupDto(group);
     }
 }

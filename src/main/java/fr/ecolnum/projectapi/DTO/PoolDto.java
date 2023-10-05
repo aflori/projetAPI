@@ -1,12 +1,10 @@
 package fr.ecolnum.projectapi.DTO;
 
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
-import fr.ecolnum.projectapi.model.Candidate;
-import fr.ecolnum.projectapi.model.Criteria;
-import fr.ecolnum.projectapi.model.Observer;
-import fr.ecolnum.projectapi.model.Pool;
+import fr.ecolnum.projectapi.model.*;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
 import fr.ecolnum.projectapi.repository.CriteriaRepository;
+import fr.ecolnum.projectapi.repository.GroupRepository;
 import fr.ecolnum.projectapi.repository.ObserverRepository;
 import java.sql.Timestamp;
 import static fr.ecolnum.projectapi.util.GenericUtility.*;
@@ -32,7 +30,7 @@ public class PoolDto {
     private List<Integer> containedCandidate;
     private List<Integer> containedCriterias;
     private List<Integer> containedObservers;
-    private List<Integer> existIn;
+    private List<Integer> containedGroups;
     public PoolDto() {
     }
 
@@ -57,6 +55,9 @@ public class PoolDto {
         Set<Criteria> evaluateCriteria = pool.getContainedCriterias();
         containedCriterias = new ArrayList<>();
 
+        Set<Group> containsGroups = pool.getContainsGroups();
+        containedGroups = new ArrayList<>();
+
         if (evaluateCriteria != null) {
             for (Criteria criteriaList : evaluateCriteria) {
                 containedCriterias.add(criteriaList.getId());
@@ -72,20 +73,29 @@ public class PoolDto {
                 containedCandidate.add(candidateList.getId());
             }
         }
+        if (containsGroups != null) {
+            for (Group groupList : containsGroups) {
+                containedCandidate.add(groupList.getId());
+            }
+        }
     }
 
     public Pool convertToPoolObject(final CandidateRepository candidateRepository,
                                     final CriteriaRepository criteriaRepository,
-                                    final ObserverRepository observerRepository)
+                                    final ObserverRepository observerRepository,
+                                    final GroupRepository groupRepository)
             throws IdNotFoundException {
 
-        Set<Candidate> evaluates = extractSetFromRepository(candidateRepository, containedCandidate);
+        Set<Candidate> containedCandidate = extractSetFromRepository(candidateRepository, this.containedCandidate);
 
         Set<Criteria> containedCriteria = extractSetFromRepository(criteriaRepository, this.containedCriterias);
 
-        Set<Observer> containedObserver = extractSetFromRepository(observerRepository, containedObservers);
+        Set<Observer> containedObserver = extractSetFromRepository(observerRepository, this.containedObservers);
 
-        return new Pool(this.id, this.name, this.startDate, this.endDate, this.location, existIn, evaluates, containedCriteria, containedObserver);
+        Set<Group> containedGroup = extractSetFromRepository(groupRepository, this.containedGroups);
+
+
+        return new Pool(this.id, this.name, this.startDate, this.endDate, this.location, containedGroup, containedCandidate, containedCriteria, containedObserver);
     }
 
     public int getId() {
@@ -152,11 +162,11 @@ public class PoolDto {
         this.containedObservers = containedObservers;
     }
 
-    public List<Integer> getExistIn() {
-        return existIn;
+    public List<Integer> getContainedGroups() {
+        return containedGroups;
     }
 
-    public void setExistIn(List<Integer> existIn) {
-        this.existIn = existIn;
+    public void setContainedGroups(List<Integer> containedGroups) {
+        this.containedGroups = containedGroups;
     }
 }

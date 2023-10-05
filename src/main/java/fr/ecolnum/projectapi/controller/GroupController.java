@@ -39,13 +39,13 @@ public class GroupController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
-    @PostMapping("/{groupId}")
-    public ResponseEntity<?> addToGroup(@RequestBody CandidateDto candidate, @PathVariable Integer groupId){
+    @PutMapping("/{groupId}")
+    public ResponseEntity<?> addToGroup(@RequestBody int candidateId, @PathVariable Integer groupId){
         try {
-            Candidate addedToGroup = groupService.addToGroup(candidate, groupId);
-            return new ResponseEntity<>(addedToGroup, HttpStatus.OK);
+            GroupDto group = groupService.addToGroup(candidateId, groupId);
+            return new ResponseEntity<>(group, HttpStatus.OK);
         } catch (IdNotFoundException e) {
-            throw new RuntimeException(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
     @Operation(summary = "Return all group", description = "Return the list of all the group from the database.")

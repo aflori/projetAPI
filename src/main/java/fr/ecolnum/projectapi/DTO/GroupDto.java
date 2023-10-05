@@ -2,11 +2,13 @@ package fr.ecolnum.projectapi.DTO;
 
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.model.*;
-import fr.ecolnum.projectapi.repository.CandidateRepository;
 import fr.ecolnum.projectapi.model.Group;
+import fr.ecolnum.projectapi.repository.CandidateRepository;
+import fr.ecolnum.projectapi.repository.PoolRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static fr.ecolnum.projectapi.util.GenericUtility.extractSetFromRepository;
@@ -15,8 +17,7 @@ public class GroupDto {
     private int id;
     private String name;
     private List<Integer> containedCandidates;
-    private List<Integer> existIn;
-    private Pool belongsToPool;
+    private int belongsToPool;
 
     public GroupDto() {
     }
@@ -38,11 +39,21 @@ public class GroupDto {
                 containedCandidates.add(candidateList.getId());
             }
         }
-    }
 
-    public Group convertToGroupObject(final CandidateRepository candidateRepository) throws IdNotFoundException {
+        Pool pool = group.getBelongsToPool();
+        if (pool != null) {
+            this.belongsToPool= pool.getId();
+        }
+
+    }
+    public Group convertToGroupObject(final CandidateRepository candidateRepository, final PoolRepository poolRepository) throws IdNotFoundException {
         Set<Candidate> belongsTo = extractSetFromRepository(candidateRepository, containedCandidates);
-        return new Group(this.id, this.name, (Pool) this.containedCandidates);
+        Optional<Pool> optionalBelongsToPool = poolRepository.findById(this.belongsToPool);
+        if (optionalBelongsToPool.isEmpty()) {
+            throw new IdNotFoundException();
+        }
+        Pool belongsToPool = optionalBelongsToPool.get();
+        return new Group(this.id, this.name, belongsToPool , belongsTo);
     }
 
     public List<Integer> getContainedCandidates() {
@@ -52,20 +63,11 @@ public class GroupDto {
     public void setContainedCandidates(List<Integer> containedCandidates) {
         this.containedCandidates = containedCandidates;
     }
-
-    public List<Integer> getExistIn() {
-        return existIn;
-    }
-
-    public void setExistIn(List<Integer> existIn) {
-        this.existIn = existIn;
-    }
-
-    public Pool getBelongsToPool() {
+    public int getBelongsToPool() {
         return belongsToPool;
     }
 
-    public void setBelongsToPool(Pool belongsToPool) {
+    public void setBelongsToPool(int belongsToPool) {
         this.belongsToPool = belongsToPool;
     }
 

@@ -27,10 +27,10 @@ public class Pool {
     @Column(name = "location", nullable = false)
     private String location;
     /**
-     * une piscine peut avoir plsusieurs groupes
+     * one pool could have many group
      */
     @OneToMany(mappedBy = "belongsToPool")
-       private Set<Group> existIn;
+       private Set<Group> containsGroups;
 
     @ManyToMany
     @JoinTable(
@@ -58,30 +58,30 @@ public class Pool {
     private Set<Observer> containedObservers;
 
     public Pool(Integer id, String name, Timestamp startDate, Timestamp endDate, String location,
-                Set<Group> existIn, Set<Candidate> evaluates, Set<Criteria> containedCriterias, Set<Observer> containedObservers) {
+                Set<Group> containsGroups, Set<Candidate> evaluates, Set<Criteria> containedCriterias, Set<Observer> containedObservers) {
         this.id = id;
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.location = location;
-        this.existIn = existIn;
+        this.containsGroups = containsGroups;
         this.evaluates = evaluates;
         this.containedCriterias = containedCriterias;
         this.containedObservers = containedObservers;
     }
 
-    public Pool(Set<Group> existIn) {
-
-        this.existIn = existIn;
-    }
+//    public Pool(Set<Group> containsGroups) {
+//
+//        this.containsGroups = containsGroups;
+//    }
 
     public Pool() {
 
     }
 
-    public Pool(int id, String name, Timestamp startDate, Timestamp endDate, String location, List<Integer> existIn, Set<Candidate> evaluates, Set<Criteria> containedCriteria, Set<Observer> containedObserver) {
-
-    }
+//    public Pool(int id, String name, Timestamp startDate, Timestamp endDate, String location, List<Integer> containsGroups, Set<Candidate> evaluates, Set<Criteria> containedCriteria, Set<Observer> containedObserver) {
+//
+//    }
 
 
     public Integer getId() {
@@ -146,5 +146,13 @@ public class Pool {
 
     public void setContainedObservers(Set<Observer> containedObservers) {
         this.containedObservers = containedObservers;
+    }
+
+    public Set<Group> getContainsGroups() {
+        return containsGroups;
+    }
+
+    public void setContainsGroups(Set<Group> containsGroups) {
+        this.containsGroups = containsGroups;
     }
 }

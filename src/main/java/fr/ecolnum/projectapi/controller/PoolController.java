@@ -1,8 +1,10 @@
 package fr.ecolnum.projectapi.controller;
 
+import fr.ecolnum.projectapi.DTO.GroupDto;
 import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.exception.PoolNotMatchingException;
+import fr.ecolnum.projectapi.model.Group;
 import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.service.PoolService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 public class PoolController {
     @Autowired
     private PoolService poolService;
-
     /**
      * @return all pools
      */
@@ -72,7 +73,21 @@ public class PoolController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
-
+    @Operation(summary = "Create a pool", description = "Add a new Pool object to the database.")
+    @PutMapping("/{id}/group")
+    @ApiResponse(
+            description = "Return pools list and the OK HTTP response",
+            responseCode = "201"
+    )
+    public ResponseEntity<?> addGroup(@RequestBody GroupDto groupDto, @PathVariable int id) {
+        GroupDto addedGroup;
+        try {
+            addedGroup = poolService.addGroup(groupDto, id);
+            return new ResponseEntity<>(addedGroup, HttpStatus.OK);
+        } catch (IdNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
     /**
      * @param poolId
      * @param poolModification it's pool's modification with her id / we add a new object like (candidate, Criteria, observer)
