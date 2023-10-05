@@ -25,7 +25,8 @@ import static fr.ecolnum.projectapi.util.GenericUtility.convertStringToJsonData;
 @Secured("ROLE_ADMIN")
 public class ObserverController {
 
-    private final ObserverService observerService;
+
+    private ObserverService observerService;
 
     @Autowired
     public ObserverController(ObserverService observerService) {
