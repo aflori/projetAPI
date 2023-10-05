@@ -42,10 +42,11 @@ public class GroupDto {
 
         Pool pool = group.getBelongsToPool();
         if (pool != null) {
-            this.belongsToPool= pool.getId();
+            this.belongsToPool = pool.getId();
         }
 
     }
+
     public Group convertToGroupObject(final CandidateRepository candidateRepository, final PoolRepository poolRepository) throws IdNotFoundException {
         Set<Candidate> belongsTo = extractSetFromRepository(candidateRepository, containedCandidates);
         Optional<Pool> optionalBelongsToPool = poolRepository.findById(this.belongsToPool);
@@ -53,7 +54,7 @@ public class GroupDto {
             throw new IdNotFoundException();
         }
         Pool belongsToPool = optionalBelongsToPool.get();
-        return new Group(this.id, this.name, belongsToPool , belongsTo);
+        return new Group(this.id, this.name, belongsToPool, belongsTo);
     }
 
     public List<Integer> getContainedCandidates() {
@@ -63,6 +64,7 @@ public class GroupDto {
     public void setContainedCandidates(List<Integer> containedCandidates) {
         this.containedCandidates = containedCandidates;
     }
+
     public int getBelongsToPool() {
         return belongsToPool;
     }

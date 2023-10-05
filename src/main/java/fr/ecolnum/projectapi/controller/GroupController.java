@@ -23,6 +23,7 @@ import static fr.ecolnum.projectapi.util.GenericUtility.convertStringToJsonData;
 public class GroupController {
     @Autowired
     private GroupService groupService;
+
     @Operation(summary = "Create a group", description = "Add a new Group object to the database.")
     @PostMapping
     @ApiResponse(
@@ -34,13 +35,13 @@ public class GroupController {
         try {
             createdGroup = groupService.createGroup(group);
             return new ResponseEntity<>(createdGroup, HttpStatus.CREATED);
-        }
-        catch (IdNotFoundException e) {
+        } catch (IdNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
+
     @PutMapping("/{groupId}")
-    public ResponseEntity<?> addToGroup(@RequestBody int candidateId, @PathVariable Integer groupId){
+    public ResponseEntity<?> addToGroup(@RequestBody int candidateId, @PathVariable Integer groupId) {
         try {
             GroupDto group = groupService.addToGroup(candidateId, groupId);
             return new ResponseEntity<>(group, HttpStatus.OK);
@@ -48,6 +49,7 @@ public class GroupController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
     @Operation(summary = "Return all group", description = "Return the list of all the group from the database.")
     @GetMapping
     @ApiResponse(
@@ -58,6 +60,7 @@ public class GroupController {
         Iterable<GroupDto> groupList = groupService.getAllGroup();
         return new ResponseEntity<>(groupList, HttpStatus.OK);
     }
+
     @Operation(summary = "Return groups by id", description = "Return group by id from the database.")
     @GetMapping("/{id}")
     @ApiResponse(

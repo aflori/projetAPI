@@ -30,7 +30,7 @@ public class Pool {
      * one pool could have many group
      */
     @OneToMany(mappedBy = "belongsToPool")
-       private Set<Group> containsGroups;
+    private Set<Group> containsGroups;
 
     @ManyToMany
     @JoinTable(
@@ -79,10 +79,10 @@ public class Pool {
 
     }
 
-//    public Pool(int id, String name, Timestamp startDate, Timestamp endDate, String location, List<Integer> containsGroups, Set<Candidate> evaluates, Set<Criteria> containedCriteria, Set<Observer> containedObserver) {
-//
-//    }
 
+    public Pool(Integer id) {
+        this.id = id;
+    }
 
     public Integer getId() {
         return id;

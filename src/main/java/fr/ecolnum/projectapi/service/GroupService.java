@@ -29,6 +29,7 @@ public class GroupService {
         group = groupRepository.save(group);
         return new GroupDto(group);
     }
+
     public GroupDto findById(int id) throws IdNotFoundException {
         Optional<Group> optionnalGroup = groupRepository.findById(id);
 
@@ -39,6 +40,7 @@ public class GroupService {
         final Group group = optionnalGroup.get();
         return new GroupDto(group);
     }
+
     public Iterable<GroupDto> getAllGroup() {
         Iterable<Group> allGroup = groupRepository.findAll();
         Set<GroupDto> allGroupDto = new HashSet<>();
@@ -48,6 +50,7 @@ public class GroupService {
         }
         return allGroupDto;
     }
+
     public GroupDto addToGroup(int candidateId, Integer groupId) throws IdNotFoundException {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new IdNotFoundException("Group not found with id: " + groupId));

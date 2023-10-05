@@ -30,6 +30,7 @@ public class Group {
             inverseJoinColumns = @JoinColumn(name = "candidate_id")
     )
     private Set<Candidate> containedCandidates;
+
     /**
      * Construct empty and with id and name
      */

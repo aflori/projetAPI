@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface CriteriaRepository extends JpaRepository<Criteria, Integer> {
+    Criteria findByName(String name);
 }

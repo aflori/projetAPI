@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class PoolController {
     @Autowired
     private PoolService poolService;
+
     /**
      * @return all pools
      */
@@ -73,6 +74,7 @@ public class PoolController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
+
     @Operation(summary = "Create a pool", description = "Add a new Pool object to the database.")
     @PutMapping("/{id}/group")
     @ApiResponse(
@@ -88,6 +90,7 @@ public class PoolController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
+
     /**
      * @param poolId
      * @param poolModification it's pool's modification with her id / we add a new object like (candidate, Criteria, observer)

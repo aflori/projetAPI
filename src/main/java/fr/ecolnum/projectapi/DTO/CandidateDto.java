@@ -27,6 +27,7 @@ public class CandidateDto {
      */
     private List<Integer> evaluatedIn;
     private List<Integer> belongsToGroup;
+
     public CandidateDto() {
     }
 
@@ -58,17 +59,20 @@ public class CandidateDto {
 
         return new Candidate(this.id, this.firstName, this.lastName, belongsTo);
     }
+
     public CandidateDto(String firstName, String lastName) {
         this.id = 0;
         this.firstName = firstName;
         this.lastName = lastName;
     }
-    public CandidateDto(String firstName, String lastName,List<Integer> belongsToGroup) {
+
+    public CandidateDto(String firstName, String lastName, List<Integer> belongsToGroup) {
         this.id = 0;
         this.firstName = firstName;
         this.lastName = lastName;
         this.belongsToGroup = belongsToGroup;
     }
+
     public Candidate convertToCandidateObject(final PoolRepository poolRepository) throws IdNotFoundException {
 
         Set<Pool> evaluatedIn = extractSetFromRepository(poolRepository, this.evaluatedIn);
