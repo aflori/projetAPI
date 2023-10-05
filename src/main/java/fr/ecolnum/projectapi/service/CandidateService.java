@@ -29,11 +29,14 @@ public class CandidateService {
     private final static String temporaryPhotoFolder = "/assets/tempPhoto/";
 
     // get the project directory from application.properties
-    @Value("${homePath}")
     private String homePath;
 
-    @Autowired
     private CandidateRepository candidateRepository;
+
+    public CandidateService(@Value("${homePath}") String homePath, @Autowired CandidateRepository candidateRepository) {
+        this.homePath = homePath;
+        this.candidateRepository = candidateRepository;
+    }
 
     /**
      * this method create a candidate in the database and import a photo in local
