@@ -1,8 +1,10 @@
 package fr.ecolnum.projectapi.controller;
 
+import fr.ecolnum.projectapi.DTO.GroupDto;
 import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.exception.PoolNotMatchingException;
+import fr.ecolnum.projectapi.model.Group;
 import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.service.PoolService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,7 +49,7 @@ public class PoolController {
     )
     public ResponseEntity<?> getPoolById(@PathVariable(value = "id") int id) {
         try {
-            return new ResponseEntity<>(poolService.finById(id), HttpStatus.OK);
+            return new ResponseEntity<>(poolService.findById(id), HttpStatus.OK);
         } catch (IdNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -68,6 +70,22 @@ public class PoolController {
         try {
             createdPool = poolService.createPool(pool);
             return new ResponseEntity<>(createdPool, HttpStatus.CREATED);
+        } catch (IdNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    @Operation(summary = "Create a pool", description = "Add a new Pool object to the database.")
+    @PutMapping("/{id}/group")
+    @ApiResponse(
+            description = "Return pools list and the OK HTTP response",
+            responseCode = "201"
+    )
+    public ResponseEntity<?> addGroup(@RequestBody GroupDto groupDto, @PathVariable int id) {
+        GroupDto addedGroup;
+        try {
+            addedGroup = poolService.addGroup(groupDto, id);
+            return new ResponseEntity<>(addedGroup, HttpStatus.OK);
         } catch (IdNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }

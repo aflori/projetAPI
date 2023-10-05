@@ -5,6 +5,7 @@ import fr.ecolnum.projectapi.exception.FileNotUpdatableException;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.exception.MultipartFileIsNotImageException;
 import fr.ecolnum.projectapi.DTO.CandidateDto;
+import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.service.CandidateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -72,6 +73,7 @@ public class CandidateController {
      * @param photoCandidate photo of checked candidate
      * @return Candidate created if candidate did not already exist, if not, a message with multiples choice http code
      */
+
     @PostMapping("/checkDuplicate")
     @Operation(
             summary = "Check for duplicate candidate in the database then create it",
@@ -100,7 +102,8 @@ public class CandidateController {
     }
 
     /**
-     *  function to get all candidate registered
+     * function to get all candidate registered
+     *
      * @return a list of candidate
      */
     @Operation(
@@ -119,7 +122,8 @@ public class CandidateController {
     }
 
     /**
-     *  endpoint to return a specific candidate
+     * endpoint to return a specific candidate
+     *
      * @param id if of the candidate we are searching for
      * @return candidate containing the good id
      */
@@ -154,7 +158,7 @@ public class CandidateController {
     )
     public ResponseEntity<?> getDuplicateNameCandidate(@RequestBody CandidateDto candidate) {
         Iterable<CandidateDto> listDuplicate = candidateService.returnDuplicate(candidate);
-        return  new ResponseEntity<>(listDuplicate, HttpStatus.OK);
+        return new ResponseEntity<>(listDuplicate, HttpStatus.OK);
     }
 
 }
