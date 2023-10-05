@@ -189,7 +189,9 @@ public class CandidateService {
 
             //removing unused file in temporary folder (except .gitkeep)
             File tempFolder = new File(tempFolderName);
-            deleteFolderContent(tempFolder);
+            deleteFolderContentExcept(tempFolder,
+                    (file) -> ".gitkeep".equals(file.getName())
+            );
 
             return new ResultImportListDto(importedCandidate, duplicateCandidate, candidateWithoutPhoto);
         } catch (FileNotUpdatableException e) {

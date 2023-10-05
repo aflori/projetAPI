@@ -13,6 +13,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Function;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -150,16 +151,17 @@ public class FileUtility {
         mapToUpdate.put(photoName, new File(photoPath.toUri()));
     }
 
-    public static void deleteFolderContent(File folder) {
+    public static void deleteFolderContentExcept(File folder, Function<File,Boolean> exception) {
         File[] files = folder.listFiles();
         if(files!= null) {
             for(File file: files) {
-                if(file.getName().equals(".gitkeep")) {
+
+                if(isNotSupposedToBeDeleted(exception, file)) {
                     continue;
                 }
 
                 if(file.isDirectory()) {
-                    deleteFolder(file);
+                    deleteFolder(file,exception);
                 } else {
                     file.delete();
                 }
@@ -167,8 +169,12 @@ public class FileUtility {
         }
     }
 
-    public static void deleteFolder(File folder) {
-        deleteFolderContent(folder);
+    private static boolean isNotSupposedToBeDeleted(Function<File, Boolean> exception, File file) {
+        return exception.apply(file);
+    }
+
+    public static void deleteFolder(File folder, Function<File, Boolean> exception) {
+        deleteFolderContentExcept(folder, exception);
         folder.delete();
     }
 }
