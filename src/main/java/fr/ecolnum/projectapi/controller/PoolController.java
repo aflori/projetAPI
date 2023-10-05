@@ -3,7 +3,6 @@ package fr.ecolnum.projectapi.controller;
 import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.exception.PoolNotMatchingException;
-import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.service.PoolService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -47,7 +46,7 @@ public class PoolController {
     )
     public ResponseEntity<?> getPoolById(@PathVariable(value = "id") int id) {
         try {
-            return new ResponseEntity<>(poolService.finById(id), HttpStatus.OK);
+            return new ResponseEntity<>(poolService.findById(id), HttpStatus.OK);
         } catch (IdNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
