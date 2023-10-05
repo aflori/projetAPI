@@ -1,8 +1,10 @@
 package fr.ecolnum.projectapi.DTO;
 
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
+import fr.ecolnum.projectapi.model.Category;
 import fr.ecolnum.projectapi.model.Criteria;
 import fr.ecolnum.projectapi.model.Pool;
+import fr.ecolnum.projectapi.repository.CategoryRepository;
 import fr.ecolnum.projectapi.repository.PoolRepository;
 
 import java.util.ArrayList;
@@ -50,10 +52,10 @@ public class CriteriaDto {
         }
     }
 
-    public Criteria convertToCriteriaObject(final PoolRepository poolRepository) throws IdNotFoundException {
+    public Criteria convertToCriteriaObject(final PoolRepository poolRepository, final CategoryRepository categoryRepository) throws IdNotFoundException {
         Set<Pool> existsIn = extractSetFromRepository(poolRepository, this.existInPool);
-
-        return new Criteria(this.id, this.name, this.description, existsIn);
+        Set<Category> belongsToCategory = extractSetFromRepository(categoryRepository, belongsToCategory);
+        return new Criteria(this.id, this.name, this.description, existsIn, belongsToCategory);
     }
 
     public int getId() {
