@@ -1,8 +1,10 @@
 package fr.ecolnum.projectapi.service;
 
+import fr.ecolnum.projectapi.DTO.GroupDto;
 import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.exception.IdNotMatchingException;
+import fr.ecolnum.projectapi.model.Group;
 import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +72,13 @@ public class PoolService {
         Pool modifiedPool = modifiedPoolDTO.convertToPoolObject(candidateRepository, criteriaRepository, observerRepository, groupRepository);
         modifiedPool = poolRepository.save(modifiedPool);
         return new PoolDto(modifiedPool);
+    }
+
+    public GroupDto addGroup(GroupDto groupDto, int poolId) throws IdNotFoundException {
+        groupDto.setBelongsToPool(poolId);
+        Group group = groupDto.convertToGroupObject(candidateRepository, poolRepository);
+        group = groupRepository.save(group);
+        return new GroupDto(group);
     }
 }
 

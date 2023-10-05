@@ -1,5 +1,6 @@
 package fr.ecolnum.projectapi.controller;
 
+import fr.ecolnum.projectapi.DTO.GroupDto;
 import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
 import fr.ecolnum.projectapi.exception.IdNotMatchingException;
@@ -72,8 +73,24 @@ public class PoolController {
         }
     }
 
+    @Operation(summary = "Create a pool", description = "Add a new Pool object to the database.")
+    @PutMapping("/{id}/group")
+    @ApiResponse(
+            description = "Return pools list and the OK HTTP response",
+            responseCode = "201"
+    )
+    public ResponseEntity<?> addGroup(@RequestBody GroupDto groupDto, @PathVariable int id) {
+        GroupDto addedGroup;
+        try {
+            addedGroup = poolService.addGroup(groupDto, id);
+            return new ResponseEntity<>(addedGroup, HttpStatus.OK);
+        } catch (IdNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
     /**
-     * @param poolId id of the pool which will be modified
+     * @param poolId           id of the pool which will be modified
      * @param poolModification it's pool's modification with her id / we add a new object like (candidate, Criteria, observer)
      * @return return just a status
      */
