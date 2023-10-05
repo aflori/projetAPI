@@ -175,34 +175,19 @@ public class CandidateService {
         String tempFolderName = homePath + temporaryPhotoFolder;
         Path path = Paths.get(tempFolderName);
         try {
+            //extract data from multipartFile
             Set<String[]> listCandidateImported = parseCsvFile(csvFile);
             Map<String, File> listPhotoByName = getPhotoFromZipArchive(photoZip, path);
 
+            //initializing return field (int variable means "hey, my sets should not have more than maxSize element")
             int maxSize = listCandidateImported.size();
-
             Set<CandidateDto> importedCandidate = new HashSet<>(maxSize);
             Set<CandidateDto> duplicateCandidate = new HashSet<>(maxSize);
             Set<CandidateDto> candidateWithoutPhoto = new HashSet<>(maxSize);
 
-            for (String[] candidateData : listCandidateImported) {
+            runThroughCsvCandidateAndInitializeSet(listCandidateImported, listPhotoByName, candidateWithoutPhoto, duplicateCandidate, importedCandidate);
 
-                if(candidateData.length != 3) {
-                    continue;
-                }
-                String firstName = candidateData[0];
-                String lastName = candidateData[1];
-                File photoFile = listPhotoByName.get(candidateData[2]);
-                if (photoFile == null) {
-                    candidateWithoutPhoto.add(new CandidateDto(firstName, lastName));
-                } else if (hasDuplicate(firstName, lastName)) {
-                    duplicateCandidate.add(new CandidateDto(firstName, lastName));
-                } else {
-                    CandidateDto candidateAdded = this.createCandidate(firstName, lastName, photoFile);
-                    listPhotoByName.remove(candidateData[2]); //should not be used again if another candidate has the same photo
-                    importedCandidate.add(candidateAdded);
-                }
-            }
-
+            //removing unused file in temporary folder (except .gitkeep)
             File tempFolder = new File(tempFolderName);
             deleteFolderContent(tempFolder);
 
@@ -213,6 +198,43 @@ public class CandidateService {
             return null;
         }
 
+    }
+
+    private void runThroughCsvCandidateAndInitializeSet(Set<String[]> listCandidate, Map<String, File> mapPhotoByName,
+                                                        Set<CandidateDto> setToInitializeCandidateNoPhoto,
+                                                        Set<CandidateDto> setToInitializeCandidateDuplicate,
+                                                        Set<CandidateDto> setToInitializeImportedCandidate) throws MultipartFileIsNotImageException {
+        for (String[] candidateData : listCandidate) {
+
+            if (isNotACandidate(candidateData)) {
+                continue;  // wi ignore the line
+            }
+            //initializing datas
+            String firstName = candidateData[0];
+            String lastName = candidateData[1];
+            File photoFile = mapPhotoByName.get(candidateData[2]);
+
+            if (photoFile == null) {
+
+                setToInitializeCandidateNoPhoto.add(new CandidateDto(firstName, lastName));
+
+            } else if (hasDuplicate(firstName, lastName)) {
+
+                setToInitializeCandidateDuplicate.add(new CandidateDto(firstName, lastName));
+
+            } else {
+                //importing candidate
+                CandidateDto candidateAdded = this.createCandidate(firstName, lastName, photoFile);
+                setToInitializeImportedCandidate.add(candidateAdded);
+
+                //the photo does not exist in temporary file anymore
+                mapPhotoByName.remove(candidateData[2]);
+            }
+        }
+    }
+
+    private static boolean isNotACandidate(String[] candidateData) {
+        return candidateData.length != 3;
     }
 
     protected CandidateDto createCandidate(String firstName, String lastName, File photo) throws MultipartFileIsNotImageException {
@@ -245,5 +267,6 @@ public class CandidateService {
         newCandidateSaved = candidateRepository.save(newCandidateSaved); // saved photoName
 
         return new CandidateDto(newCandidateSaved);
+
     }
 }
