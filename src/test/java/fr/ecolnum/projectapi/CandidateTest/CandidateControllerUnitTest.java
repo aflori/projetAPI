@@ -5,15 +5,18 @@ import fr.ecolnum.projectapi.DTO.CandidateDto;
 import fr.ecolnum.projectapi.DTO.ResultImportListDto;
 import fr.ecolnum.projectapi.controller.CandidateController;
 import fr.ecolnum.projectapi.exception.MultipartFileIsNotAnArchiveException;
+import fr.ecolnum.projectapi.security.SecurityConfig;
 import fr.ecolnum.projectapi.service.CandidateService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -31,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = CandidateController.class)
+@ImportAutoConfiguration(classes = SecurityConfig.class)
 public class CandidateControllerUnitTest {
 
     @Autowired
@@ -42,7 +46,7 @@ public class CandidateControllerUnitTest {
     @MockBean
     private CandidateService candidateService;
 
-    @Test
+    @Test @WithMockUser(roles = "ADMIN")
     public void testGetOrdersList() throws Exception {
 
         InputStream csvFile = new FileInputStream("src/test/resources/test/candidate/test.csv");
@@ -83,7 +87,7 @@ public class CandidateControllerUnitTest {
                 .andExpect(jsonPath("$.photoMissing", hasSize(2)));
     }
 
-    @Test
+    @Test @WithMockUser(roles = "ADMIN")
     public void testGetOrdersListMultipartException() throws Exception {
 
         InputStream csvFile = new FileInputStream("src/test/resources/test/candidate/test.csv");
@@ -108,7 +112,7 @@ public class CandidateControllerUnitTest {
         assertEquals(contentResult, "toto");
     }
 
-    @Test
+    @Test @WithMockUser(roles = "ADMIN")
     public void testGetOrdersListIOException() throws Exception {
 
         InputStream csvFile = new FileInputStream("src/test/resources/test/candidate/test.csv");
