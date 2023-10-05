@@ -54,12 +54,6 @@ public class CandidateDto {
         }
     }
 
-    public Candidate convertToCandidateObject(final GroupRepository groupRepository) throws IdNotFoundException {
-        Set<Group> belongsTo = extractSetFromRepository(groupRepository, this.belongsToGroup);
-
-        return new Candidate(this.id, this.firstName, this.lastName, belongsTo);
-    }
-
     public CandidateDto(String firstName, String lastName) {
         this.id = 0;
         this.firstName = firstName;
@@ -73,11 +67,11 @@ public class CandidateDto {
         this.belongsToGroup = belongsToGroup;
     }
 
-    public Candidate convertToCandidateObject(final PoolRepository poolRepository) throws IdNotFoundException {
+    public Candidate convertToCandidateObject(final PoolRepository poolRepository, final GroupRepository groupRepository) throws IdNotFoundException {
 
         Set<Pool> evaluatedIn = extractSetFromRepository(poolRepository, this.evaluatedIn);
-
-        return new Candidate(this.id, this.firstName, this.lastName, this.photoName, evaluatedIn);
+        Set<Group> belongsTo = extractSetFromRepository(groupRepository, this.belongsToGroup);
+        return new Candidate(this.id, this.firstName, this.lastName, this.photoName, evaluatedIn, belongsTo);
 
     }
 
