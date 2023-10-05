@@ -19,12 +19,16 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import static fr.ecolnum.projectapi.util.FileUtility.deleteFolderContentExcept;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -43,9 +47,12 @@ public class CandidateServiceUnitTest {
     private final MockMultipartFile csvMock;
     private final MockMultipartFile archiveMock;
 
+    private final String homeRepository;
+
     public CandidateServiceUnitTest() throws IOException {
+        this.homeRepository = "/home/aurelien/Documents/java/project-api";
         this.candidateRepository = Mockito.mock(CandidateRepository.class);
-        this.candidateService = new CandidateService("/home/aurelien/Documents/java/project-api",candidateRepository);
+        this.candidateService = new CandidateService(homeRepository, candidateRepository);
 
         //as test are always launch in home folder, we can put it without absolute path
         InputStream archiveFile = new FileInputStream("src/test/resources/test/candidate/test.zip");
@@ -87,7 +94,7 @@ public class CandidateServiceUnitTest {
         when(candidateRepository.findByLastNameEquals(eq("nom8")))
                 .thenReturn(
                         List.of(
-                                new Candidate("prénom8","nom8")
+                                new Candidate("prénom8", "nom8")
                         )
                 );
         //eq function needs an override of .equals() method in Candidate class
@@ -121,8 +128,24 @@ public class CandidateServiceUnitTest {
         assertEquals(getIterableSize(failedDuplicate), 1);
 
         assertEquals(getIterableSize(failedNoPhoto), 3);
+
+        File candidateFile = new File(homeRepository, "assets/candidatePhoto");
+
+        //clean up of created fake photo (all photo containing a negative number are removed)
+        deleteFolderContentExcept(candidateFile,
+                (file -> !hasANegativeNumber(file.getName()))
+        );
     }
 
+    public static boolean hasANegativeNumber(String string) {
+        //regex definition
+        Pattern pattern = Pattern.compile("-[0-9]");
+        //application to parameter
+        Matcher matcher = pattern.matcher(string);
+
+        //returning if regex is found
+        return matcher.find();
+    }
     private static <E> int getIterableSize(Iterable<E> iterable) {
         int cpt = 0;
         for (E element : iterable) {
