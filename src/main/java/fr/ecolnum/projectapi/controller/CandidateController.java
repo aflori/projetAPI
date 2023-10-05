@@ -104,7 +104,7 @@ public class CandidateController {
 
     @PostMapping("/list")
     @Operation(
-            summary = "Import a list of candidate into database with a boolean for duplicate",
+            summary = "Import a list of candidate into the database and return the result",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "a csv file containing for each candidate a first name, last name and a photo name," +
                             "and a folder containing all the candidate photo",
@@ -112,7 +112,7 @@ public class CandidateController {
             )
     )
     @ApiResponse(
-            description = "candidates created by server or duplicated",
+            description = "3 lists of candidate, one for imported candidates, one for duplicate and the last for candidate without photo",
             responseCode = "201 or 300"
     )
     public ResponseEntity<?> importList(@RequestPart MultipartFile listCsv, @RequestPart MultipartFile photoFolder) {

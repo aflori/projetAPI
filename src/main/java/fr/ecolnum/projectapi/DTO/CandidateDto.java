@@ -68,16 +68,6 @@ public class CandidateDto {
     }
 
 
-    public CandidateDto(CandidateDto candidate) {
-        this.id = candidate.id;
-        this.firstName = candidate.firstName;
-        this.lastName = candidate.lastName;
-        this.photoName = candidate.photoName;
-        // I don't want to change the original Dto id list by changing this one
-        // so I put a copy by using List.copyOf()
-        this.evaluatedIn = List.copyOf(candidate.evaluatedIn);
-    }
-
     public Candidate convertToCandidateObject(final PoolRepository poolRepository, final GroupRepository groupRepository) throws IdNotFoundException {
 
         Set<Pool> evaluatedIn = extractSetFromRepository(poolRepository, this.evaluatedIn);
