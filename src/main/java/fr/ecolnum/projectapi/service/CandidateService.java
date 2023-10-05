@@ -6,7 +6,9 @@ import fr.ecolnum.projectapi.exception.MultipartFileIsNotImageException;
 import fr.ecolnum.projectapi.exception.CandidateAlreadyExistsException;
 import fr.ecolnum.projectapi.DTO.CandidateDto;
 import fr.ecolnum.projectapi.model.Candidate;
+import fr.ecolnum.projectapi.model.Group;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
+import fr.ecolnum.projectapi.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -36,10 +38,12 @@ public class CandidateService {
     @Autowired
     private CandidateRepository candidateRepository;
 
+    @Autowired
+    private GroupRepository groupRepository;
+
     /**
      * this method create a candidate in the database and import a photo in local
      *
-     * @param candidate      candidate to be created in database
      * @param photoCandidate photo object of the associated candidate
      * @return the candidate (with its new ID and photo URL) created
      */
@@ -115,7 +119,8 @@ public class CandidateService {
     }
 
     /**
-     *  service to return a list of candidate that has the same first name  and last name as the one given in parameter
+     * service to return a list of candidate that has the same first name  and last name as the one given in parameter
+     *
      * @param candidate the referent candidate
      * @return a list of candidate with the same first name and last name
      */
@@ -138,6 +143,7 @@ public class CandidateService {
 
     /**
      * function made to return a list of candidate present in the repository
+     *
      * @return a list of all existing candidate
      */
     public Iterable<CandidateDto> getAllCandidate() {
@@ -151,7 +157,8 @@ public class CandidateService {
     }
 
     /**
-     *  function made to return a specific candidate
+     * function made to return a specific candidate
+     *
      * @param id id of the wanted candidate
      * @return the candidate with the parameter id
      * @throws IdNotFoundException if the id is not given in database
