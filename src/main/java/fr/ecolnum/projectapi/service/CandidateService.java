@@ -183,6 +183,9 @@ public class CandidateService {
 
             for (String[] candidateData : listCandidateImported) {
 
+                if(candidateData.length != 3) {
+                    continue;
+                }
                 String firstName = candidateData[0];
                 String lastName = candidateData[1];
                 File photoFile = listPhotoByName.get(candidateData[2]);
