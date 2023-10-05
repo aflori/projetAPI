@@ -230,7 +230,7 @@ public class CandidateService {
 
         Candidate newCandidateSaved = candidateRepository.save(candidate);
 
-        String photoName = candidate.getFirstName() + '_' + candidate.getLastName() + '_' + candidate.getId() + extensionPhoto;
+        String photoName = newCandidateSaved.getFirstName() + '_' + newCandidateSaved.getLastName() + '_' + newCandidateSaved.getId() + extensionPhoto;
 
         File newFile = changeFileName(photo, homeFolder, photoName);
 
