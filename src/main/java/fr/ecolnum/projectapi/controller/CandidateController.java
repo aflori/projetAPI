@@ -36,7 +36,8 @@ public class CandidateController {
      * @return the candidate created with Http code 201
      * @author aflori
      */
-    @PostMapping
+
+@PostMapping
     @Operation(
             summary = "Create a new candidate",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(

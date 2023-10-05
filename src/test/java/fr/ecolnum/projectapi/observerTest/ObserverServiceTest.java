@@ -3,6 +3,7 @@ package fr.ecolnum.projectapi.observerTest;
 
 import fr.ecolnum.projectapi.DTO.ObserverDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
+import fr.ecolnum.projectapi.exception.NameNotFoundException;
 import fr.ecolnum.projectapi.model.Observer;
 import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.repository.ObserverRepository;
@@ -14,12 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.util.List;
 import java.util.Set;
 
-import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
 @SpringBootTest
@@ -37,7 +37,7 @@ public class ObserverServiceTest {
     ObserverDto observerDtoTest;
 
     @Test
-    public void testFunctionCreate() throws IdNotFoundException {
+    public void testFunctionCreate() throws IdNotFoundException, NameNotFoundException {
 
         //observer tested value
 

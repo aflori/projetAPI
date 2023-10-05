@@ -3,9 +3,7 @@ package fr.ecolnum.projectapi.controller;
 import fr.ecolnum.projectapi.DTO.GroupDto;
 import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
-import fr.ecolnum.projectapi.exception.PoolNotMatchingException;
-import fr.ecolnum.projectapi.model.Group;
-import fr.ecolnum.projectapi.model.Pool;
+import fr.ecolnum.projectapi.exception.IdNotMatchingException;
 import fr.ecolnum.projectapi.service.PoolService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -49,14 +47,14 @@ public class PoolController {
     )
     public ResponseEntity<?> getPoolById(@PathVariable(value = "id") int id) {
         try {
-            return new ResponseEntity<>(poolService.findById(id), HttpStatus.OK);
+            return new ResponseEntity<>(poolService.finById(id), HttpStatus.OK);
         } catch (IdNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     /**
-     * @param pool
+     * @param pool DtoObject with necessary data for pool creation
      * @return pool created
      */
     @Operation(summary = "Create a pool", description = "Add a new Pool object to the database.")
@@ -66,7 +64,7 @@ public class PoolController {
             responseCode = "201"
     )
     public ResponseEntity<?> createPool(@RequestBody PoolDto pool) {
-        PoolDto createdPool = null;
+        PoolDto createdPool;
         try {
             createdPool = poolService.createPool(pool);
             return new ResponseEntity<>(createdPool, HttpStatus.CREATED);
@@ -92,7 +90,7 @@ public class PoolController {
     }
 
     /**
-     * @param poolId
+     * @param poolId           id of the pool which will be modified
      * @param poolModification it's pool's modification with her id / we add a new object like (candidate, Criteria, observer)
      * @return return just a status
      */
@@ -103,11 +101,11 @@ public class PoolController {
             responseCode = "201"
     )
     public ResponseEntity<?> modifyPool(@PathVariable int poolId, @RequestBody PoolDto poolModification) {
-        PoolDto poolModified = null;
+        PoolDto poolModified;
         try {
             poolModified = poolService.modifyPool(poolId, poolModification);
             return new ResponseEntity<>(poolModified, HttpStatus.OK);
-        } catch (IdNotFoundException | PoolNotMatchingException e) {
+        } catch (IdNotFoundException | IdNotMatchingException e) {
             return new ResponseEntity<>("{\"Error\" :\"" + e.getMessage() + "\"}", HttpStatus.CONFLICT);
         }
     }

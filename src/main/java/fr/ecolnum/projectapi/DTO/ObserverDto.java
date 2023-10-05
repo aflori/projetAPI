@@ -66,7 +66,6 @@ public class ObserverDto {
 
     public Observer convertToObserverObject(final PoolRepository poolRepository) throws IdNotFoundException {
         Set<Pool> observeIn = extractSetFromRepository(poolRepository, this.containInPool);
-
         return new Observer(this.id, this.lastName, this.firstName, this.email, this.password, observeIn);
     }
 
