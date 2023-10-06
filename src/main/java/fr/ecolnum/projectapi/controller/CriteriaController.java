@@ -1,7 +1,10 @@
 package fr.ecolnum.projectapi.controller;
 
 import fr.ecolnum.projectapi.DTO.CriteriaDto;
+import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
+import fr.ecolnum.projectapi.exception.IdNotMatchingException;
+import fr.ecolnum.projectapi.model.Criteria;
 import fr.ecolnum.projectapi.service.CriteriaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -48,5 +51,19 @@ public class CriteriaController {
         return new ResponseEntity<>(criteriaList, HttpStatus.OK);
     }
 
-
+    @Operation(summary = "Return modified criteria", description = "Return the criteria modified from the database.")
+    @PutMapping("/{criteriaId}")
+    @ApiResponse(
+            description = "Return criteria modified and the OK HTTP response",
+            responseCode = "201"
+    )
+    public ResponseEntity<?> modifyCriteria(@PathVariable int criteriaId, @RequestBody CriteriaDto criteriaModification) {
+        CriteriaDto criteriaModified;
+        try {
+            criteriaModified = criteriaService.modifyCriteria(criteriaId, criteriaModification);
+            return new ResponseEntity<>(criteriaModified, HttpStatus.OK);
+        } catch (IdNotFoundException | IdNotMatchingException e) {
+            return new ResponseEntity<>("{\"Error\" :\"" + e.getMessage() + "\"}", HttpStatus.CONFLICT);
+        }
+    }
 }

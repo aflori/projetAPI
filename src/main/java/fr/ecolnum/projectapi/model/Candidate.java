@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ManyToMany;
 
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -51,6 +52,7 @@ public class Candidate {
         this.photoName = null;
     }
 
+
     public Candidate(int i, String firstName, String lastName) {
         this(firstName, lastName);
         this.id = i;
@@ -77,7 +79,6 @@ public class Candidate {
         this.lastName = lastName;
         this.photoName = photoName;
         this.evaluatedIn = evaluatedIn;
-
     }
 
     public int getId() {
@@ -136,5 +137,18 @@ public class Candidate {
 
     public void setBelongsTo(Set<Group> belongsTo) {
         this.belongsTo = belongsTo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Candidate candidate = (Candidate) o;
+        return Objects.equals(firstName, candidate.firstName) && Objects.equals(lastName, candidate.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName);
     }
 }

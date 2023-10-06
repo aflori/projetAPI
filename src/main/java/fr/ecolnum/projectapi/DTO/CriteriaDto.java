@@ -1,12 +1,15 @@
 package fr.ecolnum.projectapi.DTO;
 
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
+import fr.ecolnum.projectapi.model.Category;
 import fr.ecolnum.projectapi.model.Criteria;
 import fr.ecolnum.projectapi.model.Pool;
+import fr.ecolnum.projectapi.repository.CategoryRepository;
 import fr.ecolnum.projectapi.repository.PoolRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static fr.ecolnum.projectapi.util.GenericUtility.extractSetFromRepository;
@@ -24,6 +27,7 @@ public class CriteriaDto {
      * create an object for the list which are integers
      */
     private List<Integer> existInPool;
+    private Integer belongsToCategory;
 
     public CriteriaDto() {
     }
@@ -35,6 +39,7 @@ public class CriteriaDto {
         this.id = criteria.getId();
         this.name = criteria.getName();
         this.description = criteria.getDescription();
+        this.belongsToCategory = criteria.getBelongsToCategory().getId();
         /**
          * transform the pool list in object existsIn which contain an ArrayList
          */
@@ -50,10 +55,13 @@ public class CriteriaDto {
         }
     }
 
-    public Criteria convertToCriteriaObject(final PoolRepository poolRepository) throws IdNotFoundException {
+    public Criteria convertToCriteriaObject(final PoolRepository poolRepository, final CategoryRepository categoryRepository) throws IdNotFoundException {
         Set<Pool> existsIn = extractSetFromRepository(poolRepository, this.existInPool);
-
-        return new Criteria(this.id, this.name, this.description, existsIn);
+        Optional<Category> belongsToCategory = categoryRepository.findById(this.belongsToCategory);
+        if (belongsToCategory.isEmpty()){
+            throw new IdNotFoundException("This category doesnt exist, Id : "+this.belongsToCategory) ;
+        }
+        return new Criteria(this.id, this.name, this.description, existsIn, belongsToCategory.get());
     }
 
     public int getId() {
@@ -86,5 +94,13 @@ public class CriteriaDto {
 
     public void setExistInPool(List<Integer> existInPool) {
         this.existInPool = existInPool;
+    }
+
+    public Integer getBelongsToCategory() {
+        return belongsToCategory;
+    }
+
+    public void setBelongsToCategory(Integer belongsToCategory) {
+        this.belongsToCategory = belongsToCategory;
     }
 }

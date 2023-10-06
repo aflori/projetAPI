@@ -23,11 +23,16 @@ public class Criteria {
     @ManyToMany(mappedBy = "containedCriterias")
     private Set<Pool> existsIn;
 
-    public Criteria(int id, String name, String description, Set<Pool> existsIn) {
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category belongsToCategory;
+
+    public Criteria(int id, String name, String description, Set<Pool> existsIn, Category belongsToCategory) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.existsIn = existsIn;
+        this.belongsToCategory = belongsToCategory;
     }
 
     public Criteria() {
@@ -63,5 +68,13 @@ public class Criteria {
 
     public void setExistsIn(Set<Pool> existsIn) {
         this.existsIn = existsIn;
+    }
+
+    public Category getBelongsToCategory() {
+        return belongsToCategory;
+    }
+
+    public void setBelongsToCategory(Category belongsToCategory) {
+        this.belongsToCategory = belongsToCategory;
     }
 }

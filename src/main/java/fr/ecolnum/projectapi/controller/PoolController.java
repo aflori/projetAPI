@@ -47,7 +47,7 @@ public class PoolController {
     )
     public ResponseEntity<?> getPoolById(@PathVariable(value = "id") int id) {
         try {
-            return new ResponseEntity<>(poolService.finById(id), HttpStatus.OK);
+            return new ResponseEntity<>(poolService.findById(id), HttpStatus.OK);
         } catch (IdNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -73,10 +73,11 @@ public class PoolController {
         }
     }
 
-    @Operation(summary = "Create a pool", description = "Add a new Pool object to the database.")
+    @Operation(summary = "add a group of candidate to a pool",
+            description = "add a group of candidate to the pool corresponding to the URL id (before group) ")
     @PutMapping("/{id}/group")
     @ApiResponse(
-            description = "Return pools list and the OK HTTP response",
+            description = "Return the list of group added to pool.",
             responseCode = "201"
     )
     public ResponseEntity<?> addGroup(@RequestBody GroupDto groupDto, @PathVariable int id) {

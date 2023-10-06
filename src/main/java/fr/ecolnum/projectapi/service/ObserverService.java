@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -42,6 +43,7 @@ public class ObserverService implements UserDetailsService {
 
     /**
      * This method is used to authenticate a user with his email from the database
+     *
      * @param email email of the user
      * @return details of the user with his authorities
      * @throws UsernameNotFoundException if email doesn't exist in the database
@@ -49,15 +51,14 @@ public class ObserverService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<Observer> observer = observerRepository.findByEmail(email);
-        if(observer.isEmpty()){
+        if (observer.isEmpty()) {
             throw new UsernameNotFoundException("User not exists by Email");
         }
         Set<GrantedAuthority> authorities = observer.get().getRoles().stream()
                 .map((role) -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toSet());
-        return new org.springframework.security.core.userdetails.User(email,observer.get().getPassword(),authorities);
+        return new org.springframework.security.core.userdetails.User(email, observer.get().getPassword(), authorities);
     }
-
 
 
     public ObserverDto createObserver(ObserverDto observerDto) throws IdNotFoundException, NameNotFoundException {
@@ -159,7 +160,7 @@ public class ObserverService implements UserDetailsService {
         }
 
         //if the received Role Set doesn't countain authorities ID we need to insert them
-        for(Role role : roleSet) {
+        for (Role role : roleSet) {
             Optional<Role> tableRole = roleRepository.findByName(role.getName());
             if (tableRole.isEmpty()) {
                 throw new NameNotFoundException("This name does not exist.");
