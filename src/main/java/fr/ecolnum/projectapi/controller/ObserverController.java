@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Set;
 
 import static fr.ecolnum.projectapi.util.GenericUtility.convertStringToJsonData;
@@ -24,7 +25,8 @@ import static fr.ecolnum.projectapi.util.GenericUtility.convertStringToJsonData;
 @Secured("ROLE_ADMIN")
 public class ObserverController {
 
-    private final ObserverService observerService;
+
+    private ObserverService observerService;
 
     @Autowired
     public ObserverController(ObserverService observerService) {
@@ -43,7 +45,7 @@ public class ObserverController {
         try {
             ObserverDto createdObserver = observerService.createObserver(observer);
             return new ResponseEntity<>(createdObserver, HttpStatus.CREATED);
-        } catch (IdNotFoundException|NameNotFoundException e) {
+        } catch (IdNotFoundException | NameNotFoundException e) {
             return new ResponseEntity<>(convertStringToJsonData(e.getMessage()), HttpStatus.CONFLICT);
         }
 
@@ -55,7 +57,7 @@ public class ObserverController {
             description = "Return the modified observer and the created HTTP response",
             responseCode = "201"
     )
-    @Secured({"ROLE_ADMIN","ROLE_USER"})
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     public ResponseEntity<?> editObserver(@PathVariable int id, @RequestBody ObserverDto observer) {
 
 
@@ -89,7 +91,7 @@ public class ObserverController {
         try {
             observerService.changeAuthorities(id, roleSet);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (IdNotFoundException|NameNotFoundException e) {
+        } catch (IdNotFoundException | NameNotFoundException e) {
             return new ResponseEntity<>(convertStringToJsonData(e.getMessage()), HttpStatus.CONFLICT);
         }
     }

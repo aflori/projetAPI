@@ -5,7 +5,6 @@ import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.repository.CandidateRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +27,7 @@ public class GenericUtilityTest {
     private CandidateRepository repository;
 
     @Test
-    public void testExtractSetFromRepository() {
+    public void testExtractSetFromRepository() throws Exception {
         List<Integer> listIdToTest = new ArrayList<>(List.of(1, 2, 3));
 
         //simulated behavior
@@ -56,12 +55,8 @@ public class GenericUtilityTest {
                 );
 
         //test if method get all object from list.
-        try {
-            Set<Candidate> setResult = extractSetFromRepository(repository, listIdToTest);
-            assertEquals(setResult.size(), listIdToTest.size());
-        } catch (IdNotFoundException e) {
-            fail();
-        }
+        Set<Candidate> setResult = extractSetFromRepository(repository, listIdToTest);
+        assertEquals(setResult.size(), listIdToTest.size());
 
         //add empty reference to the list
         listIdToTest.add(8);

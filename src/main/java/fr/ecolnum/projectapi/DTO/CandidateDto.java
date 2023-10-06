@@ -39,12 +39,12 @@ public class CandidateDto {
         this.firstName = candidate.getFirstName();
         this.lastName = candidate.getLastName();
         this.photoName = candidate.getPhotoName();
-        /**
+        /*
          * transform the pool list in object observeIn which contain an ArrayList
          */
         Set<Pool> observeIn = candidate.getEvaluatedIn();
         evaluatedIn = new ArrayList<>();
-        /**
+        /*
          * just take all id contain in pool List
          */
         if (observeIn != null) {
@@ -66,6 +66,7 @@ public class CandidateDto {
         this.lastName = lastName;
         this.belongsToGroup = belongsToGroup;
     }
+
 
     public Candidate convertToCandidateObject(final PoolRepository poolRepository, final GroupRepository groupRepository) throws IdNotFoundException {
 
@@ -113,9 +114,5 @@ public class CandidateDto {
 
     public void setEvaluatedIn(List<Integer> evaluatedIn) {
         this.evaluatedIn = evaluatedIn;
-    }
-
-    public Candidate convertToCandidateObject() {
-        return null;
     }
 }

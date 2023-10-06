@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  * interface use crud by extends
- */@Repository
+ */
+@Repository
 public interface PoolRepository extends JpaRepository<Pool, Integer> {
 }
