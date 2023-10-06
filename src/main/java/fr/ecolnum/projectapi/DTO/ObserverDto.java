@@ -42,23 +42,30 @@ public class ObserverDto {
         this.lastName = observer.getLastName();
         this.email = observer.getEmail();
         this.password = observer.getPassword();
-        /**
+        /*
          * transform the pool list in object observeIn which contain an ArrayList
          */
 
         Set<Pool> observeIn = observer.getObserveIn();
         containInPool = new ArrayList<>();
-        /**
+        /*
          * just take all id contain in pool List
          */
-        for (Pool poolList : observeIn) {
-            containInPool.add(poolList.getId());
+        if(observeIn != null) {
+            for (Pool poolList : observeIn) {
+                containInPool.add(poolList.getId());
+            }
         }
+    }
+
+    public ObserverDto(int id, String firstName, String lastName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public Observer convertToObserverObject(final PoolRepository poolRepository) throws IdNotFoundException {
         Set<Pool> observeIn = extractSetFromRepository(poolRepository, this.containInPool);
-
         return new Observer(this.id, this.lastName, this.firstName, this.email, this.password, observeIn);
     }
 

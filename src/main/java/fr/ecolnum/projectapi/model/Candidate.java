@@ -39,6 +39,7 @@ public class Candidate {
      */
     @ManyToMany(mappedBy = "containedCandidates")
     private Set<Group> belongsTo;
+
     public Candidate() {
     }
 
@@ -54,6 +55,7 @@ public class Candidate {
         this(firstName, lastName);
         this.id = i;
     }
+
     public Candidate(int i, String firstName, String lastName, Set<Group> belongsTo) {
         this(firstName, lastName);
         this.id = i;
@@ -68,6 +70,7 @@ public class Candidate {
         this.evaluatedIn = evaluatedIn;
         this.belongsTo = belongsTo;
     }
+
     public Candidate(int id, String firstName, String lastName, String photoName, Set<Pool> evaluatedIn) {
         this.id = id;
         this.firstName = firstName;

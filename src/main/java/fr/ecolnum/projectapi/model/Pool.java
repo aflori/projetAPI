@@ -3,6 +3,7 @@ package fr.ecolnum.projectapi.model;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -26,10 +27,10 @@ public class Pool {
     @Column(name = "location", nullable = false)
     private String location;
     /**
-     * une piscine peut avoir plsusieurs groupes
+     * one pool could have many group
      */
     @OneToMany(mappedBy = "belongsToPool")
-       private Set<Group> containIn;
+    private Set<Group> containsGroups;
 
     @ManyToMany
     @JoinTable(
@@ -57,26 +58,31 @@ public class Pool {
     private Set<Observer> containedObservers;
 
     public Pool(Integer id, String name, Timestamp startDate, Timestamp endDate, String location,
-                Set<Candidate> evaluates, Set<Criteria> containedCriterias, Set<Observer> containedObservers) {
+                Set<Group> containsGroups, Set<Candidate> evaluates, Set<Criteria> containedCriterias, Set<Observer> containedObservers) {
         this.id = id;
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.location = location;
+        this.containsGroups = containsGroups;
         this.evaluates = evaluates;
         this.containedCriterias = containedCriterias;
         this.containedObservers = containedObservers;
     }
 
-    public Pool(Set<Group> containIn) {
-
-        this.containIn = containIn;
-    }
+//    public Pool(Set<Group> containsGroups) {
+//
+//        this.containsGroups = containsGroups;
+//    }
 
     public Pool() {
 
     }
 
+
+    public Pool(Integer id) {
+        this.id = id;
+    }
 
     public Integer getId() {
         return id;
@@ -140,5 +146,13 @@ public class Pool {
 
     public void setContainedObservers(Set<Observer> containedObservers) {
         this.containedObservers = containedObservers;
+    }
+
+    public Set<Group> getContainsGroups() {
+        return containsGroups;
+    }
+
+    public void setContainsGroups(Set<Group> containsGroups) {
+        this.containsGroups = containsGroups;
     }
 }

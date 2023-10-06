@@ -3,7 +3,7 @@ package fr.ecolnum.projectapi.controller;
 import fr.ecolnum.projectapi.DTO.CriteriaDto;
 import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
-import fr.ecolnum.projectapi.exception.PoolNotMatchingException;
+import fr.ecolnum.projectapi.exception.IdNotMatchingException;
 import fr.ecolnum.projectapi.model.Criteria;
 import fr.ecolnum.projectapi.service.CriteriaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -62,7 +62,7 @@ public class CriteriaController {
         try {
             criteriaModified = criteriaService.modifyCriteria(criteriaId, criteriaModification);
             return new ResponseEntity<>(criteriaModified, HttpStatus.OK);
-        } catch (IdNotFoundException | PoolNotMatchingException e) {
+        } catch (IdNotFoundException | IdNotMatchingException e) {
             return new ResponseEntity<>("{\"Error\" :\"" + e.getMessage() + "\"}", HttpStatus.CONFLICT);
         }
     }

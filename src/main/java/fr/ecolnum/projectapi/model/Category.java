@@ -2,7 +2,9 @@ package fr.ecolnum.projectapi.model;
 
 import jakarta.persistence.*;
 
+
 import java.util.Set;
+
 
 @Entity
 public class Category {
@@ -13,13 +15,16 @@ public class Category {
     private String name;
     @OneToMany(mappedBy = "belongsToCategory")
     Set<Criteria> containsCriterias;
-    public Category(){
+
+    public Category() {
     }
+
     public Category(int id, String name, Set<Criteria> containsCriterias) {
         this.id = id;
         this.name = name;
         this.containsCriterias = containsCriterias;
     }
+
     public Integer getId() {
         return id;
     }

@@ -3,7 +3,7 @@ package fr.ecolnum.projectapi.service;
 import fr.ecolnum.projectapi.DTO.CriteriaDto;
 import fr.ecolnum.projectapi.DTO.PoolDto;
 import fr.ecolnum.projectapi.exception.IdNotFoundException;
-import fr.ecolnum.projectapi.exception.PoolNotMatchingException;
+import fr.ecolnum.projectapi.exception.IdNotMatchingException;
 import fr.ecolnum.projectapi.model.Criteria;
 import fr.ecolnum.projectapi.model.Pool;
 import fr.ecolnum.projectapi.repository.CategoryRepository;
@@ -46,9 +46,9 @@ public class CriteriaService {
 
         return allCriteriaDto;
     }
-    public CriteriaDto modifyCriteria(int criteriaId, CriteriaDto modifiedCriteriaDTO) throws IdNotFoundException, PoolNotMatchingException {
+    public CriteriaDto modifyCriteria(int criteriaId, CriteriaDto modifiedCriteriaDTO) throws IdNotFoundException, IdNotMatchingException {
         if (criteriaId != modifiedCriteriaDTO.getId()) {
-            throw new PoolNotMatchingException("Criteria Id from request does not match Id from criteriaDTO.");
+            throw new IdNotMatchingException("Criteria Id from request does not match Id from criteriaDTO.");
         }
         if (criteriaRepository.findById(criteriaId).isEmpty()) {
             throw new IdNotFoundException("This Criteria does not exist.");
