@@ -22,22 +22,22 @@ public class InitialDataLoader implements CommandLineRunner {
     @Autowired
     ObserverRepository observerRepository;
 
-    public InitialDataLoader(){
+    public InitialDataLoader() {
     }
 
     @Override
     public void run(String... args) throws NameNotFoundException {
-        if(roleRepository.findByName("ROLE_ADMIN").isEmpty()) {
+        if (roleRepository.findByName("ROLE_ADMIN").isEmpty()) {
             Role role = new Role();
             role.setName("ROLE_ADMIN");
             roleRepository.save(role);
         }
-        if(roleRepository.findByName("ROLE_USER").isEmpty()) {
+        if (roleRepository.findByName("ROLE_USER").isEmpty()) {
             Role role = new Role();
             role.setName("ROLE_USER");
             roleRepository.save(role);
         }
-        if(observerRepository.findByEmail("admin@gmail.com").isEmpty()) {
+        if (observerRepository.findByEmail("admin@gmail.com").isEmpty()) {
             Set<Role> adminRoles = new HashSet<>();
 
             Optional<Role> adminRole = roleRepository.findByName("ROLE_ADMIN");

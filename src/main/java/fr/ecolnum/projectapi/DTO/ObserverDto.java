@@ -51,7 +51,7 @@ public class ObserverDto {
         /*
          * just take all id contain in pool List
          */
-        if(observeIn != null) {
+        if (observeIn != null) {
             for (Pool poolList : observeIn) {
                 containInPool.add(poolList.getId());
             }

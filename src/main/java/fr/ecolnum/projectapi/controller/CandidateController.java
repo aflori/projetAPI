@@ -1,9 +1,7 @@
 package fr.ecolnum.projectapi.controller;
 
-import fr.ecolnum.projectapi.exception.CandidateAlreadyExistsException;
-import fr.ecolnum.projectapi.exception.FileNotUpdatableException;
-import fr.ecolnum.projectapi.exception.IdNotFoundException;
-import fr.ecolnum.projectapi.exception.MultipartFileIsNotImageException;
+import fr.ecolnum.projectapi.DTO.ResultImportListDto;
+import fr.ecolnum.projectapi.exception.*;
 import fr.ecolnum.projectapi.DTO.CandidateDto;
 import fr.ecolnum.projectapi.model.Candidate;
 import fr.ecolnum.projectapi.service.CandidateService;
@@ -14,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import static fr.ecolnum.projectapi.util.GenericUtility.convertStringToJsonData;
 
@@ -37,7 +37,7 @@ public class CandidateController {
      * @author aflori
      */
 
-@PostMapping
+    @PostMapping
     @Operation(
             summary = "Create a new candidate",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -91,7 +91,7 @@ public class CandidateController {
                                             @RequestPart String lastName,
                                             @RequestPart(name = "photo", required = false) MultipartFile photoCandidate) {
         try {
-            CandidateDto createdCandidate = candidateService.checkDuplicate(firstName, lastName, photoCandidate);
+            CandidateDto createdCandidate = candidateService.registerCandidateIfNotDuplicate(firstName, lastName, photoCandidate);
             return new ResponseEntity<>(createdCandidate, HttpStatus.CREATED);
         } catch (CandidateAlreadyExistsException e) {
             return new ResponseEntity<>(convertStringToJsonData(e.getMessage()), HttpStatus.MULTIPLE_CHOICES);
@@ -99,6 +99,31 @@ public class CandidateController {
             return new ResponseEntity<>(convertStringToJsonData(e.getMessage()), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
         } catch (FileNotUpdatableException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/list")
+    @Operation(
+            summary = "Import a list of candidate into the database and return the result",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "a csv file containing for each candidate a first name, last name and a photo name," +
+                            "and a folder containing all the candidate photo",
+                    required = true
+            )
+    )
+    @ApiResponse(
+            description = "3 lists of candidate, one for imported candidates, one for duplicate and the last for candidate without photo",
+            responseCode = "201 or 300"
+    )
+    public ResponseEntity<?> importList(@RequestPart MultipartFile listCsv, @RequestPart MultipartFile photoFolder) {
+
+        try {
+            ResultImportListDto listCandidate = candidateService.importCandidateList(listCsv, photoFolder);
+            return new ResponseEntity<>(listCandidate, HttpStatus.CREATED);
+        } catch (MultipartFileIsNotCsvException | MultipartFileIsNotAnArchiveException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+        } catch (IOException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -158,7 +183,7 @@ public class CandidateController {
             responseCode = "200"
     )
     public ResponseEntity<?> getDuplicateNameCandidate(@RequestBody CandidateDto candidate) {
-        Iterable<CandidateDto> listDuplicate = candidateService.returnDuplicate(candidate);
+        Iterable<CandidateDto> listDuplicate = candidateService.returnAllDuplicates(candidate);
         return new ResponseEntity<>(listDuplicate, HttpStatus.OK);
     }
 

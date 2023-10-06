@@ -29,7 +29,7 @@ public class Observer {
     @ManyToMany(mappedBy = "containedObservers")
     private Set<Pool> observeIn;
 
-    @ManyToMany(fetch=FetchType.EAGER) //load relation by default
+    @ManyToMany(fetch = FetchType.EAGER) //load relation by default
     private Set<Role> roles;
 
     public Observer(int id, String lastName, String firstName, String email, String password) {

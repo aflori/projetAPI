@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
-* This class declares settings for authentication and authorization
+ * This class declares settings for authentication and authorization
  */
 @Configuration
 @EnableMethodSecurity(
@@ -22,10 +22,10 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     /**
-    *This method return the encoder used for password
-    */
+     * This method return the encoder used for password
+     */
     @Bean
-    public static PasswordEncoder passwordEncoder(){
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -42,8 +42,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 //replaced by securedEnabled
-               .authorizeHttpRequests((requests) -> requests
-                        .anyRequest().permitAll() // no authentication needed for dev and test purpose
+                .authorizeHttpRequests((requests) -> requests
+                                .anyRequest().permitAll() // no authentication needed for dev and test purpose
 //                        .requestMatchers("/api/admin/criteria").permitAll() // you don't need to be authenticated
 //                        .requestMatchers("/api/admin/candidate").hasRole("ADMIN") // you need to be authenticated with admin role
 //                        .requestMatchers("/api/admin/**").hasAnyRole("ADMIN","USER") // you need to be authenticated with admin or user role
