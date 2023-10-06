@@ -1,19 +1,20 @@
 ```mermaid
 classDiagram
-    class Pool 
+    class Pool
     class Candidate
-    class Observer
-    class Criteria
-    class Group
-    class Category
     class Role
+    class Group
+    class Observer
+    class Category
+    class Criteria
 
-    Pool "1..n" o-- "1..1" Group
-    Pool "1..n" o-- "1..n" Criteria
-    Pool "1..n" o-- "1..n" Candidate
-    Pool "1..n" o-- "1..n" Observer
-    Observer "1..n" o-- "0..n" Role
-    Candidate "0..n" o-- "0..n" Group
+    Pool "n" *-- "1" Group
+    Pool "n" o-- "n" Candidate
+    Pool "n" o-- "n" Observer
+    Observer "n" o-- "n" Role
+    Candidate "n" --o "n" Group
+    Category "n" *-- "1" Criteria
+    Pool "n" o-- "n" Criteria
 
     Pool: Integer id
     Pool: String location
