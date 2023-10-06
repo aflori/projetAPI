@@ -59,7 +59,7 @@ public class CriteriaDto {
         Set<Pool> existsIn = extractSetFromRepository(poolRepository, this.existInPool);
         Optional<Category> belongsToCategory = categoryRepository.findById(this.belongsToCategory);
         if (belongsToCategory.isEmpty()){
-            throw new IdNotFoundException() ;
+            throw new IdNotFoundException("This category doesnt exist, Id : "+this.belongsToCategory) ;
         }
         return new Criteria(this.id, this.name, this.description, existsIn, belongsToCategory.get());
     }
