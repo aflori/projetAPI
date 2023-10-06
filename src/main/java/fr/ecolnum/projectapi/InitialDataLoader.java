@@ -52,7 +52,7 @@ public class InitialDataLoader implements CommandLineRunner {
             }
             adminRoles.add(userRole.get());
 
-            Observer admin = new Observer(0, "Super", "Admin", "admin@gmail.com", "admin");
+            Observer admin = new Observer(0, "Super", "Admin", "admin@gmail.com", "$2a$10$2MYM9YlRupftFSo10iXy/uMFNM8zgyw3ChwY9NowiHopIXsJsk1UC");
             admin.setRoles(adminRoles);
             observerRepository.save(admin);
         }
