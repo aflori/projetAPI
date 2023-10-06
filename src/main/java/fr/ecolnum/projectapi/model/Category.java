@@ -11,7 +11,7 @@ public class Category {
     private Integer id;
     @Column(name = "name", nullable = false)
     private String name;
-    @OneToMany(mappedBy = "BelongsToCategory")
+    @OneToMany(mappedBy = "belongsToCategory")
     Set<Criteria> containsCriterias;
     public Category(){
     }
