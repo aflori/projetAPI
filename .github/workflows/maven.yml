@@ -34,6 +34,6 @@ jobs:
       with:
         host: ${{ secrets.HOST }}
         username: ubuntu
-        passphrase: ${{secrets.PASSWORD}}
+        password: ${{secrets.PASSWORD}}
         source: "target/*.jar"
         target: "/var/www/projetAPI"
