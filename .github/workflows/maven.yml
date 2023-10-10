@@ -37,3 +37,4 @@ jobs:
         password: ${{secrets.PASSWORD}}
         source: "target/*.jar"
         target: "/var/www/projetAPI"
+        strip_component: 1
